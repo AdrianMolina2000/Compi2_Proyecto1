@@ -6,27 +6,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <!-- CodeMirror -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/codemirror.min.js" integrity="sha512-4DlmQ+aBOfYTZ3uzRKCDXdyL7y8IlopnVChhXG0pRFgyvhwONVQW3JX8e5DYoXUNr3evQpLZz7S3O1XxMH4WKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/codemirror.min.css" integrity="sha512-CCnciBUnVXwa6IQT9q8EmGcarNit9GdKI5nJnj56B1iu0LuD13Qn/GZ+IUkrZROZaBdutN718NK6mIXdUjZGqg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/theme/material-darker.min.css" integrity="sha512-2OhXH4Il3n2tHKwLLSDPhrkgnLBC+6lHGGQzSFi3chgVB6DJ/v6+nbx+XYO9CugQyHVF/8D/0k3Hx1eaUK2K9g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/mode/javascript/javascript.min.js" integrity="sha512-DJ/Flq7rxJDDhgkO49H/rmidX44jmxWot/ku3c+XXEF9XFal78KIpu7w6jEaQhK4jli1U3/yOH+Rp3cIIEYFPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Materialize -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Slabo+27px&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    <textarea id='editor'>
-            var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-            mode: "javascript",
-            lineNumbers: true,
-        });
-        editor.save()
-    </textarea>
+<body style="background-color: rgb(22, 22, 22);">
+    <center>
+        <h3 style="color: beige;">Proyecto 1 de compiladores 2</h3>
+    </center>
+    <form>
+        <div style="display: flex; width: 1000px; margin: auto;">
+            <div style="width: 50%; margin-right: 20px;">
+                <h5 style="color: beige;">Input</h5>
+                    <textarea id="editor1"></textarea>
+             
+            </div>
+            <div style="width: 50%; margin-right: 20px;">
+                <h5 style="color: beige;">Output</h5>
+                    <textarea id="editor2" readonly></textarea>
+            </div>
+        </div>
+    </form>
+    
+    <center>
+        <button class="btn btn-primary" onclick="ejecutar()">Ejecutar</button>
+        <input type="file" id="archivoTexto" class="btn btn-primary">
+    </center>
 </body>
 
 <script>
-    var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+    var editor = CodeMirror.fromTextArea(document.getElementById('editor1'), {
         mode: "javascript",
         lineNumbers: true,
+        theme: "material-darker",
+        smartIndent: true,
     });
     editor.save()
+    
+    var editor2 = CodeMirror.fromTextArea(document.getElementById('editor2'), {
+        mode: "javascript",
+        lineNumbers: true,
+        theme: "material-darker",
+        smartIndent: true,
+        readOnly: "nocursor"
+    });
+    editor2.save()
 </script>
 
 </html>
