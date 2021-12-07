@@ -1,5 +1,5 @@
 let fs = require('fs');
-let parser = require('./gramatica');
+let parser = require('./grammar');
 
 
 fs.readFile('./entrada.txt', (err, data) => {
