@@ -101,6 +101,7 @@ caracter (\'[^☼]\')
 "return"              return 'return'
 "pop"                 return 'pop'
 "push"                return 'push'
+"log"                return 'log'
 
 [0-9]+("."[0-9]+)?\b  return 'numero';
 
@@ -131,17 +132,17 @@ INSTRUCCIONES
             |INSTRUCCION                {$$ =[$1];}
 ;
 
-//declaracion metodos y funciones
 INSTRUCCION  
-        :TIPO 'identifier' '(' PARAMETROS ')' '{' LISTA_INSTRUCCIONES '}' 
-        |TIPO 'identifier' '(' ')' '{' LISTA_INSTRUCCIONES '}' 
-        |'void' 'identifier' '(' PARAMETROS ')' '{' LISTA_INSTRUCCIONES '}' 
-        |'void' 'identifier' '(' ')' '{' LISTA_INSTRUCCIONES '}' 
-        
-        |'void' 'main' '(' PARAMETROS ')' '{' LISTA_INSTRUCCIONES '}' 
-        | DECLARACION ';'
+    :TIPO 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
+    |'void' 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
+    |'void' 'main' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
+    | DECLARACION ';'
 ;
 
+Verificar_params
+    :PARAMETROS
+    |
+;
 
 PARAMETROS
     :PARAMETROS ',' TIPO 'identifier'
@@ -153,53 +154,63 @@ LISTA_INSTRUCCIONES
     |ListaIns
 ;
 
-
 ListaIns
     :PRINT ';'
     |DECLARACION ';'
     |ASIGNACION ';' 
     |LLAMAR ';' 
-
-
-
-
-
-
-    
     |IF
-    |DECLARACION_ARREGLO ';'
     |SWITCH
-    |FOR
+    |'break' ';'
     |WHILE
-    |DO
-    |STRUCT ';'
-    | OPERACIONES_ARR
+    |DO ';'
+    |FOR
+    |'identifier' 'decremento' ';'
+    |'identifier' 'incremento' ';'
     | RETURN ';'
-    | break ';'
-    | increment_decrement ';'
+    |'identifier' '.' 'pop' '(' ')'
+    |'identifier' '.' 'push' '(' EXPRESION ')'
+    |STRUCT ';'
+
 ;
 
-// FUNCIONES PRINT
+ListaIns2
+    :PRINT ';'
+    |DECLARACION ';'
+    |ASIGNACION ';' 
+    |LLAMAR ';' 
+    |SWITCH
+    |'break' ';'
+    |WHILE
+    |DO ';'
+    |FOR
+    |'identifier' 'incremento' ';'
+    |'identifier' 'decremento' ';'
+    |RETURN ';'
+    |'identifier' '.' 'pop' '(' ')'
+    |'identifier' '.' 'push' '(' EXPRESION ')'
+    |STRUCT ';'
+
+;
+
 PRINT
     :'print' '(' LISTA_EXPRESION ')'
     |'println' '(' LISTA_EXPRESION ')'
-
-// No Revisadoo
     |'printf' '(' LISTA_EXPRESION ')'
 ;
 
-// 2, a, 2+2
 LISTA_EXPRESION
     :LISTA_EXPRESION ',' EXPRESION
     |EXPRESION
 ;
 
-DECLARACION:
-    TIPO 'identifier' '=' EXPRESION 
+DECLARACION
+    :TIPO 'identifier' '=' EXPRESION 
     |TIPO LISTA_ID
+    |TIPO '[' ']' 'identifier' '=' EXPRESION
+    |'identifier' 'identifier' '=' EXPRESION 
 ;
 
-// ID1, ID2, ID3
 LISTA_ID
     :LISTA_ID ',' 'identifier'
     |'identifier'
@@ -211,9 +222,9 @@ ASIGNACION
     |'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION
     |'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION
     |'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION   
+    |'identifier' '[' EXPRESION ']' '=' EXPRESION
 ;
 
-//Metodos y funciones
 LLAMAR:
      'identifier' '(' LISTA_EXPRESION ')'
      |'identifier' '(' ')'
@@ -224,46 +235,58 @@ PARAMETROS_LLAMADA
     |EXPRESION
 ;
 
-
 IF
     :'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'
-    |'if' '(' EXPRESION ')' ListaIns
+    |'if' '(' EXPRESION ')' ListaIns2
     |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' '{' LISTA_INSTRUCCIONES '}'
     |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' IF
-    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' listaIns
-    
-//    // |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' ListaIns
-    //   |'if' '(' EXPRESION ')' ListaIns  else ListaIns
-  
- ;
-
-
-
-
-
-
-
-
-
-
-
-FOR:
-'for' 'identifier' 'in' EXPRESION '{' LISTA_INSTRUCCIONES '}'
-| 'for' 'identifier' 'in' 'identifier' '[' 'digito' ':' 'digito' ']' '{' LISTA_INSTRUCCIONES '}'
-| 'for' '(' TIPO 'identifier' '=' EXPRESION ';' EXPRESION ';' increment_decrement ')' '{' LISTA_INSTRUCCIONES '}'
-
-;
-RETURN :
-'return' EXPRESION
-;
-//
-OPERACIONES_ARR:
-'identifier' '.' 'pop' '(' EXPRESION ')'
-| 'identifier' '.' 'push' '(' EXPRESION ')'
-
+    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' ListaIns2
+    |'if' '(' EXPRESION ')' ListaIns2 'else' ListaIns2
 ;
 
+SWITCH  
+    :'switch' '(' EXPRESION ')' '{' CASE_LIST DEFAULT_LIST '}' 
+    |'switch' '(' EXPRESION ')' '{' CASE_LIST '}'  
+    |'switch' '(' EXPRESION ')' '{' DEFAULT_LIST '}'  
+;
 
+CASE_LIST
+    :CASE_LIST 'case' EXPRESION ':' LISTA_INSTRUCCIONES
+    |'case' EXPRESION ':' LISTA_INSTRUCCIONES
+;
+
+DEFAULT_LIST
+    :'default' ':' LISTA_INSTRUCCIONES
+;
+
+WHILE
+    :'while' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'
+;
+
+DO
+    :'do' '{'  LISTA_INSTRUCCIONES '}' 'while' '(' EXPRESION ')' ';'
+;
+
+FOR
+    :'for' 'identifier' 'in' EXPRESION '{' LISTA_INSTRUCCIONES '}'
+    |'for' '(' forVar ';' EXPRESION ';' for_increment ')' '{' LISTA_INSTRUCCIONES '}'
+;
+
+forVar
+    :TIPO 'identifier' '=' EXPRESION
+    |'identifier' '=' EXPRESION 
+;
+
+for_increment
+    :'identifier' 'incremento' 	            					    
+	|'identifier' 'decremento' 	            	 
+    |'identifier' ':' EXPRESION
+;
+
+RETURN 
+    :'return' EXPRESION
+    |'return'
+;
 
 STRUCT:
     'struct' 'identifier' '{' Lista_declaracion '}'
@@ -275,55 +298,11 @@ Lista_declaracion:
 ;
 
 
-OPCION_DECLARACIO_Struct:
-                        TIPO 
+OPCION_DECLARACIO_Struct
+                        :TIPO 
                         |'identifier'
+                        | TIPO  '[' ']'
 ;
-
-DECLARACION_ARREGLO:
-TIPO  '[' ']'  LISTA_ID '=' EXPRESION  
-;
-
-
-
-
-
-
-/*
-lo voy a dejar asi con esa opcion de llave porque ptm no se  ambiguedad culera
-*/
-
-
-
-
-DO:
-'do' '{'  LISTA_INSTRUCCIONES '}' 'while' '(' EXPRESION ')' ';'
-;
-WHILE:
-'while' '('  EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'
-;
-
-/*PUSE LISTAiNS2 PORQUE SINO TIRA AMBIGUEDAD POR EL IF */
-SWITCH:
-   'switch' '(' EXPRESION ')' '{'   caseList defaultList  '}' 
-  | 'switch' '(' EXPRESION ')' '{'   caseList   '}'  
-  |'switch' '(' EXPRESION ')' '{'    defaultlist  '}'  
-  ;
-
-caseList:
-caseList 'case' EXPRESION ':' LISTA_INSTRUCCIONES
-| 'case' EXPRESION ':' LISTA_INSTRUCCIONES
-;
-defaultList:
-'default' ':' LISTA_INSTRUCCIONES
-;
-
-
-
-
-
-
-
 
 
 EXPRESION 
@@ -375,37 +354,28 @@ EXPRESION
         |'caracter'  
         |'cadena'  
         
-        //Fors
-       
-
         //Llamar metodos y funciones
-      |LLAMAR
-      |'identifier'
-
-       //manooooooooooooooooooooooooooooo 
+        |LLAMAR
+        |'identifier'
+        |'[' LISTA_EXPRESION ']'
+        |'identifier' '[' EXPRESION ']'
+        |'identifier' '[' EXPRESION ':' EXPRESION ']'
+        |EXPRESION '#'
+        |'(' EXPRESION ')'   
+        |'identifier' '.' 'identifier'
+        
 
         //Distintas funciones nativas
         |TIPO '.' 'parse' '(' EXPRESION ')'
         |'toInt' '(' EXPRESION  ')' 
         |'toDouble' '(' EXPRESION ')' 
         |'string' '(' EXPRESION ')' 
-        |'typeof' '(' EXPRESION ')'         
+        |'typeof' '(' EXPRESION ')'  
+        |'log' 'numero' '(' ')'       
 
-
-        //NO REVISADAS
-        |EXPRESION '#'
-        |'['  LISTA_EXPRESION ']'
-                   
-          
-     
-          
-        |'(' EXPRESION ')'   
-          
-        //NO REVISADAS
-        |'identifier' '.' 'pop' '(' EXPRESION ')'
-        
+        |'identifier' '.' 'pop' '(' ')'
+      
 ;
- 
        
 TIPO
     :double
@@ -415,8 +385,4 @@ TIPO
     |char
 ;
 
-increment_decrement:
-        |'identifier' 'incremento'
-        |'identifier' 'decremento'
 
-;

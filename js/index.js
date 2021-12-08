@@ -28,6 +28,6 @@ const ejecutar = document.getElementById("interpretar");
 ejecutar.addEventListener('click', () => {
     let entrada = editor.getValue();
 
-    alert('Juan Diego gey');
+    
     console.log(entrada);
 })

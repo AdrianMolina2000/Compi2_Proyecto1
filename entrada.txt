@@ -1,109 +1,62 @@
+int var1 = 10;
+int var2 = 20;
 
+void main(){
+    println("Probando Manejo de Entornos");
+    println("El valor de var1 global es $a");  //10
 
-void main() {
+    int var1 = 5*5;
+    println("El valor de var1 local es $a");  //25
 
-println("hola como estas");
-print(animal.toLowercase());
-    println(animal.caracterOfPosition(2));
-    animal = "Tigre";
-println(animal.subString(2,4)); //gre
+    println("Probando expresiones Arítmeticas");
+    println(-25*(69-33*2)+22-32*2-33*(-48+48));   // -117
+    println(-93.555+92.12-81.33+19+26-68+-7/(79+11)/86);    // -105.765
+    println(8+67+74-1.0*((-86+22)*2)-5*6);  // 247.0
+    println((51 % 49) * (9.9+90.1));    // 200.0
+    println(0+9*3*(85%(46+95)));    // 2295
 
-respuesta = edad >= 50 ? "Puede vacunarse" : "No puede vacunarse";
+    println("Probando expresiones Booleanas y Lógicas");
 
+    println(56 < 48 && 68 >=12 && 62 != 96);    // false
+    println((21.0==20.5||95>=94)&&((19<39&&83<=96)||35<97));    // true
+    println((68==33||(2<95&&17==37))&&63<=9||12<=42||25==1);    // true
 
-int i = 0;
-do {
-  println(i);
-  i++;
-}
-while (i < 5);
+    println("Probando expresiones Arítmeticas, Booleanas y Lógicas");
+    if ((true == true && false != false) || true == false)
+        println("No entra acá");
+    else
+        println("Entra acá");
 
-println(animal == "Perro" ? 15 : 10);
+    if (1 == (1 + 1 - (1 * 2 / 2)) && 20.5 == 20.5)
+        println("Entra acá");
+    else
+        println("No entra acá");
 
-a = [0, 1, 2];
-    println(a);          // Imprime [0, 1, 2]
-    s = Hora(10, 30);
-    print(s);
+    if ("Hola" == "Mundo")
+        println("No entra acá");
+    else
+        println("Entra acá");
 
-a = boolean.parse("1") ;
-
-b= string([1,2,3]);
-
-
-
-
-for letra in "Hola Mundo!"  // Recorre las letras de la cadena
-{
-    print(letra, "-");      // Imprime H-o-l-a-M-u-n-d-o-!
-}
-
-String cadena = "OLC2";
-for letra in cadena
-{
-    print(letra, "-");      // Imprime O-L-C-2
-}
-    
-for animal in ["perro", "gato", "tortuga"]
-{
-    println("$animal es mi favorito");
-    /* Imprime
-        perro es mi favorito
-        gato es mi favorito
-        tortuga es mi favorito
-    */
+    int edad = 62;
+    String respuesta = edad < 50 ? "Puede vacunarse" :   edad ==60  ? "Puede vacunarse con riesgo" :   "No puede vacunarse" ;
+    println(respuesta);  //No puede vacunarse
 }
 
-int[] arr = [1,2,3,4,5];
-
-for numero in arr[2:4]{
-    print(numero, " ")      // Imprime 2 3 4
-}
-
-
-int[] arr = [1,2,3,4,5,6];
-print(arr[2:4]); //[2,3,4]
-
-print(arr[begin:4]) //[1,2,3,4]
-print(arr[4:end]) //[4,5,6]
-int[] arr = [1,2,3,4,5,6];
-int[] arr2 = #arr;
-int[] arr = [1,2,3,4,5,6];
-arr.push(7); // arr = [1,2,3,4,5,6,7]
-
-int[] arr = [1,2,3];
-print(arr#*2) //[2,4,6]
-
-double[] arr2 = sin#(arr) //[0.8415, 0.9093, 0.1411]
-
-
-Estructura a = Estructura(0);
-println(a);             // Imprime 'Estructura(0)'
-println(a.x);           // Imprime 0
-
-cambiarAtributo(a);
-println(a);             // Imprime 'Estructura(10)'
-println(a.x);           // Imprime 10
-
-
-}
-
-int a  = 0
-
-struct Estructura{
-    int x
-};
-
-function sumar(int num1, double num2){
-    return num1 + toInt(num2);
-
-    int i = 0;
-while (i < 5) {
-  println(i);
-  i++;
-}
-}
-
-
-function cambiarAtributo(Estructura s){
-    s.x = 10;
+double operacionMatematica(char operador, int valor1, int valor2){
+    switch(operador) {
+        case '+':
+            return valor1 + valor2;
+            break;
+        case '-':
+            return valor1 - valor2;
+            break;
+        case '*':
+            return valor1 * valor2;
+            break;
+        case '/':
+            return valor1 / valor2;
+            break;
+        default:
+            return 0;
+    } 
 }
