@@ -2,20 +2,23 @@
 
 %options case-sensitive
 no  ([\"]*)
-
+digito [0-9]+
+decimal {digito}("."{digito})?
 stringliteral (\"[^"]*\")
 identifier ([a-zA-Z_])[a-zA-Z0-9_]*
-
 
 caracter (\'[^☼]\')
 %%  
 
-\s+                 {}
-[ \t\r\n\f]         {}
-\n                  {}                 
-"/""/".*            {}
-[/][*][^*/]*[*][/]  {}
 
+\s+ 
+[ \t\r\n\f]   {}
+\n                  {}                 
+"/""/".*       {'comentarioUni'}
+[/][*][^*/]*[*][/] {return 'comentario'}
+
+{digito}              return 'digito'
+{decimal}             return 'decimal' 
 {caracter}            return 'caracter'
 {stringliteral}       return 'cadena'
 
@@ -41,29 +44,24 @@ caracter (\'[^☼]\')
 ":"                   return ':'
 ";"                   return ';'
 "?"                   return '?'
-
+"-"                   return '-'
+"+"                   return '+'
 "^"                   return '^'
 ","                   return ','
 "++"                  return 'incremento'
 "--"                  return 'decremento'
-"-"                   return '-'
-"+"                   return '+'
-"/"                   return '/'
+"*"                   return '*'
 "#"                   return '#'
-
-
-
-"<="                  return '<='
 "<"                   return '<'
-">="                  return '>='
 ">"                   return '>'
+"<="                  return '<='
+">="                  return '>='
 "=="                  return '=='
 "!="                  return '!='
-"="                   return '='
 "||"                  return '||'
 "&&"                  return '&&'
 "!"                   return '!'
-
+"="                   return '='
 "("                   return '('
 ")"                   return ')'  
 "["                   return '['
@@ -87,7 +85,7 @@ caracter (\'[^☼]\')
 "printf"              return 'printf'
 "if"                  return 'if'
 "in"                  return 'in'
-"for"                 return 'for'
+"for"                  return 'for'
 "else"                return 'else'
 "main"                return 'main'
 "break"               return 'break'
@@ -99,10 +97,10 @@ caracter (\'[^☼]\')
 "break"               return 'break'
 "do"                  return 'do'
 "return"              return 'return'
-"pop"                 return 'pop'
-"push"                return 'push'
+"pop"                  return 'pop'
+"push"              return 'push'
 
-[0-9]+("."[0-9]+)?\b  return 'numero';
+
 
 "struct"              return 'struct'
 {identifier}          return 'identifier'
@@ -111,7 +109,7 @@ caracter (\'[^☼]\')
 /lex
 %left 'else'
 %left '||'
-%left '&&' ,'&','^','#','?' ,'.'
+%left '&&' ,'&','^','#','?'
 %left '==', '!='
 %left '>=', '<=', '<', '>'
 %left '+' '-'
@@ -127,143 +125,82 @@ caracter (\'[^☼]\')
 INICIO : INSTRUCCIONES EOF {   console.log("ya");return $$; } ;
 
 INSTRUCCIONES
-            :INSTRUCCIONES INSTRUCCION  {$$ = $1; $1.push($2);}
+            :INSTRUCCIONES INSTRUCCION  {$1.push($2); $$ = $1;}
             |INSTRUCCION                {$$ =[$1];}
 ;
 
-//declaracion metodos y funciones
+//declaracion metodos
 INSTRUCCION  
-        :TIPO 'identifier' '(' PARAMETROS ')' '{' LISTA_INSTRUCCIONES '}' 
-        |TIPO 'identifier' '(' ')' '{' LISTA_INSTRUCCIONES '}' 
-        |'void' 'identifier' '(' PARAMETROS ')' '{' LISTA_INSTRUCCIONES '}' 
-        |'void' 'identifier' '(' ')' '{' LISTA_INSTRUCCIONES '}' 
-        
-        |'void' 'main' '(' PARAMETROS ')' '{' LISTA_INSTRUCCIONES '}' 
-        | DECLARACION ';'
+        :'function' 'identifier' '(' PARAMETROS ')' '{' ListaIns '}' 
+        |'void' 'identifier' '(' PARAMETROS ')' '{' ListaIns '}' 
+        |'void' 'main' '(' PARAMETROS ')' '{' ListaIns '}' 
+        | TIPO identifier '(' PARAMETROS ')' '{' ListaIns '}' 
+        | DECLARACION
 ;
 
 
 PARAMETROS
-    :PARAMETROS ',' TIPO 'identifier'
-    |TIPO 'identifier'
+        :Lista_params
+        |
+        
+;
+Lista_params:
+            Lista_params ',' TIPO identifier
+            |TIPO identifier
+
+
+;
+ListaIDS
+    :ListaIDS ',' 'identifier'
+    |'identifier'
 ;
 
-LISTA_INSTRUCCIONES
-    :LISTA_INSTRUCCIONES ListaIns
-    |ListaIns
+ListaIDSpto
+    :ListaIDSpto '.' 'identifier'
+    |'identifier'
 ;
-
 
 ListaIns
-    :PRINT ';'
-    |DECLARACION ';'
-    |ASIGNACION ';' 
-    |LLAMAR ';' 
-
-
-
-
-
-
-    
+    :PRINT
     |IF
-    |DECLARACION_ARREGLO ';'
+    |METODO_EXP
     |SWITCH
     |FOR
     |WHILE
     |DO
+    |DECLARACION ';'
+    |ASIGNACION ';' 
+    |DECLARACION_ARREGLO ';'
     |STRUCT ';'
     | OPERACIONES_ARR
     | RETURN ';'
-    | break ';'
-    | increment_decrement ';'
-;
-
-// FUNCIONES PRINT
-PRINT
-    :'print' '(' LISTA_EXPRESION ')'
-    |'println' '(' LISTA_EXPRESION ')'
-
-// No Revisadoo
-    |'printf' '(' LISTA_EXPRESION ')'
-;
-
-// 2, a, 2+2
-LISTA_EXPRESION
-    :LISTA_EXPRESION ',' EXPRESION
-    |EXPRESION
-;
-
-DECLARACION:
-    TIPO 'identifier' '=' EXPRESION 
-    |TIPO LISTA_ID
-;
-
-// ID1, ID2, ID3
-LISTA_ID
-    :LISTA_ID ',' 'identifier'
-    |'identifier'
-;
-
-ASIGNACION
-    :'identifier' '=' EXPRESION
-    |'identifier' '.' 'identifier' '=' EXPRESION
-    |'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION
-    |'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION
-    |'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION   
-;
-
-//Metodos y funciones
-LLAMAR:
-     'identifier' '(' LISTA_EXPRESION ')'
-     |'identifier' '(' ')'
-;        
-
-PARAMETROS_LLAMADA
-    :PARAMETROS_LLAMADA ',' EXPRESION
-    |EXPRESION
-;
-
-
-IF
-    :'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'
-    |'if' '(' EXPRESION ')' ListaIns
-    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' '{' LISTA_INSTRUCCIONES '}'
-    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' IF
-    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' listaIns
     
-//    // |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' ListaIns
-    //   |'if' '(' EXPRESION ')' ListaIns  else ListaIns
-  
- ;
-
-
-
-
-
-
-
-
-
-
-
+    
+;
 FOR:
-'for' 'identifier' 'in' EXPRESION '{' LISTA_INSTRUCCIONES '}'
-| 'for' 'identifier' 'in' 'identifier' '[' 'digito' ':' 'digito' ']' '{' LISTA_INSTRUCCIONES '}'
-| 'for' '(' TIPO 'identifier' '=' EXPRESION ';' EXPRESION ';' increment_decrement ')' '{' LISTA_INSTRUCCIONES '}'
+'for' 'identifier' 'in' EXPRESION '{' ListaIns '}'
+| 'for' 'identifier' 'in' 'identifier' '[' 'digito' ':' 'digito' ']' '{' ListaIns '}'
+| 'for' '(' TIPO 'identifier' '=' EXPRESION ';' EXPRESION ';' EXPRESION ')' '{' ListaIns '}'
 
 ;
 RETURN :
 'return' EXPRESION
 ;
-//
 OPERACIONES_ARR:
 'identifier' '.' 'pop' '(' EXPRESION ')'
 | 'identifier' '.' 'push' '(' EXPRESION ')'
 
 ;
 
+DECLARACION:
+    TIPO ListaIDS OPCION_ASIGNACION
+;
 
+
+OPCION_ASIGNACION:
+'=' EXPRESION 
+| 
+;
 
 STRUCT:
     'struct' 'identifier' '{' Lista_declaracion '}'
@@ -281,26 +218,28 @@ OPCION_DECLARACIO_Struct:
 ;
 
 DECLARACION_ARREGLO:
-TIPO  '[' ']'  LISTA_ID '=' EXPRESION  
+TIPO  '[' ']'  ListaIDS '=' EXPRESION  ';' 
+;
+
+ASIGNACION:
+'identifier' '='  EXPRESION
+|ListaIDSpto '='  EXPRESION
 ;
 
 
 
-
-
-
-/*
-lo voy a dejar asi con esa opcion de llave porque ptm no se  ambiguedad culera
-*/
-
-
-
+IF
+    :'if' '(' EXPRESION ')' '{'  ListaIns '}'
+    |'if' '(' EXPRESION ')' ListaIns 
+    |'if' '(' EXPRESION ')' '{' ListaIns '}' 'else' '{' ListaIns '}'
+    |'if' '(' EXPRESION ')' '{' ListaIns '}' 'else' ListaIns
+;
 
 DO:
-'do' '{'  LISTA_INSTRUCCIONES '}' 'while' '(' EXPRESION ')' ';'
+'do' '{'  ListaIns'}' 'while' '(' EXPRESION ')' ';'
 ;
 WHILE:
-'while' '('  EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'
+'while' '('  EXPRESION ')' '{' ListaIns '}'
 ;
 
 /*PUSE LISTAiNS2 PORQUE SINO TIRA AMBIGUEDAD POR EL IF */
@@ -311,16 +250,26 @@ SWITCH:
   ;
 
 caseList:
-caseList 'case' EXPRESION ':' LISTA_INSTRUCCIONES
-| 'case' EXPRESION ':' LISTA_INSTRUCCIONES
+caseList 'case' EXPRESION ':' ListaIns
+| 'case' EXPRESION ':' ListaIns
 ;
 defaultList:
-'default' ':' LISTA_INSTRUCCIONES
+'default' ':' ListaIns
+;
+PRINT:  'print'  '(' LISTA_EXPRESION ')' ';'
+| 'println'  '(' LISTA_EXPRESION ')' ';'
+| 'printf' '(' LISTA_EXPRESION ')' ';'
 ;
 
 
 
 
+
+
+LISTA_EXPRESION:
+LISTA_EXPRESION ',' EXPRESION
+|EXPRESION
+;
 
 
 
@@ -346,7 +295,7 @@ EXPRESION
         |EXPRESION '==' EXPRESION   
         |EXPRESION '!=' EXPRESION   
         |EXPRESION '>=' EXPRESION    
-        |EXPRESION '>'  EXPRESION   
+        |EXPRESION '>' EXPRESION   
         |EXPRESION '<=' EXPRESION   
         |EXPRESION '<' EXPRESION    
         
@@ -369,54 +318,75 @@ EXPRESION
 
         //Primitivos
         |'null'    
-        |'numero'  
+        |'digito'    
+        |'decimal'  
         |'true'    
         |'false'    
         |'caracter'  
         |'cadena'  
         
         //Fors
-       
-
-        //Llamar metodos y funciones
-      |LLAMAR
-      |'identifier'
-
-       //manooooooooooooooooooooooooooooo 
-
-        //Distintas funciones nativas
-        |TIPO '.' 'parse' '(' EXPRESION ')'
-        |'toInt' '(' EXPRESION  ')' 
-        |'toDouble' '(' EXPRESION ')' 
-        |'string' '(' EXPRESION ')' 
-        |'typeof' '(' EXPRESION ')'         
+        |'identifier' 'incremento'
+        |'identifier' 'decremento'
 
 
-        //NO REVISADAS
+
+
         |EXPRESION '#'
         |'['  LISTA_EXPRESION ']'
                    
           
+        |NATIVAS_DISTINTAS
      
+        | METODO_EXP  
           
         |'(' EXPRESION ')'   
           
-        //NO REVISADAS
-        |'identifier' '.' 'pop' '(' EXPRESION ')'
-        
+       
+        | CONVERT
+    
+
 ;
  
        
-TIPO
-    :double
-    |String
-    |int
-    |boolean
-    |char
+        
+
+
+
+
+
+CONVERT:
+         'toInt'  '(' EXPRESION  ')' 
+          | 'toDouble'  '(' EXPRESION  ')' 
+          | 'String'  '(' EXPRESION  ')' 
+          | 'typeof'  '(' EXPRESION  ')'         
+
+;          
+
+NATIVAS_DISTINTAS :
+TIPO '.' 'parse' '(' EXPRESION')'
+
 ;
 
-increment_decrement:
-        |'identifier' 'incremento'
-        |'identifier' 'decremento'
+ METODO_EXP:
 
+   'identifier' '('L_exp  ')'
+  |'identifier' '(' ')'
+  |'identifier' 
+ 
+
+  ;        
+
+L_exp: L_exp ','  EXPRESION
+  |EXPRESION
+  ;
+
+
+
+TIPO:
+double
+|String
+|int
+|boolean
+|char
 ;

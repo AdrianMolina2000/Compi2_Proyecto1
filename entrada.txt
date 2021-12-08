@@ -1,4 +1,109 @@
+
+
 void main() {
- 
-    println("---------------------------------");
+
+println("hola como estas");
+print(animal.toLowercase());
+    println(animal.caracterOfPosition(2));
+    animal = "Tigre";
+println(animal.subString(2,4)); //gre
+
+respuesta = edad >= 50 ? "Puede vacunarse" : "No puede vacunarse";
+
+
+int i = 0;
+do {
+  println(i);
+  i++;
+}
+while (i < 5);
+
+println(animal == "Perro" ? 15 : 10);
+
+a = [0, 1, 2];
+    println(a);          // Imprime [0, 1, 2]
+    s = Hora(10, 30);
+    print(s);
+
+a = boolean.parse("1") ;
+
+b= string([1,2,3]);
+
+
+
+
+for letra in "Hola Mundo!"  // Recorre las letras de la cadena
+{
+    print(letra, "-");      // Imprime H-o-l-a-M-u-n-d-o-!
+}
+
+String cadena = "OLC2";
+for letra in cadena
+{
+    print(letra, "-");      // Imprime O-L-C-2
+}
+    
+for animal in ["perro", "gato", "tortuga"]
+{
+    println("$animal es mi favorito");
+    /* Imprime
+        perro es mi favorito
+        gato es mi favorito
+        tortuga es mi favorito
+    */
+}
+
+int[] arr = [1,2,3,4,5];
+
+for numero in arr[2:4]{
+    print(numero, " ")      // Imprime 2 3 4
+}
+
+
+int[] arr = [1,2,3,4,5,6];
+print(arr[2:4]); //[2,3,4]
+
+print(arr[begin:4]) //[1,2,3,4]
+print(arr[4:end]) //[4,5,6]
+int[] arr = [1,2,3,4,5,6];
+int[] arr2 = #arr;
+int[] arr = [1,2,3,4,5,6];
+arr.push(7); // arr = [1,2,3,4,5,6,7]
+
+int[] arr = [1,2,3];
+print(arr#*2) //[2,4,6]
+
+double[] arr2 = sin#(arr) //[0.8415, 0.9093, 0.1411]
+
+
+Estructura a = Estructura(0);
+println(a);             // Imprime 'Estructura(0)'
+println(a.x);           // Imprime 0
+
+cambiarAtributo(a);
+println(a);             // Imprime 'Estructura(10)'
+println(a.x);           // Imprime 10
+
+
+}
+
+int a  = 0
+
+struct Estructura{
+    int x
+};
+
+function sumar(int num1, double num2){
+    return num1 + toInt(num2);
+
+    int i = 0;
+while (i < 5) {
+  println(i);
+  i++;
+}
+}
+
+
+function cambiarAtributo(Estructura s){
+    s.x = 10;
 }
