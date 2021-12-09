@@ -1,17 +1,11 @@
-
-let parser = require('../grammar');
-
-   
-var entrada = document.getElementById("editor1").value;
-
+let parser = require('../src/grammar');
 var editor = CodeMirror.fromTextArea(document.getElementById('editor1'), {
     mode: "javascript",
     lineNumbers: true,
     theme: "material-darker",
     smartIndent: true,
 });
-editor.save()
-
+editor.save();
 var editor2 = CodeMirror.fromTextArea(document.getElementById('editor2'), {
     mode: "javascript",
     lineNumbers: true,
@@ -19,15 +13,13 @@ var editor2 = CodeMirror.fromTextArea(document.getElementById('editor2'), {
     smartIndent: true,
     readOnly: "nocursor"
 });
-editor2.save()
-
-
-
-const ejecutar = document.getElementById("interpretar");
-
+editor2.save();
+const ejecutar = document.getElementById("ejecutar");
 ejecutar.addEventListener('click', () => {
-    let entrada = editor.getValue();
-
-    
     console.log(entrada);
-})
+    parser.Parser(entrada);
+});
+/*
+
+browserify index.js -o bundle.js
+*/ 
