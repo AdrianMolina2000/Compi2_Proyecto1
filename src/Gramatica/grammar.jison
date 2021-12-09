@@ -1,3 +1,22 @@
+
+%{ 
+    const {Tree} = require('../Simbols/Tree');
+    const {Tipo, tipos, esEntero} = require('../other/tipo');
+    const {Primitivo} = require('../Expresiones/Primitivo');
+ 
+     //Expresion
+    const {Aritmetica} = require('../Expresiones/Aritmetica');
+    const {Logico} = require('../Expresiones/Logico');
+    const {Relacional} = require('../Expresiones/Relacional');
+    const {ToLower} = require('../Expresiones/ToLower');
+    const {ToUpper} = require('../Expresiones/ToUpper');  
+   
+    const {Length} = require('../Expresiones/Length');   
+
+    //Instrucciones
+    const {Print} = require('../Instrucciones/Print');
+%}
+
 %lex
 
 %options case-sensitive
@@ -62,6 +81,7 @@ caracter (\'[^☼]\')
 "="                   return '='
 "||"                  return '||'
 "&&"                  return '&&'
+"&"                  return '&'
 "!"                   return '!'
 
 "("                   return '('
@@ -125,19 +145,21 @@ caracter (\'[^☼]\')
 %%
 
 
-INICIO : INSTRUCCIONES EOF {   console.log("ya");return $$; } ;
+INICIO : LISTA_INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
 
-INSTRUCCIONES
-            :INSTRUCCIONES INSTRUCCION  {$$ = $1; $1.push($2);}
-            |INSTRUCCION                {$$ =[$1];}
-;
+// INICIO : INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
 
-INSTRUCCION  
-    :TIPO 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
-    |'void' 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
-    |'void' 'main' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
-    | DECLARACION ';'
-;
+// INSTRUCCIONES
+//             :INSTRUCCIONES INSTRUCCION  {$$ = $1; $1.push($2);}
+//             |INSTRUCCION                {$$ =[$1];}
+// ;
+
+// INSTRUCCION  
+//     :TIPO 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
+//     |'void' 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
+//     |'void' 'main' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
+//     | DECLARACION ';'
+// ;
 
 Verificar_params
     :PARAMETROS
@@ -150,12 +172,12 @@ PARAMETROS
 ;
 
 LISTA_INSTRUCCIONES
-    :LISTA_INSTRUCCIONES ListaIns
-    |ListaIns
+    :LISTA_INSTRUCCIONES ListaIns   {$$ = $1; $1.push($2);}
+    |ListaIns                       {$$ =[$1];}
 ;
 
 ListaIns
-    :PRINT ';'
+    :PRINT ';'                      {$$ = $1;}    
     |DECLARACION ';'
     |ASIGNACION ';' 
     |LLAMAR ';' 
@@ -175,7 +197,7 @@ ListaIns
 ;
 
 ListaIns2
-    :PRINT ';'
+    :PRINT ';'                  {$$ = $1;}  
     |DECLARACION ';'
     |ASIGNACION ';' 
     |LLAMAR ';' 
@@ -194,14 +216,14 @@ ListaIns2
 ;
 
 PRINT
-    :'print' '(' LISTA_EXPRESION ')'
-    |'println' '(' LISTA_EXPRESION ')'
+    :'print' '(' LISTA_EXPRESION ')'    {$$ = new Print($3, @1.first_line, @1.first_column,1); }
+    |'println' '(' LISTA_EXPRESION ')'  {$$ = new Print($3, @1.first_line, @1.first_column,2); console.log("normaaaaaaaal")}
     |'printf' '(' LISTA_EXPRESION ')'
 ;
 
 LISTA_EXPRESION
-    :LISTA_EXPRESION ',' EXPRESION
-    |EXPRESION
+    :LISTA_EXPRESION ',' EXPRESION      {$$ = $1; $1.push($3);}
+    |EXPRESION                          {$$ = []; $$.push($1);}
 ;
 
 DECLARACION
@@ -212,8 +234,8 @@ DECLARACION
 ;
 
 LISTA_ID
-    :LISTA_ID ',' 'identifier'
-    |'identifier'
+    :LISTA_ID ',' 'identifier'   {$$ = $1; $1.push($3);}
+    |'identifier'                    {$$ = []; $$.push($1);}
 ;
 
 ASIGNACION
@@ -307,12 +329,12 @@ OPCION_DECLARACIO_Struct
 
 EXPRESION 
         //Aritmeticas
-        :'-' EXPRESION %prec UMENOS	    
-        |EXPRESION '+' EXPRESION      
-        |EXPRESION '-' EXPRESION    
-        |EXPRESION '*' EXPRESION    
-        |EXPRESION '/' EXPRESION    
-        |EXPRESION '%' EXPRESION    
+        :'-' EXPRESION %prec UMENOS     {$$ = new Aritmetica(null, $2, '-', @1.first_line, @1.first_column);}	    
+        |EXPRESION '+' EXPRESION        {$$ = new Aritmetica($1, $3, '+', @1.first_line, @1.first_column);}	
+        |EXPRESION '-' EXPRESION        {$$ = new Aritmetica($1, $3, '-', @1.first_line, @1.first_column);}
+        |EXPRESION '*' EXPRESION        {$$ = new Aritmetica($1, $3, '*', @1.first_line, @1.first_column);}	
+        |EXPRESION '/' EXPRESION        {$$ = new Aritmetica($1, $3, '/', @1.first_line, @1.first_column);}	
+        |EXPRESION '%' EXPRESION        {$$ = new Aritmetica($1, $3, '%', @1.first_line, @1.first_column);}	
         
         //Nativas Aritmeticas
         |'sin'  '(' EXPRESION ')'
@@ -322,37 +344,37 @@ EXPRESION
         |'sqrt' '(' EXPRESION ')'
 
         //Relacionales
-        |EXPRESION '==' EXPRESION   
-        |EXPRESION '!=' EXPRESION   
-        |EXPRESION '>=' EXPRESION    
-        |EXPRESION '>'  EXPRESION   
-        |EXPRESION '<=' EXPRESION   
-        |EXPRESION '<' EXPRESION    
+        |EXPRESION '==' EXPRESION       {$$ = new Relacional($1, $3, '==', @1.first_line, @1.first_column);}
+        |EXPRESION '!=' EXPRESION       {$$ = new Relacional($1, $3, '!=', @1.first_line, @1.first_column);}
+        |EXPRESION '>=' EXPRESION       {$$ = new Relacional($1, $3, '>=', @1.first_line, @1.first_column);}
+        |EXPRESION '>'  EXPRESION       {$$ = new Relacional($1, $3, '>', @1.first_line, @1.first_column);}	
+        |EXPRESION '<=' EXPRESION       {$$ = new Relacional($1, $3, '<=', @1.first_line, @1.first_column);}	
+        |EXPRESION '<'  EXPRESION       {$$ = new Relacional($1, $3, '<', @1.first_line, @1.first_column);}	 
         
         //Logicas
         |'!' EXPRESION	     
-        |EXPRESION '&&' EXPRESION  
-        |EXPRESION '||' EXPRESION  
+        |EXPRESION '&&' EXPRESION       {$$ = new Logico($1, $3, '&&', @1.first_line, @1.first_column);}
+        |EXPRESION '||' EXPRESION       {$$ = new Logico($1, $3, '||', @1.first_line, @1.first_column);}
 
         //Cadenas
-        |EXPRESION '&' EXPRESION
-        |EXPRESION '^' EXPRESION 
+        |EXPRESION '&' EXPRESION        {$$ = new Aritmetica($1, $3, '&', @1.first_line, @1.first_column);}
+        |EXPRESION '^' EXPRESION        {$$ = new Aritmetica($1, $3, '^', @1.first_line, @1.first_column);}
         |'identifier' '.' 'caracterOfPosition' '(' EXPRESION ')'
         |'identifier' '.' 'subString' '(' EXPRESION ',' EXPRESION ')'
-        |'identifier' '.' 'lenght' '(' ')'
-        |'identifier' '.' 'toUppercase' '(' ')'
-        |'identifier' '.' 'toLowercase' '(' ')'
+        |'identifier' '.' 'lenght' '(' ')'         {$$ = new Length($1, @1.first_line, @1.first_column);}
+        |'identifier' '.' 'toUppercase' '(' ')'     {$$ = new ToUpper($1, @1.first_line, @1.first_column);}    
+        |'identifier' '.' 'toLowercase' '(' ')'     {$$ = new ToLower($1, @1.first_line, @1.first_column);}  
         
         //Operador Ternario
         |EXPRESION '?' EXPRESION ':' EXPRESION
 
         //Primitivos
         |'null'    
-        |'numero'  
-        |'true'    
-        |'false'    
-        |'caracter'  
-        |'cadena'  
+        |'numero'                   {$$ = new Primitivo(new Tipo(esEntero(Number($1))), Number($1), @1.first_line, @1.first_column);} 
+        |'true'                     {$$ = new Primitivo(new Tipo(tipos.BOOLEANO), true, @1.first_line, @1.first_column);}
+        |'false'                    {$$ = new Primitivo(new Tipo(tipos.BOOLEANO), false, @1.first_line, @1.first_column);}
+        |'caracter'                 {$$ = new Primitivo(new Tipo(tipos.CARACTER), $1.replace(/\'/g,""), @1.first_line, @1.first_column);} 
+        |'cadena'                   {$$ = new Primitivo(new Tipo(tipos.STRING), $1.replace(/\"/g,""), @1.first_line, @1.first_column);}
         
         //Llamar metodos y funciones
         |LLAMAR
@@ -361,7 +383,7 @@ EXPRESION
         |'identifier' '[' EXPRESION ']'
         |'identifier' '[' EXPRESION ':' EXPRESION ']'
         |EXPRESION '#'
-        |'(' EXPRESION ')'   
+        |'(' EXPRESION ')'   {$$=$2;}
         |'identifier' '.' 'identifier'
         
 
@@ -378,11 +400,11 @@ EXPRESION
 ;
        
 TIPO
-    :double
-    |String
-    |int
-    |boolean
-    |char
+    :double     {$$ = new Tipo(tipos.DECIMAL);}
+    |String     {$$ = new Tipo(tipos.STRING);}
+    |int        {$$ = new Tipo(tipos.ENTERO);}
+    |boolean    {$$ = new Tipo(tipos.BOOLEANO);}
+    |char       {$$ = new Tipo(tipos.CARACTER);}
 ;
 
 
