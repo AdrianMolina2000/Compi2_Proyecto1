@@ -1,4 +1,7 @@
-let parser = require('../src/grammar');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Table_1 = require("../Simbols/Table");
+const parser = require('../Gramatica/grammar.js');
 var editor = CodeMirror.fromTextArea(document.getElementById('editor1'), {
     mode: "javascript",
     lineNumbers: true,
@@ -14,12 +17,23 @@ var editor2 = CodeMirror.fromTextArea(document.getElementById('editor2'), {
     readOnly: "nocursor"
 });
 editor2.save();
-const ejecutar = document.getElementById("ejecutar");
-ejecutar.addEventListener('click', () => {
-    console.log(entrada);
-    parser.Parser(entrada);
-});
-/*
-
-browserify index.js -o bundle.js
-*/ 
+global.Enviar = function entrada() {
+    const entrada = editor.getValue();
+    const tree = parser.parse(entrada);
+    const tabla = new Table_1.Table(null);
+    tree.instrucciones.map((m) => {
+        try {
+            const res = m.execute(tabla, tree);
+        }
+        catch (error) {
+            console.log('error');
+        }
+        // console.log(tree.consola);
+        var texto = "";
+        for (const key in tree.consola) {
+            texto += tree.consola[key];
+        
+        }
+        editor2.setValue(texto);
+    });
+};
