@@ -5,7 +5,7 @@ import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
 
-export class ToLower extends Nodo {
+export class ToDouble extends Nodo {
     expresion: Nodo;
     constructor(expresion: Nodo, line: Number, column: Number) {
         super(new Tipo(tipos.STRING), line, column);
@@ -15,20 +15,20 @@ export class ToLower extends Nodo {
     execute(table: Table, tree: Tree) {
 
         try {
-            console.log("s");
+           // console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log("sa");
-            console.log(resultado);
+         //   console.log("sa");
+         //   console.log(resultado);
             if (resultado instanceof Excepcion) {
                 console.log(resultado);
                 return resultado;
             } else {
-                console.log(resultado);
-                return resultado.toLowerCase();
+                console.log(resultado.toFixed(2));
+                return resultado.toFixed(2);
             }
         } catch (err) {
             const error = new Excepcion('Semantico',
-                `Ha ocurrido un error al convertir en minusculas`,
+                `Ha ocurrido un error al momento de querrer parsear el numero a decimal`,
                 this.line, this.column);
             tree.excepciones.push(error);
             tree.consola.push(error.toString());

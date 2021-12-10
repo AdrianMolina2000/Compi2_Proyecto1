@@ -4,28 +4,26 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
-class ToLower extends Nodo_1.Nodo {
-    constructor(expresion, line, column) {
+class CaracterOFposition extends Nodo_1.Nodo {
+    constructor(expresion, posicion, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.STRING), line, column);
         this.expresion = expresion;
+        this.posicion = posicion;
     }
     execute(table, tree) {
         try {
-            console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log("sa");
-            console.log(resultado);
             if (resultado instanceof Excepcion_1.Excepcion) {
-                console.log(resultado);
                 return resultado;
             }
             else {
-                console.log(resultado);
-                return resultado.toLowerCase();
+                //const inicio_rec=this.inicio;
+                return parseInt(resultado);
+                //  return resultado.toLowerCase();
             }
         }
         catch (err) {
-            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error al convertir en minusculas`, this.line, this.column);
+            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error querrer imprimir la posicion del string joven`, this.line, this.column);
             tree.excepciones.push(error);
             tree.consola.push(error.toString());
             return error;
@@ -46,4 +44,4 @@ class ToLower extends Nodo_1.Nodo {
         }
     }
 }
-exports.ToLower = ToLower;
+exports.CaracterOFposition = CaracterOFposition;

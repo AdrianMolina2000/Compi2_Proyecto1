@@ -4,28 +4,28 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
-class ToLower extends Nodo_1.Nodo {
+class ToInt extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.STRING), line, column);
         this.expresion = expresion;
     }
     execute(table, tree) {
         try {
-            console.log("s");
+            // console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log("sa");
-            console.log(resultado);
+            //   console.log("sa");
+            //   console.log(resultado);
             if (resultado instanceof Excepcion_1.Excepcion) {
                 console.log(resultado);
                 return resultado;
             }
             else {
                 console.log(resultado);
-                return resultado.toLowerCase();
+                return parseInt(resultado);
             }
         }
         catch (err) {
-            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error al convertir en minusculas`, this.line, this.column);
+            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error al momento de querrer parsear el numero a entero`, this.line, this.column);
             tree.excepciones.push(error);
             tree.consola.push(error.toString());
             return error;
@@ -46,4 +46,4 @@ class ToLower extends Nodo_1.Nodo {
         }
     }
 }
-exports.ToLower = ToLower;
+exports.ToInt = ToInt;

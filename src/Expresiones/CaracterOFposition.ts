@@ -5,30 +5,36 @@ import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
 
-export class ToLower extends Nodo {
+export class CaracterOFposition extends Nodo {
     expresion: Nodo;
-    constructor(expresion: Nodo, line: Number, column: Number) {
+
+     posicion:Number;
+     final:Number;
+    constructor(expresion: Nodo,posicion:Number,line: Number, column: Number) {
         super(new Tipo(tipos.STRING), line, column);
         this.expresion = expresion;
+        this.posicion=posicion;
+      
     }
 
     execute(table: Table, tree: Tree) {
 
         try {
-            console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log("sa");
-            console.log(resultado);
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
             } else {
-                console.log(resultado);
-                return resultado.toLowerCase();
+
+                 //const inicio_rec=this.inicio;
+                 return parseInt(resultado)
+
+              //  return resultado.toLowerCase();
+
+
             }
         } catch (err) {
             const error = new Excepcion('Semantico',
-                `Ha ocurrido un error al convertir en minusculas`,
+                `Ha ocurrido un error querrer imprimir la posicion del string joven`,
                 this.line, this.column);
             tree.excepciones.push(error);
             tree.consola.push(error.toString());

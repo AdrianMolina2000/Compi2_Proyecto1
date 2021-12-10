@@ -29,7 +29,6 @@ export class Print extends Nodo{
         /*agregando el tipo para el pritnln lo  maneje asi  fuera del for para evitar clavos papa ctm*/ 
         if (this.tipo_print==1){
             
-
         }
         else  if (this.tipo_print==2) {
             

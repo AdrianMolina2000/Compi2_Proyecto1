@@ -5,30 +5,37 @@ import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
 
-export class ToLower extends Nodo {
+export class Substring extends Nodo {
     expresion: Nodo;
-    constructor(expresion: Nodo, line: Number, column: Number) {
+
+     inicio:Number;
+     final:Number;
+    constructor(expresion: Nodo,inicio:Number,final:Number, line: Number, column: Number) {
         super(new Tipo(tipos.STRING), line, column);
         this.expresion = expresion;
+        this.inicio=inicio;
+        this.final=final;
     }
 
     execute(table: Table, tree: Tree) {
 
         try {
-            console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log("sa");
-            console.log(resultado);
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
             } else {
-                console.log(resultado);
-                return resultado.toLowerCase();
+                console.log(this.inicio+"--"+this.final);
+                console.log(resultado.substring(this.inicio,this.final));
+                 //const inicio_rec=this.inicio;
+                 return resultado.substring(this.inicio,this.final);
+
+             
+
+
             }
         } catch (err) {
             const error = new Excepcion('Semantico',
-                `Ha ocurrido un error al convertir en minusculas`,
+                `Ha ocurrido un error al momento de realizar la funcion substring`,
                 this.line, this.column);
             tree.excepciones.push(error);
             tree.consola.push(error.toString());

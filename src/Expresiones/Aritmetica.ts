@@ -318,7 +318,7 @@ export class Aritmetica extends Nodo {
                 if (this.operadorIzq.tipo.tipo === tipos.ENTERO) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.DECIMAL);
-                        return resultadoIzq / resultadoDerecho;
+                        return parseInt(resultadoIzq / resultadoDerecho);
                     } else if (this.operadorDer.tipo.tipo === tipos.DECIMAL) {
                         this.tipo = new Tipo(tipos.DECIMAL);
                         return resultadoIzq / resultadoDerecho;
@@ -333,11 +333,11 @@ export class Aritmetica extends Nodo {
                         // tree.consola.push(error.toString());
                         return error;
                     }
-                    //DOUBLE /
+                    //DOUBLE / 
                 } else if (this.operadorIzq.tipo.tipo === tipos.DECIMAL) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.DECIMAL);
-                        return resultadoIzq / resultadoDerecho;
+                        return parseInt(resultadoIzq / resultadoDerecho);
                     } else if (this.operadorDer.tipo.tipo === tipos.DECIMAL) {
                         this.tipo = new Tipo(tipos.DECIMAL);
                         return resultadoIzq / resultadoDerecho;
@@ -552,6 +552,13 @@ export class Aritmetica extends Nodo {
                 } else if (this.operadorDer.tipo.tipo === tipos.DECIMAL) {
                     this.tipo = new Tipo(tipos.DECIMAL);
                     return -1 * resultadoDerecho;
+                } else {
+                    const error = new Excepcion('Semantico',
+                        `No se puede aplicar negativo al tipo ${this.operadorDer.tipo}`,
+                        this.line, this.column);
+                    tree.excepciones.push(error);
+                    // tree.consola.push(error.toString());
+                    return error;
                 }
             } else {
                 const error = new Excepcion('Semantico',

@@ -32,7 +32,6 @@ global.Enviar = function entrada() {
         var texto = "";
         for (const key in tree.consola) {
             texto += tree.consola[key];
-        
         }
         editor2.setValue(texto);
     });

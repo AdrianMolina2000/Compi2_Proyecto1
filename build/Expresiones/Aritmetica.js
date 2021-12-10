@@ -318,7 +318,7 @@ class Aritmetica extends Nodo_1.Nodo {
                 if (this.operadorIzq.tipo.tipo === tipo_1.tipos.ENTERO) {
                     if (this.operadorDer.tipo.tipo === tipo_1.tipos.ENTERO) {
                         this.tipo = new tipo_1.Tipo(tipo_1.tipos.DECIMAL);
-                        return resultadoIzq / resultadoDerecho;
+                        return parseInt(resultadoIzq / resultadoDerecho);
                     }
                     else if (this.operadorDer.tipo.tipo === tipo_1.tipos.DECIMAL) {
                         this.tipo = new tipo_1.Tipo(tipo_1.tipos.DECIMAL);
@@ -334,12 +334,12 @@ class Aritmetica extends Nodo_1.Nodo {
                         // tree.consola.push(error.toString());
                         return error;
                     }
-                    //DOUBLE /
+                    //DOUBLE / 
                 }
                 else if (this.operadorIzq.tipo.tipo === tipo_1.tipos.DECIMAL) {
                     if (this.operadorDer.tipo.tipo === tipo_1.tipos.ENTERO) {
                         this.tipo = new tipo_1.Tipo(tipo_1.tipos.DECIMAL);
-                        return resultadoIzq / resultadoDerecho;
+                        return parseInt(resultadoIzq / resultadoDerecho);
                     }
                     else if (this.operadorDer.tipo.tipo === tipo_1.tipos.DECIMAL) {
                         this.tipo = new tipo_1.Tipo(tipo_1.tipos.DECIMAL);
@@ -561,6 +561,12 @@ class Aritmetica extends Nodo_1.Nodo {
                 else if (this.operadorDer.tipo.tipo === tipo_1.tipos.DECIMAL) {
                     this.tipo = new tipo_1.Tipo(tipo_1.tipos.DECIMAL);
                     return -1 * resultadoDerecho;
+                }
+                else {
+                    const error = new Excepcion_1.Excepcion('Semantico', `No se puede aplicar negativo al tipo ${this.operadorDer.tipo}`, this.line, this.column);
+                    tree.excepciones.push(error);
+                    // tree.consola.push(error.toString());
+                    return error;
                 }
             }
             else {
