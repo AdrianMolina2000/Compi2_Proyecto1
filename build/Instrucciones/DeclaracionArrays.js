@@ -25,46 +25,13 @@ function defal(tipo, line, column) {
 }
 exports.defal = defal;
 class DeclaracionArray extends Nodo_1.Nodo {
-    constructor(tipo, id, tipo2, num, listaValores, line, column) {
+    constructor(tipo, id, listaValores, line, column) {
         super(tipo, line, column);
         this.id = id;
-        this.tipo2 = tipo2;
-        this.num = num;
         this.listaValores = listaValores;
     }
     execute(table, tree) {
-        if ((this.tipo2 != null) && (this.num != null) && (this.listaValores == null)) {
-            //Declaracion Tipo 1
-            if (this.tipo.tipo != this.tipo2.tipo) {
-                const error = new Excepcion_1.Excepcion('Semantico', `El vector no puede ser declarado debido a que son de diferentes tipos`, this.line, this.column);
-                tree.excepciones.push(error);
-                tree.consola.push(error.toString());
-                return error;
-            }
-            else {
-                var contenido = new Array();
-                const result = this.num.execute(table, tree);
-                if (result instanceof Excepcion_1.Excepcion) {
-                    return result;
-                }
-                for (let i = 0; i < result; i++) {
-                    contenido.push(defal(this.tipo, this.line, this.column));
-                }
-                let simbolo;
-                simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, contenido, new tipo_1.Tipo(tipo_1.tipos.ARRAY), this.line, this.column);
-                if (table.getVariable(this.id) == null) {
-                    table.setVariable(simbolo);
-                    tree.Variables.push(simbolo);
-                }
-                else {
-                    const error = new Excepcion_1.Excepcion('Semantico', `El vector ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`, this.line, this.column);
-                    tree.excepciones.push(error);
-                    tree.consola.push(error.toString());
-                    return error;
-                }
-            }
-        }
-        else if ((this.tipo2 == null) && (this.num == null) && (this.listaValores != null)) {
+        if ((this.listaValores != null)) {
             //Declaracion Tipo 2
             var contenido = new Array();
             for (let i = 0; i < this.listaValores.length; i++) {
@@ -74,7 +41,7 @@ class DeclaracionArray extends Nodo_1.Nodo {
                     contenido.push(this.listaValores[i]);
                 }
                 else if (this.tipo.tipo != this.listaValores[i].tipo.tipo) {
-                    const error = new Excepcion_1.Excepcion('Semantico', `El vector no puede ser declarado debido a que son de diferentes tipos`, this.line, this.column);
+                    const error = new Excepcion_1.Excepcion('Semantico', `El Array no puede ser declarado debido a que son de diferentes tipos`, this.line, this.column);
                     tree.excepciones.push(error);
                     tree.consola.push(error.toString());
                     return error;
@@ -84,13 +51,13 @@ class DeclaracionArray extends Nodo_1.Nodo {
                 }
             }
             let simbolo;
-            simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, contenido, new tipo_1.Tipo(tipo_1.tipos.ARRAY), this.line, this.column);
+            simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, contenido, new tipo_1.Tipo(tipo_1.tipos.ARREGLO), this.line, this.column);
             if (table.getVariable(this.id) == null) {
                 table.setVariable(simbolo);
                 tree.Variables.push(simbolo);
             }
             else {
-                const error = new Excepcion_1.Excepcion('Semantico', `El vector ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`, this.line, this.column);
+                const error = new Excepcion_1.Excepcion('Semantico', `El array ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`, this.line, this.column);
                 tree.excepciones.push(error);
                 tree.consola.push(error.toString());
                 return error;

@@ -24,58 +24,19 @@ export function defal(tipo: Tipo, line: Number, column: Number) {
 export class DeclaracionArray extends Nodo {
     tipo: Tipo;
     id: String;
-    tipo2: Tipo;
-    num: Nodo;
     listaValores: Array<Nodo>;
 
-    constructor(tipo: Tipo, id: String, tipo2: Tipo, num: Nodo, listaValores: Array<Nodo>, line: Number, column: Number) {
+    constructor(tipo: Tipo, id: String, listaValores: Array<Nodo>, line: Number, column: Number) {
         super(tipo, line, column);
         this.id = id;
-        this.tipo2 = tipo2;
-        this.num = num;
         this.listaValores = listaValores;
     }
 
     execute(table: Table, tree: Tree) {
-        if ((this.tipo2 != null) && (this.num != null) && (this.listaValores == null)) {
-            //Declaracion Tipo 1
-
-            if (this.tipo.tipo != this.tipo2.tipo) {
-                const error = new Excepcion('Semantico',
-                    `El vector no puede ser declarado debido a que son de diferentes tipos`,
-                    this.line, this.column);
-                tree.excepciones.push(error);
-                tree.consola.push(error.toString());
-                return error;
-            } else {
-                var contenido: Array<Nodo> = new Array<Nodo>();
-                const result = this.num.execute(table, tree);
-                if (result instanceof Excepcion) {
-                    return result;
-                }
-                for (let i = 0; i < result; i++) {
-                    contenido.push(defal(this.tipo, this.line, this.column));
-                }
-                let simbolo: Simbolo;
-                simbolo = new Simbolo(this.tipo, this.id, contenido, new Tipo(tipos.ARRAY), this.line, this.column);
-
-                if (table.getVariable(this.id) == null) {
-                    table.setVariable(simbolo);
-                    tree.Variables.push(simbolo)
-                } else {
-                    const error = new Excepcion('Semantico',
-                        `El vector ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`,
-                        this.line, this.column);
-                    tree.excepciones.push(error);
-                    tree.consola.push(error.toString());
-                    return error;
-                }
-            }
-
-        } else if ((this.tipo2 == null) && (this.num == null) && (this.listaValores != null)) {
+        if ((this.listaValores != null)) {
             //Declaracion Tipo 2
-
             var contenido: Array<Nodo> = new Array<Nodo>();
+            
             for (let i = 0; i < this.listaValores.length; i++) {
                 this.listaValores[i].execute(table, tree);
                 if ((this.tipo.tipo == tipos.DECIMAL) && (this.listaValores[i].tipo.tipo == tipos.ENTERO)) {
@@ -83,7 +44,7 @@ export class DeclaracionArray extends Nodo {
                     contenido.push(this.listaValores[i]);
                 } else if (this.tipo.tipo != this.listaValores[i].tipo.tipo) {
                     const error = new Excepcion('Semantico',
-                        `El vector no puede ser declarado debido a que son de diferentes tipos`,
+                        `El Array no puede ser declarado debido a que son de diferentes tipos`,
                         this.line, this.column);
                     tree.excepciones.push(error);
                     tree.consola.push(error.toString());
@@ -93,22 +54,27 @@ export class DeclaracionArray extends Nodo {
                 }
             }
 
+
+
             let simbolo: Simbolo;
-            simbolo = new Simbolo(this.tipo, this.id, contenido, new Tipo(tipos.ARRAY), this.line, this.column);
+            simbolo = new Simbolo(this.tipo, this.id, contenido, new Tipo(tipos.ARREGLO), this.line, this.column);
 
             if (table.getVariable(this.id) == null) {
                 table.setVariable(simbolo);
                 tree.Variables.push(simbolo)
             } else {
                 const error = new Excepcion('Semantico',
-                    `El vector ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`,
+                    `El array ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`,
                     this.line, this.column);
                 tree.excepciones.push(error);
                 tree.consola.push(error.toString());
                 return error;
             }
 
+
         }
+        
+
         return null;
     }
 
@@ -116,7 +82,7 @@ export class DeclaracionArray extends Nodo {
 
 
 
-    
+
     getNodo() {
 
         var nodo: NodoAST = new NodoAST("DECLARACION ARRAY");

@@ -197,6 +197,9 @@ break;
 case 123:
 this.$ = new Substring($$[$0-7],$$[$0-3],$$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column);
 break;
+case 125:
+this.$ = new Primitivo(new Tipo(tipos.ARREGLO), $$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column);
+break;
 case 129:
 this.$=$$[$0-1];
 break;

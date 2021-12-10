@@ -1658,6 +1658,18 @@ class Primitivo extends Nodo_1.Nodo {
         this.valor = valor;
     }
     execute(table, tree) {
+        try {
+            if (Array.isArray(this.valor)) {
+                var contenido = new Array();
+                for (let key in this.valor) {
+                    contenido.push(this.valor[key].execute(table, tree));
+                }
+                return contenido;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
         return this.valor;
     }
     getNodo() {
@@ -2652,6 +2664,9 @@ var grammar = (function () {
                     break;
                 case 123:
                     this.$ = new Substring($$[$0 - 7], $$[$0 - 3], $$[$0 - 1], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
+                    break;
+                case 125:
+                    this.$ = new Primitivo(new Tipo(tipos.ARREGLO), $$[$0 - 1], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                     break;
                 case 129:
                     this.$ = $$[$0 - 1];

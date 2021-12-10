@@ -388,24 +388,24 @@ EXPRESION
         
         //Llamar metodos y funciones
         |LLAMAR
-        |'[' LISTA_EXPRESION ']'
+        |'[' LISTA_EXPRESION ']'                        {$$ = new Primitivo(new Tipo(tipos.ARREGLO), $2, @1.first_line, @1.first_column);}
         |'identifier' '[' EXPRESION ']'
         |'identifier' '[' EXPRESION ':' EXPRESION ']'
         | EXPRESION '#'
-        |'(' EXPRESION ')'   {$$=$2;}
+        |'(' EXPRESION ')'                                      {$$=$2;}
         // |'identifier' '.' 'identifier'
         
 
         //Distintas funciones nativas
         |TIPO '.' 'parse' '(' EXPRESION ')' 
-        |'toInt' '(' EXPRESION  ')'   {$$ = new ToInt($3, @1.first_line, @1.first_column);}
-        |'toDouble' '(' EXPRESION ')'   {$$ = new ToDouble($3, @1.first_line, @1.first_column);}
-        |'string' '(' EXPRESION ')'  {$$ = new ConverString($3, @1.first_line, @1.first_column); console.log("adentrooooooo")}
+        |'toInt' '(' EXPRESION  ')'         {$$ = new ToInt($3, @1.first_line, @1.first_column);}
+        |'toDouble' '(' EXPRESION ')'       {$$ = new ToDouble($3, @1.first_line, @1.first_column);}
+        |'string' '(' EXPRESION ')'         {$$ = new ConverString($3, @1.first_line, @1.first_column); console.log("adentrooooooo")}
         |'typeof' '(' EXPRESION ')'  
         |'log' 'numero' '(' ')'       
 
         |'identifier' '.' 'pop' '(' ')'
-        |'identifier'               {$$ = new Identificador($1, @1.first_line, @1.first_column);}
+        |'identifier'                       {$$ = new Identificador($1, @1.first_line, @1.first_column);}
 ;
 
 TIPO

@@ -9,6 +9,18 @@ class Primitivo extends Nodo_1.Nodo {
         this.valor = valor;
     }
     execute(table, tree) {
+        try {
+            if (Array.isArray(this.valor)) {
+                var contenido = new Array();
+                for (let key in this.valor) {
+                    contenido.push(this.valor[key].execute(table, tree));
+                }
+                return contenido;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
         return this.valor;
     }
     getNodo() {
