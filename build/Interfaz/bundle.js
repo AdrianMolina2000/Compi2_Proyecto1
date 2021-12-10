@@ -777,7 +777,7 @@ class NodoAST {
 }
 exports.NodoAST = NodoAST;
 
-},{"ts-linked-list":29}],6:[function(require,module,exports){
+},{"ts-linked-list":30}],6:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -1373,7 +1373,7 @@ class Aritmetica extends Nodo_1.Nodo {
 }
 exports.Aritmetica = Aritmetica;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],7:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -1422,7 +1422,7 @@ class CaracterOFposition extends Nodo_1.Nodo {
 }
 exports.CaracterOFposition = CaracterOFposition;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],8:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -1474,7 +1474,7 @@ class ConverString extends Nodo_1.Nodo {
 }
 exports.ConverString = ConverString;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],9:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -1507,7 +1507,7 @@ class Identificador extends Nodo_1.Nodo {
 }
 exports.Identificador = Identificador;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27}],10:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -1553,7 +1553,7 @@ class Length extends Nodo_1.Nodo {
 }
 exports.Length = Length;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],11:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -1646,7 +1646,7 @@ class Logico extends Nodo_1.Nodo {
 }
 exports.Logico = Logico;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],12:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -2206,7 +2206,7 @@ class Relacional extends Nodo_1.Nodo {
 }
 exports.Relacional = Relacional;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],14:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -2257,7 +2257,7 @@ class Substring extends Nodo_1.Nodo {
 }
 exports.Substring = Substring;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],15:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -2308,7 +2308,7 @@ class ToDouble extends Nodo_1.Nodo {
 }
 exports.ToDouble = ToDouble;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],16:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -2359,7 +2359,7 @@ class ToInt extends Nodo_1.Nodo {
 }
 exports.ToInt = ToInt;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],17:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -2410,7 +2410,7 @@ class ToLower extends Nodo_1.Nodo {
 }
 exports.ToLower = ToLower;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],18:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -2456,7 +2456,7 @@ class ToUpper extends Nodo_1.Nodo {
 }
 exports.ToUpper = ToUpper;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],19:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],19:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -2566,7 +2566,6 @@ var grammar = (function () {
                     break;
                 case 41:
                     this.$ = new Print($$[$0 - 1], _$[$0 - 3].first_line, _$[$0 - 3].first_column, 2);
-                    console.log("normaaaaaaaal");
                     break;
                 case 43:
                 case 49:
@@ -2583,6 +2582,9 @@ var grammar = (function () {
                     break;
                 case 46:
                     this.$ = new Declaracion($$[$0 - 1], $$[$0], defal($$[$0 - 1]), _$[$0 - 1].first_line, _$[$0 - 1].first_column);
+                    break;
+                case 47:
+                    this.$ = new DeclaracionArray($$[$0 - 5], $$[$0 - 2], $$[$0], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
                     break;
                 case 51:
                     this.$ = new Asignacion($$[$0 - 2], $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
@@ -2935,6 +2937,7 @@ var grammar = (function () {
     //Instrucciones
     const { Print } = require('../Instrucciones/Print');
     const { Declaracion, defal } = require('../Instrucciones/Declaracion');
+    const { DeclaracionArray } = require('../Instrucciones/DeclaracionArray');
     const { Asignacion } = require('../Instrucciones/Asignacion');
     /* generated by jison-lex 0.3.4 */
     var lexer = (function () {
@@ -3537,7 +3540,7 @@ if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
 }
 
 }).call(this)}).call(this,require('_process'))
-},{"../Expresiones/Aritmetica":6,"../Expresiones/CaracterOFposition":7,"../Expresiones/ConverString":8,"../Expresiones/Identificador":9,"../Expresiones/Length":10,"../Expresiones/Logico":11,"../Expresiones/Primitivo":12,"../Expresiones/Relacional":13,"../Expresiones/Substring":14,"../Expresiones/ToDouble":15,"../Expresiones/ToInt":16,"../Expresiones/ToLower":17,"../Expresiones/ToUpper":18,"../Instrucciones/Asignacion":20,"../Instrucciones/Declaracion":21,"../Instrucciones/Print":22,"../Simbols/Tree":26,"../other/tipo":28,"_process":3,"fs":1,"path":2}],20:[function(require,module,exports){
+},{"../Expresiones/Aritmetica":6,"../Expresiones/CaracterOFposition":7,"../Expresiones/ConverString":8,"../Expresiones/Identificador":9,"../Expresiones/Length":10,"../Expresiones/Logico":11,"../Expresiones/Primitivo":12,"../Expresiones/Relacional":13,"../Expresiones/Substring":14,"../Expresiones/ToDouble":15,"../Expresiones/ToInt":16,"../Expresiones/ToLower":17,"../Expresiones/ToUpper":18,"../Instrucciones/Asignacion":20,"../Instrucciones/Declaracion":21,"../Instrucciones/DeclaracionArray":22,"../Instrucciones/Print":23,"../Simbols/Tree":27,"../other/tipo":29,"_process":3,"fs":1,"path":2}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -3601,7 +3604,7 @@ class Asignacion extends Nodo_1.Nodo {
 }
 exports.Asignacion = Asignacion;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":27,"../other/tipo":28}],21:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":28,"../other/tipo":29}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -3678,13 +3681,125 @@ class Declaracion extends Nodo_1.Nodo {
 }
 exports.Declaracion = Declaracion;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Primitivo":12,"../Simbols/Simbolo":24,"../other/Excepcion":27,"../other/tipo":28}],22:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Primitivo":12,"../Simbols/Simbolo":25,"../other/Excepcion":28,"../other/tipo":29}],22:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Nodo_1 = require("../Abstract/Nodo");
+const Excepcion_1 = require("../other/Excepcion");
+const tipo_1 = require("../other/tipo");
+const Simbolo_1 = require("../Simbols/Simbolo");
+const Primitivo_1 = require("../Expresiones/Primitivo");
+const NodoAST_1 = require("../Abstract/NodoAST");
+function defal(tipo, line, column) {
+    if (tipo.tipo == tipo_1.tipos.ENTERO) {
+        return new Primitivo_1.Primitivo(tipo, 0, line, column);
+    }
+    else if (tipo.tipo == tipo_1.tipos.DECIMAL) {
+        return new Primitivo_1.Primitivo(tipo, 0.0, line, column);
+    }
+    else if (tipo.tipo == tipo_1.tipos.BOOLEANO) {
+        return new Primitivo_1.Primitivo(tipo, true, line, column);
+    }
+    else if (tipo.tipo == tipo_1.tipos.CARACTER) {
+        return new Primitivo_1.Primitivo(tipo, '', line, column);
+    }
+    else if (tipo.tipo == tipo_1.tipos.STRING) {
+        return new Primitivo_1.Primitivo(tipo, "", line, column);
+    }
+}
+exports.defal = defal;
+function revisar(tipo1, lista) {
+    for (let key in lista.valor) {
+        if (lista.valor[key].tipo.tipo == 6) {
+            return revisar(tipo1, lista.valor[key]);
+        }
+        if (tipo1.tipo != lista.valor[key].tipo.tipo) {
+            return false;
+        }
+    }
+    return true;
+}
+class DeclaracionArray extends Nodo_1.Nodo {
+    constructor(tipo, id, listaValores, line, column) {
+        super(tipo, line, column);
+        this.id = id;
+        this.listaValores = listaValores;
+    }
+    //int[] a = [1];
+    execute(table, tree) {
+        if ((this.listaValores != null)) {
+            //Declaracion Tipo 2
+            if (revisar(this.tipo, this.listaValores)) {
+                let simbolo;
+                simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, this.listaValores, new tipo_1.Tipo(tipo_1.tipos.ARREGLO), this.line, this.column);
+                if (table.getVariable(this.id) == null) {
+                    table.setVariable(simbolo);
+                    tree.Variables.push(simbolo);
+                }
+                else {
+                    const error = new Excepcion_1.Excepcion('Semantico', `El array ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`, this.line, this.column);
+                    tree.excepciones.push(error);
+                    tree.consola.push(error.toString());
+                    return error;
+                }
+            }
+            else {
+                const error = new Excepcion_1.Excepcion('Semantico', `El Array no puede ser declarado debido a que son de diferentes tipos \n`, this.line, this.column);
+                tree.excepciones.push(error);
+                tree.consola.push(error.toString());
+                return error;
+            }
+        }
+        return null;
+    }
+    getNodo() {
+        var nodo = new NodoAST_1.NodoAST("DECLARACION ARRAY");
+        // if ((this.tipo2 != null) && (this.num != null) && (this.listaValores == null)) {
+        //     nodo.agregarHijo(`${this.tipo}[]`);
+        //     nodo.agregarHijo(this.id + "");
+        //     nodo.agregarHijo("=");
+        //     nodo.agregarHijo("new");
+        //     var nodo2: NodoAST = new NodoAST("Tamaño del Array");
+        //     nodo2.agregarHijo("int");
+        //     nodo2.agregarHijo("[");
+        //     nodo2.agregarHijo(this.num.getNodo());
+        //     nodo2.agregarHijo("]");
+        //     nodo.agregarHijo(nodo2);
+        // } else if ((this.tipo2 == null) && (this.num == null) && (this.listaValores != null)) {
+        //     nodo.agregarHijo(`${this.tipo}[]`);
+        //     nodo.agregarHijo(this.id + "");
+        //     nodo.agregarHijo("=");
+        //     nodo.agregarHijo("{");
+        //     var nodo2: NodoAST = new NodoAST("Lista Valores");
+        //     for (let i = 0; i < this.listaValores.length; i++) {
+        //         nodo2.agregarHijo(this.listaValores[i].getNodo());
+        //     }
+        //     nodo.agregarHijo(nodo2);
+        //     nodo.agregarHijo("}");
+        // }
+        return nodo;
+    }
+}
+exports.DeclaracionArray = DeclaracionArray;
+
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Primitivo":12,"../Simbols/Simbolo":25,"../other/Excepcion":28,"../other/tipo":29}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
 const tipo_1 = require("../other/tipo");
 const tipo_2 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+function imprimir(lista, table, tree) {
+    var salida = "[";
+    for (let key in lista.valor) {
+        if (lista.valor[key].tipo.tipo == 6) {
+            return salida + imprimir(lista.valor[key], table, tree) + "]";
+        }
+        salida += lista.valor[key].execute(table, tree) + ", ";
+    }
+    salida = salida.substring(0, salida.length - 2);
+    return salida + "]";
+}
 class Print extends Nodo_1.Nodo {
     constructor(expresion, line, column, tipo_print) {
         super(new tipo_1.Tipo(tipo_2.tipos.VOID), line, column);
@@ -3692,9 +3807,24 @@ class Print extends Nodo_1.Nodo {
         this.tipo_print = tipo_print;
     }
     execute(table, tree) {
+        /*
+        
+        int[] a = [1,2,3];
+String b = "ss";
+
+println(a);
+print(b);
+        
+        */
+        //int[] a = [1,2,3]; print(a);
         for (let key in this.expresion) {
             const valor = this.expresion[key].execute(table, tree);
-            tree.consola.push(valor);
+            if (valor.tipo == null) {
+                tree.consola.push(valor);
+            }
+            else {
+                tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
+            }
         }
         /*agregando el tipo para el pritnln lo  maneje asi  fuera del for para evitar clavos papa ctm*/
         if (this.tipo_print == 1) {
@@ -3715,7 +3845,7 @@ class Print extends Nodo_1.Nodo {
 }
 exports.Print = Print;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/tipo":28}],23:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/tipo":29}],24:[function(require,module,exports){
 (function (global){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -3757,7 +3887,7 @@ global.Enviar = function entrada() {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../Gramatica/grammar.js":19,"../Simbols/Table":25}],24:[function(require,module,exports){
+},{"../Gramatica/grammar.js":19,"../Simbols/Table":26}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Simbolo {
@@ -3772,7 +3902,7 @@ class Simbolo {
 }
 exports.Simbolo = Simbolo;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Table {
@@ -3807,7 +3937,7 @@ class Table {
 }
 exports.Table = Table;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Tree {
@@ -3820,7 +3950,7 @@ class Tree {
 }
 exports.Tree = Tree;
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Excepcion {
@@ -3836,7 +3966,7 @@ class Excepcion {
 }
 exports.Excepcion = Excepcion;
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var tipos;
@@ -3905,7 +4035,7 @@ class Tipo {
 }
 exports.Tipo = Tipo;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 var __generator = (this && this.__generator) || function (thisArg, body) {
     var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
@@ -4599,7 +4729,7 @@ var LinkedList = /** @class */ (function () {
 }());
 exports.default = LinkedList;
 
-},{"./LinkedListNode":30}],30:[function(require,module,exports){
+},{"./LinkedListNode":31}],31:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -4697,4 +4827,4 @@ var LinkedListNode = /** @class */ (function () {
 }());
 exports.default = LinkedListNode;
 
-},{"./LinkedList":29}]},{},[23]);
+},{"./LinkedList":30}]},{},[24]);

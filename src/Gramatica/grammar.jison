@@ -13,7 +13,7 @@
    
     const {Length} = require('../Expresiones/Length');   
     const {Substring} = require('../Expresiones/Substring'); 
-     const {CaracterOFposition} = require('../Expresiones/CaracterOFposition'); 
+    const {CaracterOFposition} = require('../Expresiones/CaracterOFposition'); 
     const {ToInt} = require('../Expresiones/ToInt'); 
     const {ToDouble} = require('../Expresiones/ToDouble'); 
     const {ConverString} = require('../Expresiones/ConverString');
@@ -21,6 +21,7 @@
     //Instrucciones
     const {Print} = require('../Instrucciones/Print');
     const {Declaracion, defal} = require('../Instrucciones/Declaracion');
+    const {DeclaracionArray} = require('../Instrucciones/DeclaracionArray');
     const {Asignacion} = require('../Instrucciones/Asignacion');
 %}
 
@@ -227,7 +228,7 @@ ListaIns2
 
 PRINT
     :'print' '(' LISTA_EXPRESION ')'    {$$ = new Print($3, @1.first_line, @1.first_column,1); }
-    |'println' '(' LISTA_EXPRESION ')'  {$$ = new Print($3, @1.first_line, @1.first_column,2); console.log("normaaaaaaaal")}
+    |'println' '(' LISTA_EXPRESION ')'  {$$ = new Print($3, @1.first_line, @1.first_column,2); }
     |'printf' '(' LISTA_EXPRESION ')'
 ;
 
@@ -239,7 +240,7 @@ LISTA_EXPRESION
 DECLARACION
     :TIPO 'identifier' '=' EXPRESION            {$$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column);}
     |TIPO LISTA_ID                              {$$ = new Declaracion($1, $2, defal($1), @1.first_line, @1.first_column);}
-    |TIPO '[' ']' 'identifier' '=' EXPRESION
+    |TIPO '[' ']' 'identifier' '=' EXPRESION    {$$ = new DeclaracionArray($1, $4, $6, @1.first_line, @1.first_column);}
     |'identifier' 'identifier' '=' EXPRESION 
 ;
 
