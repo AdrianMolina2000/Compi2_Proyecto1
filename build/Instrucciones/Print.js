@@ -22,23 +22,19 @@ class Print extends Nodo_1.Nodo {
         this.tipo_print = tipo_print;
     }
     execute(table, tree) {
-        /*
-        
-        int[] a = [1,2,3];
-String b = "ss";
-
-println(a);
-print(b);
-        
-        */
-        //int[] a = [1,2,3]; print(a);
         for (let key in this.expresion) {
             const valor = this.expresion[key].execute(table, tree);
             if (valor.tipo == null) {
                 tree.consola.push(valor);
             }
             else {
-                tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
+                if (this.expresion[key].execute(table, tree).tipo.tipo == 6) {
+                    console.log("simon");
+                    tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
+                }
+                else {
+                    tree.consola.push(valor);
+                }
             }
         }
         /*agregando el tipo para el pritnln lo  maneje asi  fuera del for para evitar clavos papa ctm*/

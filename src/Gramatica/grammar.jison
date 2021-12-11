@@ -4,6 +4,8 @@
     const {Tipo, tipos, esEntero} = require('../other/tipo');
     const {Primitivo} = require('../Expresiones/Primitivo');
     const {Identificador} = require('../Expresiones/Identificador');
+    const {Vector} = require('../Expresiones/Vector');
+
      //Expresion
     const {Aritmetica} = require('../Expresiones/Aritmetica');
     const {Logico} = require('../Expresiones/Logico');
@@ -17,12 +19,30 @@
     const {ToInt} = require('../Expresiones/ToInt'); 
     const {ToDouble} = require('../Expresiones/ToDouble'); 
     const {ConverString} = require('../Expresiones/ConverString');
+    const {TypeOf} = require('../Expresiones/TypeOf');
+    const {Log} = require('../Expresiones/Log');
+    const {Seno} = require('../Expresiones/Seno');
+    const {Cos} = require('../Expresiones/Cos');
+    const {Tan} = require('../Expresiones/Tan');
+    const {Sqrt} = require('../Expresiones/Sqrt');
+    const {Pow} = require('../Expresiones/Pow');
+    const {Nativas_Diferentes} = require('../Expresiones/Nativas_Diferentes');
+    const {Ternario} = require('../Expresiones/Ternario');
 
     //Instrucciones
     const {Print} = require('../Instrucciones/Print');
+    const {If} = require('../Instrucciones/If');
+    const {If_unico} = require('../Instrucciones/If_unico');
+    const {Switch} = require('../Instrucciones/Switch');
+    const {Case} = require('../Instrucciones/Case');
+    const {Retorno} = require('../Instrucciones/Retorno');
+    const {Break} = require('../Expresiones/Break'); 
+    const {While} = require('../Expresiones/While'); 
+    const {DoWhile} = require('../Instrucciones/DoWhile');
     const {Declaracion, defal} = require('../Instrucciones/Declaracion');
     const {DeclaracionArray} = require('../Instrucciones/DeclaracionArray');
     const {Asignacion} = require('../Instrucciones/Asignacion');
+    const {InDecrement} = require('../Expresiones/InDecrement');
 %}
 
 %lex
@@ -31,7 +51,6 @@
 no  ([\"]*)
 
 stringliteral (\"[^"]*\")
-identifier ([a-zA-Z_])[a-zA-Z0-9_]*
 
 
 caracter (\'[^☼]\')
@@ -133,8 +152,11 @@ caracter (\'[^☼]\')
 
 [0-9]+("."[0-9]+)?\b  return 'numero';
 
-"struct"              return 'struct'
-{identifier}          return 'identifier'
+"struct"                return 'struct'
+([a-zA-Z])[a-zA-Z0-9_]* return 'identifier';
+
+
+
 
 <<EOF>>	              return 'EOF'
 /lex
@@ -176,8 +198,8 @@ Verificar_params
 ;
 
 PARAMETROS
-    :PARAMETROS ',' TIPO 'identifier'
-    |TIPO 'identifier'
+    :PARAMETROS ',' TIPO 'identifier'   {$$ = $1; $1.push($2);}
+    |TIPO 'identifier'                  {$$ =[$1];}
 ;
 
 LISTA_INSTRUCCIONES
@@ -186,45 +208,48 @@ LISTA_INSTRUCCIONES
 ;
 
 ListaIns
-    :PRINT ';'                      {$$ = $1;}    
-    |DECLARACION ';'
-    |ASIGNACION ';' 
+    :PRINT ';'                                  {$$ = $1;}    
+    |DECLARACION ';'                            {$$ = $1;}
+    |ASIGNACION ';'                             {$$ = $1;}
     |LLAMAR ';' 
-    |IF
-    |SWITCH
-    |'break' ';'
-    |WHILE
-    |DO ';'
-    |FOR
-    |'identifier' 'decremento' ';'
-    |'identifier' 'incremento' ';'
-    | RETURN ';'
+    |IF                                         {$$ = $1;}  
+    |SWITCH                                      {$$ = $1;}  
+    |'break' ';'                                {$$ = new Break(@1.first_line, @1.first_column);}
+    |WHILE                                      {$$ = $1;}  
+    |DO ';'                                     {$$ = $1;}  
+    |FOR          
+    |'identifier' 'decremento' ';'              {$$ = new InDecrement($1, "--", @1.first_line, @1.first_column);}
+    |'identifier' 'incremento' ';'              {$$ = new InDecrement($1, "++", @1.first_line, @1.first_column);}
+    | RETURN ';'                                {$$ = $1;}  
     |'identifier' '.' 'pop' '(' ')'
     |'identifier' '.' 'push' '(' EXPRESION ')'
     |STRUCT ';' 
-    | error ';' {console.log(yytext+"error sintactico") }
+    |'continue' ';'                             {$$ = new Continue(@1.first_line, @1.first_column);}
+    | error ';'                                 {console.log(yytext+"error sintactico") }
 
 
 ;
-
 ListaIns2
-    :PRINT ';'                  {$$ = $1;}  
-    |DECLARACION ';'
-    |ASIGNACION ';' 
-    |LLAMAR ';' 
-    |SWITCH
-    |'break' ';'
+    :PRINT ';'                                  {$$ = $1;}  
+    |DECLARACION ';'                            {$$ = $1;}
+    |ASIGNACION ';'                             {$$ = $1;}
+    |LLAMAR ';'                                      
+    |SWITCH                                     {$$ = $1;}  
+    |'break' ';'                                {$$ = new Break(@1.first_line, @1.first_column);} 
     |WHILE
-    |DO ';'
+    |DO ';'                                     {$$ = $1;}
     |FOR
-    |'identifier' 'incremento' ';'
-    |'identifier' 'decremento' ';'
-    |RETURN ';'
+    |'identifier' 'incremento' ';'              {$$ = new InDecrement($1, "++", @1.first_line, @1.first_column);}
+    |'identifier' 'decremento' ';'              {$$ = new InDecrement($1, "--", @1.first_line, @1.first_column);}
+    |RETURN ';'                                 {$$ = $1;}  
     |'identifier' '.' 'pop' '(' ')'
     |'identifier' '.' 'push' '(' EXPRESION ')'
+    |'continue' ';'                             {$$ = new Continue(@1.first_line, @1.first_column);}
     |STRUCT ';'
+    | error ';'                                 {console.log(yytext+"error sintactico") }
 
 ;
+
 
 PRINT
     :'print' '(' LISTA_EXPRESION ')'    {$$ = new Print($3, @1.first_line, @1.first_column,1); }
@@ -237,8 +262,9 @@ LISTA_EXPRESION
     |EXPRESION                          {$$ = []; $$.push($1);}
 ;
 
+
 DECLARACION
-    :TIPO 'identifier' '=' EXPRESION            {$$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column);}
+    :TIPO 'identifier' '=' EXPRESION            {$$ = new Declaracion($1, [$2], $4, @1.first_line, @1.first_column);}
     |TIPO LISTA_ID                              {$$ = new Declaracion($1, $2, defal($1), @1.first_line, @1.first_column);}
     |TIPO '[' ']' 'identifier' '=' EXPRESION    {$$ = new DeclaracionArray($1, $4, $6, @1.first_line, @1.first_column);}
     |'identifier' 'identifier' '=' EXPRESION 
@@ -269,35 +295,35 @@ PARAMETROS_LLAMADA
 ;
 
 IF
-    :'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'
-    |'if' '(' EXPRESION ')' ListaIns2
-    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' '{' LISTA_INSTRUCCIONES '}'
-    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' IF
-    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' ListaIns2
-    |'if' '(' EXPRESION ')' ListaIns2 'else' ListaIns2
+    :'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'                                     {$$ = new If($3, $6, [], @1.first_line, @1.first_column);}
+    |'if' '(' EXPRESION ')' ListaIns2                                                       {$$ = new If_unico($3, $5, null, @1.first_line, @1.first_column); console.log("suuuu1");}
+    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' '{' LISTA_INSTRUCCIONES '}'  {$$ = new If($3, $6, $10, @1.first_line, @1.first_column);}
+    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' IF                           {$$ = new If($3, $6, [$9], @1.first_line, @1.first_column);}
+    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' ListaIns2                     {$$ = new If($3, $6, $9, @1.first_line, @1.first_column);}
+    |'if' '(' EXPRESION ')' ListaIns2 'else' ListaIns2                                      {$$ = new If_unico($3,$5,$7,@1.first_line, @1.first_column); console.log("suuuu");}
 ;
 
 SWITCH  
-    :'switch' '(' EXPRESION ')' '{' CASE_LIST DEFAULT_LIST '}' 
-    |'switch' '(' EXPRESION ')' '{' CASE_LIST '}'  
-    |'switch' '(' EXPRESION ')' '{' DEFAULT_LIST '}'  
+    :'switch' '(' EXPRESION ')' '{' CASE_LIST DEFAULT_LIST '}'      {$$ = new Switch($3, $6, $7, @1.first_line, @1.first_column);}
+    |'switch' '(' EXPRESION ')' '{' CASE_LIST '}'                   {$$ = new Switch($3, $6, null, @1.first_line, @1.first_column);}
+    |'switch' '(' EXPRESION ')' '{' DEFAULT_LIST '}'                {$$ = new Switch($3, null, $6, @1.first_line, @1.first_column);}
 ;
 
 CASE_LIST
-    :CASE_LIST 'case' EXPRESION ':' LISTA_INSTRUCCIONES
-    |'case' EXPRESION ':' LISTA_INSTRUCCIONES
+    :CASE_LIST 'case' EXPRESION ':' LISTA_INSTRUCCIONES             {$$ = $1; $$.push(new Case($3, $5, @1.first_line, @1.first_column));}
+    |'case' EXPRESION ':' LISTA_INSTRUCCIONES                       {$$ = []; $$.push(new Case($2, $4, @1.first_line, @1.first_column));}
 ;
 
 DEFAULT_LIST
-    :'default' ':' LISTA_INSTRUCCIONES
+    :'default' ':' LISTA_INSTRUCCIONES      {$$ = $3}
 ;
 
 WHILE
-    :'while' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'
+    :'while' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'          {$$ = new While($3, $6, @1.first_line, @1.first_column);}
 ;
 
 DO
-    :'do' '{'  LISTA_INSTRUCCIONES '}' 'while' '(' EXPRESION ')' ';'
+    :'do' '{'  LISTA_INSTRUCCIONES '}' 'while' '(' EXPRESION ')'    {$$ = new DoWhile($7, $3, @1.first_line, @1.first_column); console.log("adentro de mi amigo do")}
 ;
 
 FOR
@@ -317,8 +343,8 @@ for_increment
 ;
 
 RETURN 
-    :'return' EXPRESION
-    |'return'
+    :'return' EXPRESION         {$$ = new Retorno($2, @1.first_line, @1.first_column);}
+    |'return'                   {$$ = new Retorno(null, @1.first_line, @1.first_column);}
 ;
 
 STRUCT:
@@ -347,12 +373,14 @@ EXPRESION
         |EXPRESION '/' EXPRESION        {$$ = new Aritmetica($1, $3, '/', @1.first_line, @1.first_column);}	
         |EXPRESION '%' EXPRESION        {$$ = new Aritmetica($1, $3, '%', @1.first_line, @1.first_column);}	
         
+         
         //Nativas Aritmeticas
-        |'sin'  '(' EXPRESION ')'
-        |'cos' '(' EXPRESION ')'
-        |'tan' '(' EXPRESION ')'
-        |'pow' '(' EXPRESION ',' 'EXPRESION' ')'
-        |'sqrt' '(' EXPRESION ')'
+        |'sin'  '(' EXPRESION ')'                   {$$ = new Seno($3, @1.first_line, @1.first_column);}
+        |'cos' '(' EXPRESION ')'                    {$$ = new Cos($3, @1.first_line, @1.first_column);}
+        |'tan' '(' EXPRESION ')'                    {$$ = new Tan($3, @1.first_line, @1.first_column);}
+        |'pow' '(' EXPRESION ',' 'EXPRESION' ')'    {$$ = new Pow($3,$5, @1.first_line, @1.first_column);}
+        |'sqrt' '(' EXPRESION ')'                   {$$ = new Sqrt($3, @1.first_line, @1.first_column);}
+
 
         //Relacionales
         |EXPRESION '==' EXPRESION       {$$ = new Relacional($1, $3, '==', @1.first_line, @1.first_column);}
@@ -363,7 +391,7 @@ EXPRESION
         |EXPRESION '<'  EXPRESION       {$$ = new Relacional($1, $3, '<', @1.first_line, @1.first_column);}	 
         
         //Logicas
-        |'!' EXPRESION	     
+        |'!' EXPRESION	                {$$ = new Logico(null, $2, '!', @1.first_line, @1.first_column);}	
         |EXPRESION '&&' EXPRESION       {$$ = new Logico($1, $3, '&&', @1.first_line, @1.first_column);}
         |EXPRESION '||' EXPRESION       {$$ = new Logico($1, $3, '||', @1.first_line, @1.first_column);}
 
@@ -372,41 +400,42 @@ EXPRESION
         |EXPRESION '^' EXPRESION        {$$ = new Aritmetica($1, $3, '^', @1.first_line, @1.first_column);}
         
         //Operador Ternario
-        |EXPRESION '?' EXPRESION ':' EXPRESION
+        |EXPRESION '?' EXPRESION ':' EXPRESION  {$$ = new Ternario($1, $3, $5, @1.first_line, @1.first_column);}
 
         //Primitivos
         |'null'    
-        |'numero'                   {$$ = new Primitivo(new Tipo(esEntero(Number($1))), Number($1), @1.first_line, @1.first_column);} 
-        |'true'                     {$$ = new Primitivo(new Tipo(tipos.BOOLEANO), true, @1.first_line, @1.first_column);}
-        |'false'                    {$$ = new Primitivo(new Tipo(tipos.BOOLEANO), false, @1.first_line, @1.first_column);}
-        |'caracter'                 {$$ = new Primitivo(new Tipo(tipos.CARACTER), $1.replace(/\'/g,""), @1.first_line, @1.first_column);} 
-        |'cadena'                   {$$ = new Primitivo(new Tipo(tipos.STRING), $1.replace(/\"/g,""), @1.first_line, @1.first_column);}
-        |EXPRESION '.' 'toLowercase' '(' ')'     {$$ = new ToLower($1, @1.first_line, @1.first_column);}  
-        |EXPRESION '.' 'toUppercase' '(' ')'     {$$ = new ToUpper($1, @1.first_line, @1.first_column);} 
-        |EXPRESION '.' 'length' '(' ')'          {$$ = new Length($1, @1.first_line, @1.first_column);}
-        |EXPRESION '.'  'caracterOfPosition' '(' 'numero' ')'  {$$ = new CaracterOFposition($1,$5, @1.first_line, @1.first_column);}
-        |EXPRESION '.'  'subString' '(' numero ',' numero ')'  {$$ = new Substring($1,$5,$7, @1.first_line, @1.first_column);}
+        |'numero'                                               {$$ = new Primitivo(new Tipo(esEntero(Number($1))), Number($1), @1.first_line, @1.first_column);} 
+        |'true'                                                 {$$ = new Primitivo(new Tipo(tipos.BOOLEANO), true, @1.first_line, @1.first_column);}
+        |'false'                                                {$$ = new Primitivo(new Tipo(tipos.BOOLEANO), false, @1.first_line, @1.first_column);}
+        |'caracter'                                             {$$ = new Primitivo(new Tipo(tipos.CARACTER), $1.replace(/\'/g,""), @1.first_line, @1.first_column);} 
+        |'cadena'                                               {$$ = new Primitivo(new Tipo(tipos.STRING), $1.replace(/\"/g,""), @1.first_line, @1.first_column);}
+        |EXPRESION '.' 'toLowercase' '(' ')'                    {$$ = new ToLower($1, @1.first_line, @1.first_column);}  
+        |EXPRESION '.' 'toUppercase' '(' ')'                    {$$ = new ToUpper($1, @1.first_line, @1.first_column);} 
+        |EXPRESION '.' 'length' '(' ')'                         {$$ = new Length($1, @1.first_line, @1.first_column);}
+        |EXPRESION '.'  'caracterOfPosition' '(' 'numero' ')'   {$$ = new CaracterOFposition($1,$5, @1.first_line, @1.first_column);}
+        |EXPRESION '.'  'subString' '(' numero ',' numero ')'   {$$ = new Substring($1,$5,$7, @1.first_line, @1.first_column);}
         
         //Llamar metodos y funciones
         |LLAMAR
-        |'[' LISTA_EXPRESION ']'                        {$$ = new Primitivo(new Tipo(tipos.ARREGLO), $2, @1.first_line, @1.first_column);}
-        |'identifier' '[' EXPRESION ']'
+        |'[' LISTA_EXPRESION ']'                                {$$ = new Primitivo(new Tipo(tipos.ARREGLO), $2, @1.first_line, @1.first_column);}
+        |'identifier' '[' EXPRESION ']'                         {$$ = new Vector($1, $3, @1.first_line, @1.first_column);}
         |'identifier' '[' EXPRESION ':' EXPRESION ']'
         | EXPRESION '#'
         |'(' EXPRESION ')'                                      {$$=$2;}
         // |'identifier' '.' 'identifier'
         
 
-        //Distintas funciones nativas
-        |TIPO '.' 'parse' '(' EXPRESION ')' 
-        |'toInt' '(' EXPRESION  ')'         {$$ = new ToInt($3, @1.first_line, @1.first_column);}
-        |'toDouble' '(' EXPRESION ')'       {$$ = new ToDouble($3, @1.first_line, @1.first_column);}
-        |'string' '(' EXPRESION ')'         {$$ = new ConverString($3, @1.first_line, @1.first_column); console.log("adentrooooooo")}
-        |'typeof' '(' EXPRESION ')'  
-        |'log' 'numero' '(' ')'       
+   
 
+        //Distintas funciones nativas
+        |TIPO '.' 'parse' '(' EXPRESION ')'     {$$ = new Nativas_Diferentes($1, $5, @1.first_line, @1.first_column);}
+        |'toInt' '(' EXPRESION  ')'             {$$ = new ToInt($3, @1.first_line, @1.first_column);}
+        |'toDouble' '(' EXPRESION ')'           {$$ = new ToDouble($3, @1.first_line, @1.first_column);}
+        |'string' '(' EXPRESION ')'             {$$ = new ConverString($3, @1.first_line, @1.first_column); }
+        |'typeof' '(' EXPRESION ')'             {$$ = new TypeOf($3, @1.first_line, @1.first_column);}
+        |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);}
         |'identifier' '.' 'pop' '(' ')'
-        |'identifier'                       {$$ = new Identificador($1, @1.first_line, @1.first_column);}
+        |'identifier'                           {$$ = new Identificador($1, @1.first_line, @1.first_column);}
 ;
 
 TIPO
