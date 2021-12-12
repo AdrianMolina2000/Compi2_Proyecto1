@@ -16,36 +16,36 @@ class Vector extends Nodo_1.Nodo {
         variable = table.getVariable(this.id);
         if (variable == null) {
             const error = new Excepcion_1.Excepcion('Semantico', `El Vector {${this.id}} no ha sido encontrada`, this.line, this.column);
-            tree.excepciones.push(error);
-            tree.consola.push(error.toString());
             return error;
         }
+        /*
+        int [] a = [1,2,3,4,5];
+        print(a[0]);
+        */
         this.tipo = variable.tipo;
         var arreglo;
         arreglo = variable.valor.valor;
         this.pos = this.posicion.execute(table, tree);
         if (this.posicion.tipo.tipo == tipo_1.tipos.ENTERO) {
-            if ((this.posicion.execute(table, tree) >= arreglo.length) || (this.posicion.execute(table, tree) < 0)) {
+            if ((this.pos >= arreglo.length) || (this.pos < 0)) {
                 const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
-                tree.excepciones.push(error);
                 return error;
             }
             else {
                 try {
                     this.bandera1 = true;
-                    this.valor = arreglo[this.posicion.execute(table, tree)].execute(table, tree);
+                    this.valor = arreglo[this.pos].execute(table, tree);
                     return this.valor;
                 }
                 catch (err) {
                     const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
-                    tree.excepciones.push(error);
+                    console.log(err);
                     return error;
                 }
             }
         }
         else {
             const error = new Excepcion_1.Excepcion('Semantico', `Se esperaba un valor entero en la posicion`, this.line, this.column);
-            tree.excepciones.push(error);
             return error;
         }
     }

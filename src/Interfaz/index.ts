@@ -32,12 +32,11 @@ global.Enviar = function entrada() {
         try {
             const res = m.execute(tabla, tree);
         } catch (error) {
-            console.log('error')
+            console.log(error)
         }
         // console.log(tree.consola);
         var texto = "";        
         for (const key in tree.consola) {
-            
             texto += tree.consola[key];
         }
         editor2.setValue(texto);

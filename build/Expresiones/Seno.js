@@ -6,18 +6,16 @@ const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 class Seno extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
-        super(new tipo_1.Tipo(tipo_1.tipos.STRING), line, column);
+        super(new tipo_1.Tipo(tipo_1.tipos.DECIMAL), line, column);
         this.expresion = expresion;
     }
     execute(table, tree) {
         try {
             const resultado = this.expresion.execute(table, tree);
             if (resultado instanceof Excepcion_1.Excepcion) {
-                console.log(resultado);
                 return resultado;
             }
             else {
-                console.log(Math.sin(resultado));
                 return Math.sin(resultado);
             }
         }

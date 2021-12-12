@@ -8,22 +8,18 @@ import { NodoAST } from "../Abstract/NodoAST";
 export class ToDouble extends Nodo {
     expresion: Nodo;
     constructor(expresion: Nodo, line: Number, column: Number) {
-        super(new Tipo(tipos.STRING), line, column);
+        super(new Tipo(tipos.DECIMAL), line, column);
         this.expresion = expresion;
     }
 
     execute(table: Table, tree: Tree) {
 
         try {
-           // console.log("s");
             const resultado = this.expresion.execute(table, tree);
-         //   console.log("sa");
-         //   console.log(resultado);
+
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
             } else {
-                console.log(resultado.toFixed(2));
                 return resultado.toFixed(2);
             }
         } catch (err) {

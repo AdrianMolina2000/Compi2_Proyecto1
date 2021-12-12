@@ -13,19 +13,18 @@ class CaracterOFposition extends Nodo_1.Nodo {
     execute(table, tree) {
         try {
             const resultado = this.expresion.execute(table, tree);
+            const pos = this.posicion.execute(table, tree);
             if (resultado instanceof Excepcion_1.Excepcion) {
                 return resultado;
             }
             else {
                 //const inicio_rec=this.inicio;
-                return parseInt(resultado);
-                //  return resultado.toLowerCase();
+                return resultado.charAt(pos);
             }
         }
         catch (err) {
-            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error querrer imprimir la posicion del string joven`, this.line, this.column);
-            tree.excepciones.push(error);
-            tree.consola.push(error.toString());
+            console.log(err);
+            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error querer imprimir la posicion del string joven`, this.line, this.column);
             return error;
         }
     }

@@ -6,21 +6,16 @@ const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 class ToDouble extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
-        super(new tipo_1.Tipo(tipo_1.tipos.STRING), line, column);
+        super(new tipo_1.Tipo(tipo_1.tipos.DECIMAL), line, column);
         this.expresion = expresion;
     }
     execute(table, tree) {
         try {
-            // console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            //   console.log("sa");
-            //   console.log(resultado);
             if (resultado instanceof Excepcion_1.Excepcion) {
-                console.log(resultado);
                 return resultado;
             }
             else {
-                console.log(resultado.toFixed(2));
                 return resultado.toFixed(2);
             }
         }

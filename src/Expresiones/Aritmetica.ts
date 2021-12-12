@@ -56,7 +56,7 @@ export class Aritmetica extends Nodo {
                         const error = new Excepcion('Semantico',
                             `No se pueden Sumar los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                             this.line, this.column);
-                        tree.excepciones.push(error);
+                        // tree.excepciones.push(error);
                         // tree.consola.push(error.toString());
                         return error;
                     }
@@ -318,7 +318,7 @@ export class Aritmetica extends Nodo {
                 if (this.operadorIzq.tipo.tipo === tipos.ENTERO) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.DECIMAL);
-                        return parseInt(resultadoIzq / resultadoDerecho);
+                        return parseInt((resultadoIzq / resultadoDerecho).toString());
                     } else if (this.operadorDer.tipo.tipo === tipos.DECIMAL) {
                         this.tipo = new Tipo(tipos.DECIMAL);
                         return resultadoIzq / resultadoDerecho;
@@ -337,7 +337,7 @@ export class Aritmetica extends Nodo {
                 } else if (this.operadorIzq.tipo.tipo === tipos.DECIMAL) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.DECIMAL);
-                        return parseInt(resultadoIzq / resultadoDerecho);
+                        return parseInt((resultadoIzq / resultadoDerecho).toString());
                     } else if (this.operadorDer.tipo.tipo === tipos.DECIMAL) {
                         this.tipo = new Tipo(tipos.DECIMAL);
                         return resultadoIzq / resultadoDerecho;

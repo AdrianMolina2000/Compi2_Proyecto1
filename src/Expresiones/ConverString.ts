@@ -15,16 +15,10 @@ export class ConverString extends Nodo {
     execute(table: Table, tree: Tree) {
 
         try {
-           // console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log(resultado);
-         //   console.log("sa");
-         //   console.log(resultado);
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
             } else {
-                console.log(resultado.toString());
                 return resultado.toString();
             }
         } catch (err) {

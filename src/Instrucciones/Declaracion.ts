@@ -20,7 +20,7 @@ export function defal(tipo: Tipo, line: Number, column: Number) {
         return new Primitivo(tipo, '', line, column);
     } else if (tipo.tipo == tipos.STRING) {
         return new Primitivo(tipo, "", line, column);
-    }
+    } 
 }
 
 export class Declaracion extends Nodo {

@@ -7,65 +7,53 @@ import { NodoAST } from "../Abstract/NodoAST";
 
 export class Nativas_Diferentes extends Nodo {
     expresion: Nodo;
-    tipo: Tipo;
-    constructor(tipo: Tipo, expresion: Nodo, line: Number, column: Number) {
-        super(new Tipo(tipos.STRING), line, column);
+    tipo2: Tipo;
+    constructor(tipo2: Tipo, expresion: Nodo, line: Number, column: Number) {
+        super(null, line, column);
         this.expresion = expresion;
-        this.tipo = tipo;
+        this.tipo2 = tipo2;
     }
 
     execute(table: Table, tree: Tree) {
-
         try {
-
             const resultado = this.expresion.execute(table, tree);
 
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
-            } else {
+            }
 
-                if (this.tipo.tipo == tipos.DECIMAL) {
+            if (typeof (resultado) == typeof ("")) {
+
+                if (this.tipo2.tipo == tipos.DECIMAL) {
+                    this.tipo = new Tipo(tipos.DECIMAL)
                     return parseFloat(resultado)
-
-
-                }
-
-                else if (this.tipo.tipo == tipos.ENTERO) {
+                } else if (this.tipo2.tipo == tipos.ENTERO) {
+                    this.tipo = new Tipo(tipos.ENTERO)
                     return parseInt(resultado)
-
-
                 }
-                else if (this.tipo.tipo == tipos.BOOLEANO) {
-
+                else if (this.tipo2.tipo == tipos.BOOLEANO) {
+                    this.tipo = new Tipo(tipos.BOOLEANO)
                     switch (resultado) {
-                        case true:
                         case "true":
-                        case 1:
                         case "1":
-                        case "on":
-                        case "yes":
                             return true;
-                        case false:
                         case "false":
-                        case 0:
                         case "0":
-                        
-                        case "no":
-                            return  false;
+                            return false;
                         default:
                             return false;
                     }
-
                 }
-
+            } else {
+                const error = new Excepcion('Semantico',
+                    `La entrada debe ser del tipo String para realizar esta operacion `,
+                    this.line, this.column);
+                return error;
             }
         } catch (err) {
             const error = new Excepcion('Semantico',
                 `Ha ocurrido un error al querrer convertir `,
                 this.line, this.column);
-            tree.excepciones.push(error);
-            tree.consola.push(error.toString());
             return error;
         }
     }

@@ -6,7 +6,7 @@ const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 class Pow extends Nodo_1.Nodo {
     constructor(base, exponente, line, column) {
-        super(new tipo_1.Tipo(tipo_1.tipos.STRING), line, column);
+        super(new tipo_1.Tipo(tipo_1.tipos.DECIMAL), line, column);
         this.base = base;
         this.exponente = exponente;
     }
@@ -15,11 +15,9 @@ class Pow extends Nodo_1.Nodo {
             const resultado = this.base.execute(table, tree);
             const resultado2 = this.exponente.execute(table, tree);
             if (resultado instanceof Excepcion_1.Excepcion) {
-                console.log(resultado);
                 return resultado;
             }
             else {
-                console.log(Math.pow(resultado, resultado2));
                 return Math.pow(resultado, resultado2);
             }
         }

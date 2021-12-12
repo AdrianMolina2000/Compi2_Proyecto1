@@ -26,7 +26,7 @@ global.Enviar = function entrada() {
             const res = m.execute(tabla, tree);
         }
         catch (error) {
-            console.log('error');
+            console.log(error);
         }
         // console.log(tree.consola);
         var texto = "";

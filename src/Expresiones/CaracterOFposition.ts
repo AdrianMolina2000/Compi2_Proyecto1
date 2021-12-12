@@ -8,9 +8,9 @@ import { NodoAST } from "../Abstract/NodoAST";
 export class CaracterOFposition extends Nodo {
     expresion: Nodo;
 
-     posicion:Number;
+     posicion:Nodo;
      final:Number;
-    constructor(expresion: Nodo,posicion:Number,line: Number, column: Number) {
+    constructor(expresion: Nodo,posicion:Nodo,line: Number, column: Number) {
         super(new Tipo(tipos.STRING), line, column);
         this.expresion = expresion;
         this.posicion=posicion;
@@ -21,23 +21,20 @@ export class CaracterOFposition extends Nodo {
 
         try {
             const resultado = this.expresion.execute(table, tree);
+            const pos = this.posicion.execute(table,tree);
+
+         
             if (resultado instanceof Excepcion) {
                 return resultado;
             } else {
-
-                 //const inicio_rec=this.inicio;
-                 return parseInt(resultado)
-
-              //  return resultado.toLowerCase();
-
-
+                    //const inicio_rec=this.inicio;
+                    return resultado.charAt(pos)
             }
         } catch (err) {
+            console.log(err)
             const error = new Excepcion('Semantico',
-                `Ha ocurrido un error querrer imprimir la posicion del string joven`,
+                `Ha ocurrido un error querer imprimir la posicion del string joven`,
                 this.line, this.column);
-            tree.excepciones.push(error);
-            tree.consola.push(error.toString());
             return error;
         }
     }

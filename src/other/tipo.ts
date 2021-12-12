@@ -5,7 +5,6 @@ export enum tipos {
     CARACTER,
     STRING,
     BOOLEANO,
-   
     ARREGLO,
     VOID, 
     METODO,

@@ -8,7 +8,7 @@ import { NodoAST } from "../Abstract/NodoAST";
 export class Tan extends Nodo {
     expresion: Nodo;
     constructor(expresion: Nodo, line: Number, column: Number) {
-        super(new Tipo(tipos.STRING), line, column);
+        super(new Tipo(tipos.DECIMAL), line, column);
         this.expresion = expresion;
     }
 
@@ -19,10 +19,9 @@ export class Tan extends Nodo {
             const resultado = this.expresion.execute(table, tree);
            
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
+
                 return resultado;
             } else {
-                console.log(Math.tan(resultado));
                 return Math.tan(resultado);
             }
         } catch (err) {

@@ -15,15 +15,10 @@ export class ToLower extends Nodo {
     execute(table: Table, tree: Tree) {
 
         try {
-            console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log("sa");
-            console.log(resultado);
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
             } else {
-                console.log(resultado);
                 return resultado.toLowerCase();
             }
         } catch (err) {

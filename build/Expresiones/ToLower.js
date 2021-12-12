@@ -11,16 +11,11 @@ class ToLower extends Nodo_1.Nodo {
     }
     execute(table, tree) {
         try {
-            console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log("sa");
-            console.log(resultado);
             if (resultado instanceof Excepcion_1.Excepcion) {
-                console.log(resultado);
                 return resultado;
             }
             else {
-                console.log(resultado);
                 return resultado.toLowerCase();
             }
         }

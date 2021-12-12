@@ -59,16 +59,12 @@ export class DeclaracionArray extends Nodo {
                     const error = new Excepcion('Semantico',
                         `El array ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`,
                         this.line, this.column);
-                    tree.excepciones.push(error);
-                    tree.consola.push(error.toString());
                     return error;
                 }
-            } else{
+            } else {
                 const error = new Excepcion('Semantico',
                     `El Array no puede ser declarado debido a que son de diferentes tipos \n`,
                     this.line, this.column);
-                tree.excepciones.push(error);
-                tree.consola.push(error.toString());
                 return error;
             }
         }

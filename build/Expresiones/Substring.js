@@ -12,22 +12,18 @@ class Substring extends Nodo_1.Nodo {
         this.final = final;
     }
     execute(table, tree) {
-        try {
-            const resultado = this.expresion.execute(table, tree);
-            if (resultado instanceof Excepcion_1.Excepcion) {
-                return resultado;
-            }
-            else {
-                console.log(this.inicio + "--" + this.final);
-                console.log(resultado.substring(this.inicio, this.final));
-                //const inicio_rec=this.inicio;
-                return resultado.substring(this.inicio, this.final);
-            }
+        // try {
+        const ini = this.inicio.execute(table, tree);
+        const fin = this.final.execute(table, tree);
+        const resultado = this.expresion.execute(table, tree);
+        if (resultado instanceof Excepcion_1.Excepcion) {
+            return resultado;
         }
-        catch (err) {
-            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error al momento de realizar la funcion substring`, this.line, this.column);
-            tree.excepciones.push(error);
-            tree.consola.push(error.toString());
+        if (this.inicio.tipo.tipo == 0 && this.final.tipo.tipo == 0) {
+            return resultado.substring(ini, fin + 1);
+        }
+        else {
+            const error = new Excepcion_1.Excepcion('Semantico', `Ambas posiciones deben ser un numero entero `, this.line, this.column);
             return error;
         }
     }
@@ -47,3 +43,8 @@ class Substring extends Nodo_1.Nodo {
     }
 }
 exports.Substring = Substring;
+/*
+String animal = "Tigre";
+println(animal.subString(0,-1)); //gre
+
+*/ 

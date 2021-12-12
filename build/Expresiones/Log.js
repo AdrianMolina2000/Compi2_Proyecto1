@@ -6,26 +6,21 @@ const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 class Log extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
-        super(new tipo_1.Tipo(tipo_1.tipos.STRING), line, column);
+        super(new tipo_1.Tipo(tipo_1.tipos.DECIMAL), line, column);
         this.expresion = expresion;
     }
     execute(table, tree) {
         try {
-            console.log("s");
             const resultado = this.expresion.execute(table, tree);
-            console.log("sa");
-            console.log(resultado);
             if (resultado instanceof Excepcion_1.Excepcion) {
-                console.log(resultado);
                 return resultado;
             }
             else {
-                console.log(Math.log10(resultado));
                 return Math.log10(resultado);
             }
         }
         catch (err) {
-            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error al  ejecutar el numero de base10`, this.line, this.column);
+            const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error al ejecutar el comando coseno`, this.line, this.column);
             tree.excepciones.push(error);
             tree.consola.push(error.toString());
             return error;

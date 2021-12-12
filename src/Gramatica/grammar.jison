@@ -37,12 +37,16 @@
     const {Case} = require('../Instrucciones/Case');
     const {Retorno} = require('../Instrucciones/Retorno');
     const {Break} = require('../Expresiones/Break'); 
-    const {While} = require('../Expresiones/While'); 
+    const {While} = require('../Instrucciones/While'); 
     const {DoWhile} = require('../Instrucciones/DoWhile');
     const {Declaracion, defal} = require('../Instrucciones/Declaracion');
     const {DeclaracionArray} = require('../Instrucciones/DeclaracionArray');
     const {Asignacion} = require('../Instrucciones/Asignacion');
     const {InDecrement} = require('../Expresiones/InDecrement');
+    const {AddLista} = require('../Instrucciones/AddLista');
+    const {Pop} = require('../Instrucciones/pop');
+
+    const {AsignacionVector} = require('../Instrucciones/AsignacionVector');
 %}
 
 %lex
@@ -148,7 +152,7 @@ caracter (\'[^☼]\')
 "return"              return 'return'
 "pop"                 return 'pop'
 "push"                return 'push'
-"log"                return 'log'
+"log10"                return 'log10'
 
 [0-9]+("."[0-9]+)?\b  return 'numero';
 
@@ -221,8 +225,8 @@ ListaIns
     |'identifier' 'decremento' ';'              {$$ = new InDecrement($1, "--", @1.first_line, @1.first_column);}
     |'identifier' 'incremento' ';'              {$$ = new InDecrement($1, "++", @1.first_line, @1.first_column);}
     | RETURN ';'                                {$$ = $1;}  
-    |'identifier' '.' 'pop' '(' ')'
-    |'identifier' '.' 'push' '(' EXPRESION ')'
+    |'identifier' '.' 'pop' '(' ')'             {$$ = new Pop($1, @1.first_line, @1.first_column);} 
+    |'identifier' '.' 'push' '(' EXPRESION ')'  {$$ = new AddLista($1, $5, @1.first_line, @1.first_column);} 
     |STRUCT ';' 
     |'continue' ';'                             {$$ = new Continue(@1.first_line, @1.first_column);}
     | error ';'                                 {console.log(yytext+"error sintactico") }
@@ -242,8 +246,8 @@ ListaIns2
     |'identifier' 'incremento' ';'              {$$ = new InDecrement($1, "++", @1.first_line, @1.first_column);}
     |'identifier' 'decremento' ';'              {$$ = new InDecrement($1, "--", @1.first_line, @1.first_column);}
     |RETURN ';'                                 {$$ = $1;}  
-    |'identifier' '.' 'pop' '(' ')'
-    |'identifier' '.' 'push' '(' EXPRESION ')'
+    |'identifier' '.' 'pop' '(' ')'             {$$ = new Pop($1, @1.first_line, @1.first_column);} 
+    |'identifier' '.' 'push' '(' EXPRESION ')'  {$$ = new AddLista($1, $5, @1.first_line, @1.first_column);}
     |'continue' ';'                             {$$ = new Continue(@1.first_line, @1.first_column);}
     |STRUCT ';'
     | error ';'                                 {console.log(yytext+"error sintactico") }
@@ -281,8 +285,12 @@ ASIGNACION
     |'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION
     |'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION
     |'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION   
-    |'identifier' '[' EXPRESION ']' '=' EXPRESION
+    |'identifier' '[' EXPRESION ']' '=' EXPRESION   {$$ = new AsignacionVector($1, $3, $6, @1.first_line, @1.first_column);} 
 ;
+
+/*string alv="abcdefgh";
+
+print(alv);*/
 
 LLAMAR:
      'identifier' '(' LISTA_EXPRESION ')'
@@ -296,11 +304,11 @@ PARAMETROS_LLAMADA
 
 IF
     :'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'                                     {$$ = new If($3, $6, [], @1.first_line, @1.first_column);}
-    |'if' '(' EXPRESION ')' ListaIns2                                                       {$$ = new If_unico($3, $5, null, @1.first_line, @1.first_column); console.log("suuuu1");}
+    |'if' '(' EXPRESION ')' ListaIns2                                                       {$$ = new If_unico($3, $5,[], null,1, @1.first_line, @1.first_column); console.log("suuuu1");}
     |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' '{' LISTA_INSTRUCCIONES '}'  {$$ = new If($3, $6, $10, @1.first_line, @1.first_column);}
     |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' IF                           {$$ = new If($3, $6, [$9], @1.first_line, @1.first_column);}
-    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' ListaIns2                     {$$ = new If($3, $6, $9, @1.first_line, @1.first_column);}
-    |'if' '(' EXPRESION ')' ListaIns2 'else' ListaIns2                                      {$$ = new If_unico($3,$5,$7,@1.first_line, @1.first_column); console.log("suuuu");}
+    |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' ListaIns2                    {$$ = new If_unico($3,null, $6, $9,2, @1.first_line, @1.first_column);}
+    |'if' '(' EXPRESION ')' ListaIns2 'else' ListaIns2                                      {$$ = new If_unico($3,$5,[],$7,1,@1.first_line, @1.first_column); console.log("suuuu");}
 ;
 
 SWITCH  
@@ -352,13 +360,13 @@ STRUCT:
 ;
 
 Lista_declaracion:
-                Lista_declaracion ',' OPCION_DECLARACIO_Struct 'identifier' 
-                |OPCION_DECLARACIO_Struct 'identifier' 
+                Lista_declaracion ',' OPCION_DECLARACIO_Struct 'identifier'   {$$ = new Declaracion($1, [$2], $4, @1.first_line, @1.first_column);}
+                |OPCION_DECLARACIO_Struct 'identifier'     {$$ = new Declaracion($1, [$2], $4, @1.first_line, @1.first_column);}
 ;
 
 
 OPCION_DECLARACIO_Struct
-                        :TIPO 
+                        :TIPO {$$=$1;}
                         |'identifier'
                         | TIPO  '[' ']'
 ;
@@ -412,8 +420,8 @@ EXPRESION
         |EXPRESION '.' 'toLowercase' '(' ')'                    {$$ = new ToLower($1, @1.first_line, @1.first_column);}  
         |EXPRESION '.' 'toUppercase' '(' ')'                    {$$ = new ToUpper($1, @1.first_line, @1.first_column);} 
         |EXPRESION '.' 'length' '(' ')'                         {$$ = new Length($1, @1.first_line, @1.first_column);}
-        |EXPRESION '.'  'caracterOfPosition' '(' 'numero' ')'   {$$ = new CaracterOFposition($1,$5, @1.first_line, @1.first_column);}
-        |EXPRESION '.'  'subString' '(' numero ',' numero ')'   {$$ = new Substring($1,$5,$7, @1.first_line, @1.first_column);}
+        |EXPRESION '.'  'caracterOfPosition' '(' 'EXPRESION' ')'   {$$ = new CaracterOFposition($1,$5, @1.first_line, @1.first_column); console.log("adentro de caracterofposition")}
+        |EXPRESION '.'  'subString' '(' EXPRESION ',' EXPRESION ')'   {$$ = new Substring($1, $5, $7, @1.first_line, @1.first_column);}
         
         //Llamar metodos y funciones
         |LLAMAR
@@ -425,7 +433,6 @@ EXPRESION
         // |'identifier' '.' 'identifier'
         
 
-   
 
         //Distintas funciones nativas
         |TIPO '.' 'parse' '(' EXPRESION ')'     {$$ = new Nativas_Diferentes($1, $5, @1.first_line, @1.first_column);}
@@ -433,8 +440,7 @@ EXPRESION
         |'toDouble' '(' EXPRESION ')'           {$$ = new ToDouble($3, @1.first_line, @1.first_column);}
         |'string' '(' EXPRESION ')'             {$$ = new ConverString($3, @1.first_line, @1.first_column); }
         |'typeof' '(' EXPRESION ')'             {$$ = new TypeOf($3, @1.first_line, @1.first_column);}
-        |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);}
-        |'identifier' '.' 'pop' '(' ')'
+        |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);console.log("adentro del log papa")}
         |'identifier'                           {$$ = new Identificador($1, @1.first_line, @1.first_column);}
 ;
 

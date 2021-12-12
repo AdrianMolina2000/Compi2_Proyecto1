@@ -19,10 +19,8 @@ export class Sqrt extends Nodo {
             const resultado = this.expresion.execute(table, tree);
            
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
             } else {
-                console.log(Math.sqrt(resultado));
                 return Math.sqrt(resultado);
             }
         } catch (err) {

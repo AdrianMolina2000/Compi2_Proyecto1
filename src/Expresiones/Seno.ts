@@ -8,7 +8,7 @@ import { NodoAST } from "../Abstract/NodoAST";
 export class Seno extends Nodo {
     expresion: Nodo;
     constructor(expresion: Nodo, line: Number, column: Number) {
-        super(new Tipo(tipos.STRING), line, column);
+        super(new Tipo(tipos.DECIMAL), line, column);
         this.expresion = expresion;
     }
 
@@ -19,10 +19,8 @@ export class Seno extends Nodo {
             const resultado = this.expresion.execute(table, tree);
            
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
             } else {
-                console.log(Math.sin(resultado));
                 return Math.sin(resultado);
             }
         } catch (err) {

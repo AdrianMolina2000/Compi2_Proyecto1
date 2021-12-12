@@ -13,11 +13,9 @@ class Sqrt extends Nodo_1.Nodo {
         try {
             const resultado = this.expresion.execute(table, tree);
             if (resultado instanceof Excepcion_1.Excepcion) {
-                console.log(resultado);
                 return resultado;
             }
             else {
-                console.log(Math.sqrt(resultado));
                 return Math.sqrt(resultado);
             }
         }

@@ -7,39 +7,35 @@ import { NodoAST } from "../Abstract/NodoAST";
 
 export class Substring extends Nodo {
     expresion: Nodo;
+    inicio: Nodo;
+    final: Nodo;
 
-     inicio:Number;
-     final:Number;
-    constructor(expresion: Nodo,inicio:Number,final:Number, line: Number, column: Number) {
+    constructor(expresion: Nodo, inicio: Nodo, final: Nodo, line: Number, column: Number) {
         super(new Tipo(tipos.STRING), line, column);
         this.expresion = expresion;
-        this.inicio=inicio;
-        this.final=final;
+        this.inicio = inicio;
+        this.final = final;
     }
 
     execute(table: Table, tree: Tree) {
 
-        try {
-            const resultado = this.expresion.execute(table, tree);
-            if (resultado instanceof Excepcion) {
-                return resultado;
-            } else {
-                console.log(this.inicio+"--"+this.final);
-                console.log(resultado.substring(this.inicio,this.final));
-                 //const inicio_rec=this.inicio;
-                 return resultado.substring(this.inicio,this.final);
+        // try {
+        const ini = this.inicio.execute(table, tree)
+        const fin = this.final.execute(table, tree)
+        const resultado = this.expresion.execute(table, tree);
 
-             
+        if (resultado instanceof Excepcion) {
+            return resultado;
+        }
 
+        if (this.inicio.tipo.tipo == 0 && this.final.tipo.tipo == 0) {
+            return resultado.substring(ini, fin+1);
+        } else {
+                const error = new Excepcion('Semantico',
+                    `Ambas posiciones deben ser un numero entero `,
+                    this.line, this.column);
 
-            }
-        } catch (err) {
-            const error = new Excepcion('Semantico',
-                `Ha ocurrido un error al momento de realizar la funcion substring`,
-                this.line, this.column);
-            tree.excepciones.push(error);
-            tree.consola.push(error.toString());
-            return error;
+                return error;
         }
     }
 
@@ -58,3 +54,9 @@ export class Substring extends Nodo {
     }
 
 }
+
+/*
+String animal = "Tigre";
+println(animal.subString(0,-1)); //gre
+
+*/

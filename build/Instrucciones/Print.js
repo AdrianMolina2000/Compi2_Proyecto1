@@ -15,6 +15,10 @@ function imprimir(lista, table, tree) {
     salida = salida.substring(0, salida.length - 2);
     return salida + "]";
 }
+/*
+
+           var metodo = new Simbolo(this.tipo, nombre, [this.listaParams, this.instrucciones], tipo2, this.line, this.column);
+*/
 class Print extends Nodo_1.Nodo {
     constructor(expresion, line, column, tipo_print) {
         super(new tipo_1.Tipo(tipo_2.tipos.VOID), line, column);
@@ -29,7 +33,6 @@ class Print extends Nodo_1.Nodo {
             }
             else {
                 if (this.expresion[key].execute(table, tree).tipo.tipo == 6) {
-                    console.log("simon");
                     tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
                 }
                 else {

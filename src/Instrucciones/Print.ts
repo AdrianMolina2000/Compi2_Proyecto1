@@ -17,7 +17,10 @@ function imprimir(lista: Nodo, table: Table, tree: Tree) {
     salida = salida.substring(0, salida.length - 2);
     return salida + "]";
 }
+/*
 
+           var metodo = new Simbolo(this.tipo, nombre, [this.listaParams, this.instrucciones], tipo2, this.line, this.column);
+*/
 
 export class Print extends Nodo {
     expresion: Array<Nodo>;
@@ -39,7 +42,6 @@ export class Print extends Nodo {
                 tree.consola.push(valor);
             } else {
                 if(this.expresion[key].execute(table, tree).tipo.tipo == 6){
-                    console.log("simon");
                     tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
                 }else{
                     tree.consola.push(valor);

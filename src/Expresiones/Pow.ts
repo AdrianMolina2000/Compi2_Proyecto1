@@ -9,7 +9,7 @@ export class Pow extends Nodo {
     base: Nodo;
     exponente:Nodo;
     constructor(base: Nodo,exponente:Nodo, line: Number, column: Number) {
-        super(new Tipo(tipos.STRING), line, column);
+        super(new Tipo(tipos.DECIMAL), line, column);
         this.base = base;
         this.exponente=exponente
     }
@@ -22,10 +22,8 @@ export class Pow extends Nodo {
             const resultado2 = this.exponente.execute(table, tree);
            
             if (resultado instanceof Excepcion) {
-                console.log(resultado);
                 return resultado;
             } else {
-                console.log(Math.pow(resultado,resultado2));
                 return Math.pow(resultado,resultado2);
             }
         } catch (err) {

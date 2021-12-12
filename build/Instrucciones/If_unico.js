@@ -9,11 +9,13 @@ const Break_1 = require("../Expresiones/Break");
 const NodoAST_1 = require("../Abstract/NodoAST");
 const Retorno_1 = require("./Retorno");
 class If_unico extends Nodo_1.Nodo {
-    constructor(condicion, listaIf, listaElse, line, column) {
+    constructor(condicion, listaIf, listaIf2, listaElse, tipos, line, column) {
         super(null, line, column);
         this.condicion = condicion;
         this.listaIf = listaIf;
         this.listaElse = listaElse;
+        this.tipos = tipos;
+        this.listaIf2;
     }
     execute(table, tree) {
         let cont1 = 0;
@@ -31,9 +33,19 @@ class If_unico extends Nodo_1.Nodo {
             return error;
         }
         if (result) {
-            const res = this.listaIf.execute(newtable, tree);
-            if (res instanceof Continue_1.Continue || res instanceof Break_1.Break || res instanceof Retorno_1.Retorno) {
-                return res;
+            if (this.tipos == 1) {
+                const res = this.listaIf.execute(newtable, tree);
+                if (res instanceof Continue_1.Continue || res instanceof Break_1.Break || res instanceof Retorno_1.Retorno) {
+                    return res;
+                }
+            }
+            else {
+                for (let i = 0; i < this.listaIf2.length; i++) {
+                    const res = this.listaIf2[i].execute(newtable, tree);
+                    if (res instanceof Continue_1.Continue || res instanceof Break_1.Break || res instanceof Retorno_1.Retorno) {
+                        return res;
+                    }
+                }
             }
         }
         else {
