@@ -317,8 +317,15 @@ class Aritmetica extends Nodo_1.Nodo {
                 }
                 if (this.operadorIzq.tipo.tipo === tipo_1.tipos.ENTERO) {
                     if (this.operadorDer.tipo.tipo === tipo_1.tipos.ENTERO) {
-                        this.tipo = new tipo_1.Tipo(tipo_1.tipos.DECIMAL);
-                        return parseInt((resultadoIzq / resultadoDerecho).toString());
+                        var x = resultadoIzq / resultadoDerecho;
+                        if (esEntero(x)) {
+                            this.tipo = new tipo_1.Tipo(tipo_1.tipos.ENTERO);
+                            return parseInt(x.toString());
+                        }
+                        else {
+                            this.tipo = new tipo_1.Tipo(tipo_1.tipos.DECIMAL);
+                            return x;
+                        }
                     }
                     else if (this.operadorDer.tipo.tipo === tipo_1.tipos.DECIMAL) {
                         this.tipo = new tipo_1.Tipo(tipo_1.tipos.DECIMAL);

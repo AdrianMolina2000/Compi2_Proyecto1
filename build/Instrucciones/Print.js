@@ -26,6 +26,7 @@ class Print extends Nodo_1.Nodo {
         this.tipo_print = tipo_print;
     }
     execute(table, tree) {
+        console.log(this.expresion);
         for (let key in this.expresion) {
             const valor = this.expresion[key].execute(table, tree);
             if (valor.tipo == null) {

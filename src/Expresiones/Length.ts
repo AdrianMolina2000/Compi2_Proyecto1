@@ -18,15 +18,20 @@ export class Length extends Nodo {
             const resultado = this.expresion.execute(table, tree);
             if (resultado instanceof Excepcion) {
                 return resultado;
-            } else {
+            } 
+
+            if(this.expresion.tipo.tipo == 6){
+                return this.expresion.valor.length
+            }else if(resultado.tipo.tipo == 6){
+                return resultado.valor.length;
+            }else{
                 return resultado.length;
             }
+            
         } catch (err) {
             const error = new Excepcion('Semantico',
                 `Ha ocurrido un error con la longitud buscada`,
                 this.line, this.column);
-            tree.excepciones.push(error);
-            tree.consola.push(error.toString());
             return error;
         }
     }

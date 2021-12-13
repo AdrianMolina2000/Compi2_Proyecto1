@@ -25,7 +25,7 @@ function imprimir(lista: Nodo, table: Table, tree: Tree) {
 export class Print extends Nodo {
     expresion: Array<Nodo>;
     tipo_print: Number;
-
+   
     constructor(expresion: Array<Nodo>, line: Number, column: Number, tipo_print: Number) {
         super(new Tipo(tipos.VOID), line, column);
         this.expresion = expresion;
@@ -34,7 +34,7 @@ export class Print extends Nodo {
     }
 
     execute(table: Table, tree: Tree): any {
-
+        console.log(this.expresion);
         for (let key in this.expresion) {
             const valor = this.expresion[key].execute(table, tree);
 

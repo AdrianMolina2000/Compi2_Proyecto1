@@ -8,29 +8,32 @@ const Continue_1 = require("../Expresiones/Continue");
 const Break_1 = require("../Expresiones/Break");
 const NodoAST_1 = require("../Abstract/NodoAST");
 const Retorno_1 = require("./Retorno");
-class While extends Nodo_1.Nodo {
-    constructor(condicion, List, line, column) {
+class For extends Nodo_1.Nodo {
+    constructor(inicio, fin, paso, expresion, line, column) {
         super(null, line, column);
-        this.condicion = condicion;
-        this.List = List;
+        this.inicio = inicio;
+        this.fin = fin;
+        this.paso = paso;
+        this.expresion = expresion;
     }
     execute(table, tree) {
+        this.inicio.execute(table, tree);
         const newtable = new Table_1.Table(table);
         let result;
         do {
-            result = this.condicion.execute(newtable, tree);
+            result = this.fin.execute(newtable, tree);
             if (result instanceof Excepcion_1.Excepcion) {
                 return result;
             }
-            if (this.condicion.tipo.tipo !== tipo_1.tipos.BOOLEANO) {
+            if (this.fin.tipo.tipo !== tipo_1.tipos.BOOLEANO) {
                 const error = new Excepcion_1.Excepcion('Semantico', `Se esperaba una expresion booleana para la condicion`, this.line, this.column);
                 tree.excepciones.push(error);
                 tree.consola.push(error.toString());
                 return error;
             }
             if (result) {
-                for (let i = 0; i < this.List.length; i++) {
-                    const res = this.List[i].execute(newtable, tree);
+                for (let i = 0; i < this.expresion.length; i++) {
+                    const res = this.expresion[i].execute(newtable, tree);
                     if (res instanceof Continue_1.Continue) {
                         break;
                     }
@@ -38,24 +41,29 @@ class While extends Nodo_1.Nodo {
                         return;
                     }
                 }
+                this.paso.execute(table, tree);
             }
         } while (result);
         return null;
     }
     getNodo() {
-        var nodo = new NodoAST_1.NodoAST("WHILE");
-        nodo.agregarHijo("while");
+        var nodo = new NodoAST_1.NodoAST("FOR");
+        nodo.agregarHijo("for");
         nodo.agregarHijo("(");
-        nodo.agregarHijo(this.condicion.getNodo());
+        nodo.agregarHijo(this.inicio.getNodo());
+        nodo.agregarHijo(";");
+        nodo.agregarHijo(this.fin.getNodo());
+        nodo.agregarHijo(";");
+        nodo.agregarHijo(this.paso.getNodo());
         nodo.agregarHijo(")");
         nodo.agregarHijo("{");
         var nodo2 = new NodoAST_1.NodoAST("INSTRUCCIONES");
-        for (let i = 0; i < this.List.length; i++) {
-            nodo2.agregarHijo(this.List[i].getNodo());
+        for (let i = 0; i < this.expresion.length; i++) {
+            nodo2.agregarHijo(this.expresion[i].getNodo());
         }
         nodo.agregarHijo(nodo2);
         nodo.agregarHijo("}");
         return nodo;
     }
 }
-exports.While = While;
+exports.For = For;

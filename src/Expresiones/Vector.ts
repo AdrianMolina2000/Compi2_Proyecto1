@@ -30,11 +30,6 @@ export class Vector extends Nodo {
             return error;
         }
 
-/*
-int [] a = [1,2,3,4,5];
-print(a[0]);
-*/
-
         this.tipo = variable.tipo;
         var arreglo: Array<Nodo>;
         arreglo = variable.valor.valor;
@@ -55,7 +50,6 @@ print(a[0]);
                     const error = new Excepcion('Semantico',
                     `La Posicion especificada no es valida para el vector {${this.id}}`,
                         this.line, this.column);
-                    console.log(err);
                     return error;
                 }
             }

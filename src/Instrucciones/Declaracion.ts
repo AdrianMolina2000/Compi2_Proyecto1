@@ -36,6 +36,7 @@ export class Declaracion extends Nodo {
 
     execute(table: Table, tree: Tree) {
         const result = this.valor.execute(table, tree);
+        
         if (result instanceof Excepcion) {
             return result;
         }

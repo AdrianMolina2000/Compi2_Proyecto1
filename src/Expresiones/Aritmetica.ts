@@ -317,8 +317,14 @@ export class Aritmetica extends Nodo {
                 }
                 if (this.operadorIzq.tipo.tipo === tipos.ENTERO) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
-                        this.tipo = new Tipo(tipos.DECIMAL);
-                        return parseInt((resultadoIzq / resultadoDerecho).toString());
+                        var x = resultadoIzq / resultadoDerecho;
+                        if(esEntero(x)){
+                            this.tipo = new Tipo(tipos.ENTERO);
+                            return parseInt(x.toString());
+                        }else{
+                            this.tipo = new Tipo(tipos.DECIMAL);
+                            return x
+                        }
                     } else if (this.operadorDer.tipo.tipo === tipos.DECIMAL) {
                         this.tipo = new Tipo(tipos.DECIMAL);
                         return resultadoIzq / resultadoDerecho;

@@ -38,7 +38,7 @@ export class AsignacionVector extends Nodo {
             return error;
         }
 
-        var arreglo: Array<Nodo> = <Array<Nodo>>variable.valor.valor;
+        var arreglo: Array<Nodo> = variable.valor.valor;
         this.pos = this.posicion.execute(table, tree);
 
         if (this.posicion.tipo.tipo == tipos.ENTERO) {

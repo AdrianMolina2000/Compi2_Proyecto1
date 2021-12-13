@@ -45,8 +45,11 @@
     const {InDecrement} = require('../Expresiones/InDecrement');
     const {AddLista} = require('../Instrucciones/AddLista');
     const {Pop} = require('../Instrucciones/pop');
-
-    const {AsignacionVector} = require('../Instrucciones/AsignacionVector');
+    const {For} = require('../Instrucciones/For');
+    const {ForIn} = require('../Instrucciones/ForIn');
+    const {Struct} = require('../Instrucciones/Struct');
+    const {DeclaracionMetodo} = require('../Instrucciones/DeclaracionMetodo');
+    const {LlamadaMetodo} = require('../Instrucciones/LlamadaMetodo');
 %}
 
 %lex
@@ -166,11 +169,11 @@ caracter (\'[^☼]\')
 /lex
 %left 'else'
 %left '||'
-%left '&&' ,'&','^','#','?' ,'.'
+%left '&&' ,'&','^','#','?'
 %left '==', '!='
 %left '>=', '<=', '<', '>'
 %left '+' '-'
-%left '*' '/' '%' 'identifier'
+%left '*' '/' '%' 'identifier' '.'
 %right '!'
 %left UMENOS
 
@@ -179,31 +182,29 @@ caracter (\'[^☼]\')
 %%
 
 
-INICIO : LISTA_INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
+// INICIO : LISTA_INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
 
-// INICIO : INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
+INICIO : INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
 
-// INSTRUCCIONES
-//             :INSTRUCCIONES INSTRUCCION  {$$ = $1; $1.push($2);}
-//             |INSTRUCCION                {$$ =[$1];}
-// ;
+INSTRUCCIONES
+            :INSTRUCCIONES INSTRUCCION  {$$ = $1; $1.push($2);}
+            |INSTRUCCION                {$$ =[$1];}
+;
 
-// INSTRUCCION  
-//     :TIPO 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
-//     |'void' 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
-//     |'void' 'main' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}' 
-//     | DECLARACION ';'
-    //| error ';' {console.log(yytext+"error sintactico") }
-// ;
+INSTRUCCION  
+    :TIPO 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}'     {$$ = new DeclaracionMetodo($1 ,$2, $4, $7, @1.first_line, @1.first_column);}
+    |DECLARACION ';'                                                            {$$ = $1;}
+    |llamada
+;
 
 Verificar_params
-    :PARAMETROS
-    |
+    :PARAMETROS     {$$ = $1}
+    |               {$$ = []}
 ;
 
 PARAMETROS
-    :PARAMETROS ',' TIPO 'identifier'   {$$ = $1; $1.push($2);}
-    |TIPO 'identifier'                  {$$ =[$1];}
+    :PARAMETROS ',' TIPO 'identifier'   {$$ = $1; $$.push(new Declaracion($3, $4, null,@1.first_line, @1.first_column));}
+    |TIPO 'identifier'                  {$$ = []; $$.push(new Declaracion($1, $2, null,@1.first_line, @1.first_column));} 
 ;
 
 LISTA_INSTRUCCIONES
@@ -211,11 +212,24 @@ LISTA_INSTRUCCIONES
     |ListaIns                       {$$ =[$1];}
 ;
 
+llamada
+    :llamar ';'                          {$$ = $1;}
+;
+
+llamar
+    :'identifier' '(' parametros_llamada ')'    {$$ = new LlamadaMetodo($1, $3, @1.first_line, @1.first_column);}
+    |'identifier' '(' ')'                       {$$ = new LlamadaMetodo($1, [], @1.first_line, @1.first_column);}
+;
+
+parametros_llamada
+    :parametros_llamada ',' EXPRESION   { $$ = $1; $$.push($3);}
+    |EXPRESION                          { $$ = []; $$.push($1);}
+;
+
 ListaIns
     :PRINT ';'                                  {$$ = $1;}    
     |DECLARACION ';'                            {$$ = $1;}
     |ASIGNACION ';'                             {$$ = $1;}
-    |LLAMAR ';' 
     |IF                                         {$$ = $1;}  
     |SWITCH                                      {$$ = $1;}  
     |'break' ';'                                {$$ = new Break(@1.first_line, @1.first_column);}
@@ -227,8 +241,9 @@ ListaIns
     | RETURN ';'                                {$$ = $1;}  
     |'identifier' '.' 'pop' '(' ')'             {$$ = new Pop($1, @1.first_line, @1.first_column);} 
     |'identifier' '.' 'push' '(' EXPRESION ')'  {$$ = new AddLista($1, $5, @1.first_line, @1.first_column);} 
-    |STRUCT ';' 
+    |STRUCT ';'                                   {$$ = $1;}  
     |'continue' ';'                             {$$ = new Continue(@1.first_line, @1.first_column);}
+    |llamada                                    {$$ = $1}
     | error ';'                                 {console.log(yytext+"error sintactico") }
 
 
@@ -237,7 +252,6 @@ ListaIns2
     :PRINT ';'                                  {$$ = $1;}  
     |DECLARACION ';'                            {$$ = $1;}
     |ASIGNACION ';'                             {$$ = $1;}
-    |LLAMAR ';'                                      
     |SWITCH                                     {$$ = $1;}  
     |'break' ';'                                {$$ = new Break(@1.first_line, @1.first_column);} 
     |WHILE
@@ -249,7 +263,8 @@ ListaIns2
     |'identifier' '.' 'pop' '(' ')'             {$$ = new Pop($1, @1.first_line, @1.first_column);} 
     |'identifier' '.' 'push' '(' EXPRESION ')'  {$$ = new AddLista($1, $5, @1.first_line, @1.first_column);}
     |'continue' ';'                             {$$ = new Continue(@1.first_line, @1.first_column);}
-    |STRUCT ';'
+    |STRUCT ';'                                 {$$ = $1;}  
+    |llamada                                    {$$ = $1;}
     | error ';'                                 {console.log(yytext+"error sintactico") }
 
 ;
@@ -292,14 +307,11 @@ ASIGNACION
 
 print(alv);*/
 
-LLAMAR:
-     'identifier' '(' LISTA_EXPRESION ')'
-     |'identifier' '(' ')'
-;        
+    
 
 PARAMETROS_LLAMADA
-    :PARAMETROS_LLAMADA ',' EXPRESION
-    |EXPRESION
+    :PARAMETROS_LLAMADA ',' EXPRESION       { $$ = $1; $$.push($3);}
+    |EXPRESION                              { $$ = []; $$.push($1);}
 ;
 
 IF
@@ -335,19 +347,24 @@ DO
 ;
 
 FOR
-    :'for' 'identifier' 'in' EXPRESION '{' LISTA_INSTRUCCIONES '}'
-    |'for' '(' forVar ';' EXPRESION ';' for_increment ')' '{' LISTA_INSTRUCCIONES '}'
+    :'for' forIn 'in' EXPRESION '{' LISTA_INSTRUCCIONES '}'                             {$$ = new ForIn($2, $4, $6, @1.first_line, @1.first_column);}
+    |'for' '(' forVar ';' EXPRESION ';' for_increment ')' '{' LISTA_INSTRUCCIONES '}'   {$$ = new For($3, $5, $7, $10, @1.first_line, @1.first_column);}
 ;
 
+forIn
+    :'identifier'                       {$$ = new Declaracion(new Tipo(tipos.STRING), [$1], defal(new Tipo(tipos.STRING)), @1.first_line, @1.first_column);}
+;
+
+
 forVar
-    :TIPO 'identifier' '=' EXPRESION
-    |'identifier' '=' EXPRESION 
+    :TIPO 'identifier' '=' EXPRESION    {$$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column);}
+    |'identifier' '=' EXPRESION         {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
 ;
 
 for_increment
-    :'identifier' 'incremento' 	            					    
-	|'identifier' 'decremento' 	            	 
-    |'identifier' ':' EXPRESION
+    :'identifier' 'incremento' 	        {$$ = new InDecrement($1, "++", @1.first_line, @1.first_column);}   					    
+	|'identifier' 'decremento'          {$$ = new InDecrement($1, "--", @1.first_line, @1.first_column);}
+    |'identifier' '=' EXPRESION         {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}        	 
 ;
 
 RETURN 
@@ -356,21 +373,21 @@ RETURN
 ;
 
 STRUCT:
-    'struct' 'identifier' '{' Lista_declaracion '}'
+    'struct' 'identifier' '{' Lista_declaracion '}'   {$$ = new Struct($2,$4, @1.first_line, @1.first_column);} 
 ;
 
 Lista_declaracion:
-                Lista_declaracion ',' OPCION_DECLARACIO_Struct 'identifier'   {$$ = new Declaracion($1, [$2], $4, @1.first_line, @1.first_column);}
-                |OPCION_DECLARACIO_Struct 'identifier'     {$$ = new Declaracion($1, [$2], $4, @1.first_line, @1.first_column);}
+                Lista_declaracion ',' OPCION_DECLARACIO_Struct      {$$ = $1; $1.push($3);}
+                |OPCION_DECLARACIO_Struct                           {$$ = []; $$.push($1);}
 ;
+
 
 
 OPCION_DECLARACIO_Struct
-                        :TIPO {$$=$1;}
-                        |'identifier'
-                        | TIPO  '[' ']'
+                        :TIPO 'identifier'{$$ = new Declaracion($1, [$2], defal($1), @1.first_line, @1.first_column);}
+                        |'identifier'  'identifier' 
+                        | TIPO   '[' ']' 'identifier'  {$$ = new DeclaracionArray($1, $4, $6, @1.first_line, @1.first_column);}
 ;
-
 
 EXPRESION 
         //Aritmeticas
@@ -424,7 +441,7 @@ EXPRESION
         |EXPRESION '.'  'subString' '(' EXPRESION ',' EXPRESION ')'   {$$ = new Substring($1, $5, $7, @1.first_line, @1.first_column);}
         
         //Llamar metodos y funciones
-        |LLAMAR
+        |llamar
         |'[' LISTA_EXPRESION ']'                                {$$ = new Primitivo(new Tipo(tipos.ARREGLO), $2, @1.first_line, @1.first_column);}
         |'identifier' '[' EXPRESION ']'                         {$$ = new Vector($1, $3, @1.first_line, @1.first_column);}
         |'identifier' '[' EXPRESION ':' EXPRESION ']'
@@ -450,6 +467,7 @@ TIPO
     |int        {$$ = new Tipo(tipos.ENTERO);}
     |boolean    {$$ = new Tipo(tipos.BOOLEANO);}
     |char       {$$ = new Tipo(tipos.CARACTER);}
+    |void       {$$ = new Tipo(tipos.VOID);}
 ;
 
 

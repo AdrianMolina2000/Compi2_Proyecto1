@@ -32,9 +32,9 @@ class Relacional extends Nodo_1.Nodo {
                     return resultadoIzq < resultadoDer.charCodeAt(0);
                 }
                 else {
+                    console.log(this.operadorIzq);
+                    console.log(this.operadorDer);
                     const error = new Excepcion_1.Excepcion('Semantico', `El operador relacional MENOR QUE se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`, this.line, this.column);
-                    tree.excepciones.push(error);
-                    // tree.consola.push(error.toString());
                     return error;
                 }
             }
