@@ -311,14 +311,14 @@ ID..ID
 print(alv);*/
 
   LISTA_EXPRESION_PTO:
-  LISTA_EXPRESION_PTO OPCION_PTO   { $$ = $1; $$.push($2);}
-    | OPCION_PTO               { $$ = []; $$.push($1);}
+  LISTA_EXPRESION_PTO OPCION_PTO    { $$ = $1; $1.push($2);}
+    | OPCION_PTO                    { $$ = []; $$.push($1);}
   
   ;  
   OPCION_PTO:
-  '.' 'identifier'    { $$ =$2;}
-  |'identifier'      { $$ =$1; console.log("efeeee") }
-  | 'identifier' '[' EXPRESION']'   { $$ =$1;}
+  '.' 'identifier'                  {$$ =$2;}
+  |'identifier'                     {$$ =$1;}
+  | 'identifier' '[' EXPRESION']'   {$$ =$1;}
 
   
   
@@ -332,11 +332,11 @@ PARAMETROS_LLAMADA
 
 IF
     :'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}'                                     {$$ = new If($3, $6, [], @1.first_line, @1.first_column);}
-    |'if' '(' EXPRESION ')' ListaIns2                                                       {$$ = new If_unico($3, $5,[], null,1, @1.first_line, @1.first_column); console.log("suuuu1");}
+    |'if' '(' EXPRESION ')' ListaIns2                                                       {$$ = new If_unico($3, $5,[], null,1, @1.first_line, @1.first_column);}
     |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' '{' LISTA_INSTRUCCIONES '}'  {$$ = new If($3, $6, $10, @1.first_line, @1.first_column);}
     |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' IF                           {$$ = new If($3, $6, [$9], @1.first_line, @1.first_column);}
     |'if' '(' EXPRESION ')' '{' LISTA_INSTRUCCIONES '}' 'else' ListaIns2                    {$$ = new If_unico($3,null, $6, $9,2, @1.first_line, @1.first_column);}
-    |'if' '(' EXPRESION ')' ListaIns2 'else' ListaIns2                                      {$$ = new If_unico($3,$5,[],$7,1,@1.first_line, @1.first_column); console.log("suuuu");}
+    |'if' '(' EXPRESION ')' ListaIns2 'else' ListaIns2                                      {$$ = new If_unico($3,$5,[],$7,1,@1.first_line, @1.first_column);}
 ;
 
 SWITCH  
@@ -359,7 +359,7 @@ WHILE
 ;
 
 DO
-    :'do' '{'  LISTA_INSTRUCCIONES '}' 'while' '(' EXPRESION ')'    {$$ = new DoWhile($7, $3, @1.first_line, @1.first_column); console.log("adentro de mi amigo do")}
+    :'do' '{'  LISTA_INSTRUCCIONES '}' 'while' '(' EXPRESION ')'    {$$ = new DoWhile($7, $3, @1.first_line, @1.first_column);}
 ;
 
 FOR
@@ -401,7 +401,7 @@ Lista_declaracion:
 
 OPCION_DECLARACIO_Struct
                         :TIPO 'identifier'{$$ = new Declaracion($1, [$2], defal($1), @1.first_line, @1.first_column);}
-                        |'identifier'  'identifier'  {$$ = new DeclaracionVarStruct(  new Tipo(tipos.STRUCTS),$1, [$2], null, @1.first_line, @1.first_column);}
+                        |'identifier'  'identifier'  {$$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS),$1, $2, null, @1.first_line, @1.first_column);}
                         | TIPO   '[' ']' 'identifier'  {$$ = new DeclaracionArray($1, $4, [], @1.first_line, @1.first_column);}
 ;
 
@@ -453,7 +453,7 @@ EXPRESION
         |EXPRESION '.' 'toLowercase' '(' ')'                    {$$ = new ToLower($1, @1.first_line, @1.first_column);}  
         |EXPRESION '.' 'toUppercase' '(' ')'                    {$$ = new ToUpper($1, @1.first_line, @1.first_column);} 
         |EXPRESION '.' 'length' '(' ')'                         {$$ = new Length($1, @1.first_line, @1.first_column);}
-        |EXPRESION '.'  'caracterOfPosition' '(' 'EXPRESION' ')'   {$$ = new CaracterOFposition($1,$5, @1.first_line, @1.first_column); console.log("adentro de caracterofposition")}
+        |EXPRESION '.'  'caracterOfPosition' '(' 'EXPRESION' ')'   {$$ = new CaracterOFposition($1,$5, @1.first_line, @1.first_column);}
         |EXPRESION '.'  'subString' '(' EXPRESION ',' EXPRESION ')'   {$$ = new Substring($1, $5, $7, @1.first_line, @1.first_column);}
         
         //Llamar metodos y funciones
@@ -472,9 +472,9 @@ EXPRESION
         |'toDouble' '(' EXPRESION ')'           {$$ = new ToDouble($3, @1.first_line, @1.first_column);}
         |'string' '(' EXPRESION ')'             {$$ = new ConverString($3, @1.first_line, @1.first_column); }
         |'typeof' '(' EXPRESION ')'             {$$ = new TypeOf($3, @1.first_line, @1.first_column);}
-        |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);console.log("adentro del log papa")}
+        |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);}
         |'identifier'                           {$$ = new Identificador($1, @1.first_line, @1.first_column);}
-        | EXPRESION '.' LISTA_EXPRESION_PTO               {  console.log($1+"tu puta madre jison"); $$ = new Obtener_struct($1, $3, @1.first_line, @1.first_column);   }
+        | EXPRESION '.' LISTA_EXPRESION_PTO     {$$ = new Obtener_struct($1, $3, @1.first_line, @1.first_column);}
 
 ;
 

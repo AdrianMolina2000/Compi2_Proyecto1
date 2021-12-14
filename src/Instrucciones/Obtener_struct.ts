@@ -9,166 +9,59 @@ import { Vector } from "../Expresiones/Vector";
 import { If } from "./If";
 
 
-function alv(padre: Simbolo, id: String, lista_ids: Array<String>,  tree: Tree, table: Table): any {
-
-  
- 
-
-
-
-
-
+function alv(padre: Simbolo, id: String, lista_ids: Array<String>, tree: Tree, table: Table): any {
+    var name = "";
     for (let index = 0; index < padre.valor.length; index++) {
-
-           
-
-        if (padre.valor[index].id == padre.id + "_" + id) {
-
-            
+        if (padre.valor[index].id[0] == padre.id + "_" + id) {
+            name = padre.id + "_" + id;
             if (padre.valor[index].tipo.tipo == 11) {
-               
-
-
                 if (lista_ids.length == 1) {
-                   
-
-                       return padre.valor[index].execute(tree,table)
-
+                    let variable = table.getVariable(name);
+                    return variable.valor;
                 }
-
-                else if(lista_ids.length>1){
-                      
-                    lista_ids.shift()
+                else if (lista_ids.length > 1) {
+                    lista_ids.shift();
                     let id_hijo: Simbolo
                     id_hijo = table.getVariable(padre.valor[index].nombre_struct)
-
-                      alv(id_hijo, lista_ids[0], lista_ids,  tree, table);
-
-
-
-
-
-                    
-
-                     
-
-
-
-
-
+                    return alv(id_hijo, lista_ids[0], lista_ids, tree, id_hijo.ambito);
                 }
-
-
-
-
-
+            } else {
+                let variable = table.getVariable(name);
+                return variable;
             }
-            else {
-
-                console.log("-------------")
-                console.log(padre.valor[index].execute(tree,table))
-                        
-              
-                    return padre.valor[index].execute(tree,table)
-
-
-
-               
-
-
-
-                
-            }
-
-
-
-
-           /*
-           
-           */
-
-
         }
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
 }
 
 
 
 
 export class Obtener_struct extends Nodo {
-    id: Nodo;
+    id: String;
     posicion: Array<String>;
-  
     pos: any;
 
-    constructor(id: Nodo, posicion: Array<String>, line: Number, column: Number) {
+    constructor(id: String, posicion: Array<String>, line: Number, column: Number) {
         super(null, line, column);
         this.id = id.id;
         this.posicion = posicion;
        
     }
 
-    execute(table: Table, tree: Tree) {
-
-       // const result = this.valor.execute(table, tree);
-         
-         
-         let id_struct: Simbolo
+    execute(table: Table, tree: Tree) {         
+        let id_struct: Simbolo
         id_struct = table.getVariable(this.id)
 
-        
-        //console.log(table.getVariable("alv_a"))
-        
-      
-
         if (id_struct.tipo2.tipo == tipos.STRUCTS) {
-
-            //   console.log(this.posicion[0])
-           
-          
-           return alv(id_struct, this.posicion[0], this.posicion,  tree, table);
-
-
-
-
-
-
-
-
-
-
-
-        }
-
-
-        else {
+            let retorno = alv(id_struct, this.posicion[0], this.posicion, tree, id_struct.ambito)
+            this.tipo = retorno.tipo.tipo
+            return retorno.valor;
+        }else {
             const error = new Excepcion('Semantico',
                 `no se puede  modificar el valor del struct debido a que este id no es un struct \n`,
                 this.line, this.column);
             return error;
-
         }
-
-       
-
-
-
-
     }
 
     getNodo() {

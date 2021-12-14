@@ -225,14 +225,11 @@ var grammar = (function () {
                     break;
                 case 67:
                     this.$ = $$[$0 - 1];
-                    this.$.push($$[$0]);
+                    $$[$0 - 1].push($$[$0]);
                     break;
                 case 69:
-                    this.$ = $$[$0];
-                    break;
                 case 70:
                     this.$ = $$[$0];
-                    console.log("efeeee");
                     break;
                 case 71:
                     this.$ = $$[$0 - 3];
@@ -242,7 +239,6 @@ var grammar = (function () {
                     break;
                 case 75:
                     this.$ = new If_unico($$[$0 - 2], $$[$0], [], null, 1, _$[$0 - 4].first_line, _$[$0 - 4].first_column);
-                    console.log("suuuu1");
                     break;
                 case 76:
                     this.$ = new If($$[$0 - 8], $$[$0 - 5], $$[$0 - 1], _$[$0 - 10].first_line, _$[$0 - 10].first_column);
@@ -255,7 +251,6 @@ var grammar = (function () {
                     break;
                 case 79:
                     this.$ = new If_unico($$[$0 - 4], $$[$0 - 2], [], $$[$0], 1, _$[$0 - 6].first_line, _$[$0 - 6].first_column);
-                    console.log("suuuu");
                     break;
                 case 80:
                     this.$ = new Switch($$[$0 - 5], $$[$0 - 2], $$[$0 - 1], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
@@ -279,7 +274,6 @@ var grammar = (function () {
                     break;
                 case 87:
                     this.$ = new DoWhile($$[$0 - 1], $$[$0 - 5], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
-                    console.log("adentro de mi amigo do");
                     break;
                 case 88:
                     this.$ = new ForIn($$[$0 - 5], $$[$0 - 3], $$[$0 - 1], _$[$0 - 6].first_line, _$[$0 - 6].first_column);
@@ -312,7 +306,7 @@ var grammar = (function () {
                     this.$ = new Declaracion($$[$0 - 1], [$$[$0]], defal($$[$0 - 1]), _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                     break;
                 case 102:
-                    this.$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS), $$[$0 - 1], [$$[$0]], null, _$[$0 - 1].first_line, _$[$0 - 1].first_column);
+                    this.$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS), $$[$0 - 1], $$[$0], null, _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                     break;
                 case 103:
                     this.$ = new DeclaracionArray($$[$0 - 3], $$[$0], [], _$[$0 - 3].first_line, _$[$0 - 3].first_column);
@@ -412,7 +406,6 @@ var grammar = (function () {
                     break;
                 case 136:
                     this.$ = new CaracterOFposition($$[$0 - 5], $$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
-                    console.log("adentro de caracterofposition");
                     break;
                 case 137:
                     this.$ = new Substring($$[$0 - 7], $$[$0 - 3], $$[$0 - 1], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
@@ -443,13 +436,12 @@ var grammar = (function () {
                     break;
                 case 149:
                     this.$ = new Log($$[$0 - 1], _$[$0 - 3].first_line, _$[$0 - 3].first_column);
-                    console.log("adentro del log papa");
                     break;
                 case 150:
                     this.$ = new Identificador($$[$0], _$[$0].first_line, _$[$0].first_column);
                     break;
                 case 151:
-                    console.log($$[$0 - 2] + "tu puta madre jison");
+                    console.log($$[$0]);
                     this.$ = new Obtener_struct($$[$0 - 2], $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                     break;
                 case 152:

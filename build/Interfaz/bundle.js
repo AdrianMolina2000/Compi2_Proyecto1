@@ -3296,14 +3296,11 @@ var grammar = (function () {
                     break;
                 case 67:
                     this.$ = $$[$0 - 1];
-                    this.$.push($$[$0]);
+                    $$[$0 - 1].push($$[$0]);
                     break;
                 case 69:
-                    this.$ = $$[$0];
-                    break;
                 case 70:
                     this.$ = $$[$0];
-                    console.log("efeeee");
                     break;
                 case 71:
                     this.$ = $$[$0 - 3];
@@ -3313,7 +3310,6 @@ var grammar = (function () {
                     break;
                 case 75:
                     this.$ = new If_unico($$[$0 - 2], $$[$0], [], null, 1, _$[$0 - 4].first_line, _$[$0 - 4].first_column);
-                    console.log("suuuu1");
                     break;
                 case 76:
                     this.$ = new If($$[$0 - 8], $$[$0 - 5], $$[$0 - 1], _$[$0 - 10].first_line, _$[$0 - 10].first_column);
@@ -3326,7 +3322,6 @@ var grammar = (function () {
                     break;
                 case 79:
                     this.$ = new If_unico($$[$0 - 4], $$[$0 - 2], [], $$[$0], 1, _$[$0 - 6].first_line, _$[$0 - 6].first_column);
-                    console.log("suuuu");
                     break;
                 case 80:
                     this.$ = new Switch($$[$0 - 5], $$[$0 - 2], $$[$0 - 1], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
@@ -3350,7 +3345,6 @@ var grammar = (function () {
                     break;
                 case 87:
                     this.$ = new DoWhile($$[$0 - 1], $$[$0 - 5], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
-                    console.log("adentro de mi amigo do");
                     break;
                 case 88:
                     this.$ = new ForIn($$[$0 - 5], $$[$0 - 3], $$[$0 - 1], _$[$0 - 6].first_line, _$[$0 - 6].first_column);
@@ -3383,7 +3377,7 @@ var grammar = (function () {
                     this.$ = new Declaracion($$[$0 - 1], [$$[$0]], defal($$[$0 - 1]), _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                     break;
                 case 102:
-                    this.$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS), $$[$0 - 1], [$$[$0]], null, _$[$0 - 1].first_line, _$[$0 - 1].first_column);
+                    this.$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS), $$[$0 - 1], $$[$0], null, _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                     break;
                 case 103:
                     this.$ = new DeclaracionArray($$[$0 - 3], $$[$0], [], _$[$0 - 3].first_line, _$[$0 - 3].first_column);
@@ -3483,7 +3477,6 @@ var grammar = (function () {
                     break;
                 case 136:
                     this.$ = new CaracterOFposition($$[$0 - 5], $$[$0 - 1], _$[$0 - 5].first_line, _$[$0 - 5].first_column);
-                    console.log("adentro de caracterofposition");
                     break;
                 case 137:
                     this.$ = new Substring($$[$0 - 7], $$[$0 - 3], $$[$0 - 1], _$[$0 - 7].first_line, _$[$0 - 7].first_column);
@@ -3514,13 +3507,12 @@ var grammar = (function () {
                     break;
                 case 149:
                     this.$ = new Log($$[$0 - 1], _$[$0 - 3].first_line, _$[$0 - 3].first_column);
-                    console.log("adentro del log papa");
                     break;
                 case 150:
                     this.$ = new Identificador($$[$0], _$[$0].first_line, _$[$0].first_column);
                     break;
                 case 151:
-                    console.log($$[$0 - 2] + "tu puta madre jison");
+                    console.log($$[$0]);
                     this.$ = new Obtener_struct($$[$0 - 2], $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                     break;
                 case 152:
@@ -4647,27 +4639,28 @@ const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 function alv(padre, id, lista_ids, valor, tree, table) {
+    var name = "";
     for (let index = 0; index < padre.valor.length; index++) {
-        if (padre.valor[index].id == padre.id + "_" + id) {
+        if (padre.valor[index].id[0] == padre.id + "_" + id) {
+            name = padre.id + "_" + id;
             if (padre.valor[index].tipo.tipo == 11) {
                 if (lista_ids.length == 1) {
-                    padre.valor[index] = valor;
+                    let variable = table.getVariable(name);
+                    variable.valor = valor.execute(table, tree);
+                    break;
                 }
                 else if (lista_ids.length > 1) {
                     lista_ids.shift();
                     let id_hijo;
                     id_hijo = table.getVariable(padre.valor[index].nombre_struct);
-                    alv(id_hijo, lista_ids[0], lista_ids, valor, tree, table);
+                    alv(id_hijo, lista_ids[0], lista_ids, valor, tree, id_hijo.ambito);
                 }
             }
             else {
-                console.log("------------");
-                padre.valor[index].valor = valor;
-                console.log(padre.valor[index].valor);
+                let variable = table.getVariable(name);
+                variable.valor = valor.execute(table, tree);
+                break;
             }
-            /*
-            
-            */
         }
     }
 }
@@ -4680,23 +4673,19 @@ class Asignacion_Struct extends Nodo_1.Nodo {
     }
     execute(table, tree) {
         const result = this.valor.execute(table, tree);
+        if (result instanceof Excepcion_1.Excepcion) {
+            return result;
+        }
         let id_struct;
         id_struct = table.getVariable(this.id);
-        let efe;
-        efe = table.getVariable("alv2_efe2");
-        //console.log(table.getVariable("alv_a"))
-        // prueba=table.getVariable("alv_a")
         if (id_struct.tipo2.tipo == tipo_1.tipos.STRUCTS) {
-            //   console.log(this.posicion[0])
-            alv(id_struct, this.posicion[0], this.posicion, this.valor, tree, table);
+            alv(id_struct, this.posicion[0], this.posicion, this.valor, tree, id_struct.ambito);
         }
         else {
             const error = new Excepcion_1.Excepcion('Semantico', `no se puede  modificar el valor del struct debido a que este id no es un struct \n`, this.line, this.column);
             return error;
         }
-        if (result instanceof Excepcion_1.Excepcion) {
-            return result;
-        }
+        return null;
     }
     getNodo() {
         var nodo = new NodoAST_1.NodoAST("ASIGNACION VECTOR");
@@ -4992,26 +4981,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const Simbolo_1 = require("../Simbols/Simbolo");
-const Primitivo_1 = require("../Expresiones/Primitivo");
 const NodoAST_1 = require("../Abstract/NodoAST");
-function defal(tipo, line, column) {
-    if (tipo.tipo == tipo_1.tipos.ENTERO) {
-        return new Primitivo_1.Primitivo(tipo, 0, line, column);
-    }
-    else if (tipo.tipo == tipo_1.tipos.DECIMAL) {
-        return new Primitivo_1.Primitivo(tipo, 0.0, line, column);
-    }
-    else if (tipo.tipo == tipo_1.tipos.BOOLEANO) {
-        return new Primitivo_1.Primitivo(tipo, true, line, column);
-    }
-    else if (tipo.tipo == tipo_1.tipos.CARACTER) {
-        return new Primitivo_1.Primitivo(tipo, '', line, column);
-    }
-    else if (tipo.tipo == tipo_1.tipos.STRING) {
-        return new Primitivo_1.Primitivo(tipo, "", line, column);
-    }
-}
-exports.defal = defal;
 class DeclaracionVarStruct extends Nodo_1.Nodo {
     constructor(tipo, nombre_struct, id, valor, line, column) {
         super(tipo, line, column);
@@ -5020,23 +4990,13 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
         this.valor = valor;
     }
     execute(table, tree) {
-        // const result = this.valor.execute(table, tree);
         if (this.valor instanceof Excepcion_1.Excepcion) {
             return this.valor;
         }
         let simbolo;
-        let id_struct;
-        //id_struct = table.getVariable(this.nombre_struct);
-        simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, this.valor, new tipo_1.Tipo(tipo_1.tipos.STRUCTS), this.line, this.column);
+        simbolo = new Simbolo_1.Simbolo(this.tipo, this.id[0], this.valor, new tipo_1.Tipo(tipo_1.tipos.STRUCTS), this.line, this.column);
         const res = table.setVariable(simbolo);
         tree.Variables.push(simbolo);
-        // if (res != null) {
-        // const error = new Excepcion('Semantico',
-        // res,
-        // this.line, this.column);
-        // tree.excepciones.push(error);
-        // tree.consola.push(error.toString());
-        // }
         return null;
     }
     getNodo() {
@@ -5052,7 +5012,7 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
 }
 exports.DeclaracionVarStruct = DeclaracionVarStruct;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Primitivo":19,"../Simbols/Simbolo":57,"../other/Excepcion":60,"../other/tipo":61}],43:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Simbols/Simbolo":57,"../other/Excepcion":60,"../other/tipo":61}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -5578,27 +5538,26 @@ const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 function alv(padre, id, lista_ids, tree, table) {
+    var name = "";
     for (let index = 0; index < padre.valor.length; index++) {
-        if (padre.valor[index].id == padre.id + "_" + id) {
+        if (padre.valor[index].id[0] == padre.id + "_" + id) {
+            name = padre.id + "_" + id;
             if (padre.valor[index].tipo.tipo == 11) {
                 if (lista_ids.length == 1) {
-                    return padre.valor[index].execute(tree, table);
+                    let variable = table.getVariable(name);
+                    return variable.valor;
                 }
                 else if (lista_ids.length > 1) {
                     lista_ids.shift();
                     let id_hijo;
                     id_hijo = table.getVariable(padre.valor[index].nombre_struct);
-                    alv(id_hijo, lista_ids[0], lista_ids, tree, table);
+                    return alv(id_hijo, lista_ids[0], lista_ids, tree, id_hijo.ambito);
                 }
             }
             else {
-                console.log("-------------");
-                console.log(padre.valor[index].execute(tree, table));
-                return padre.valor[index].execute(tree, table);
+                let variable = table.getVariable(name);
+                return variable;
             }
-            /*
-            
-            */
         }
     }
 }
@@ -5609,13 +5568,12 @@ class Obtener_struct extends Nodo_1.Nodo {
         this.posicion = posicion;
     }
     execute(table, tree) {
-        // const result = this.valor.execute(table, tree);
         let id_struct;
         id_struct = table.getVariable(this.id);
-        //console.log(table.getVariable("alv_a"))
         if (id_struct.tipo2.tipo == tipo_1.tipos.STRUCTS) {
-            //   console.log(this.posicion[0])
-            return alv(id_struct, this.posicion[0], this.posicion, tree, table);
+            let retorno = alv(id_struct, this.posicion[0], this.posicion, tree, id_struct.ambito);
+            this.tipo = retorno.tipo.tipo;
+            return retorno.valor;
         }
         else {
             const error = new Excepcion_1.Excepcion('Semantico', `no se puede  modificar el valor del struct debido a que este id no es un struct \n`, this.line, this.column);
@@ -5730,55 +5688,24 @@ const Table_1 = require("../Simbols/Table");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const Simbolo_1 = require("../Simbols/Simbolo");
-const Primitivo_1 = require("../Expresiones/Primitivo");
 const NodoAST_1 = require("../Abstract/NodoAST");
-function defal(tipo, line, column) {
-    if (tipo.tipo == tipo_1.tipos.ENTERO) {
-        return new Primitivo_1.Primitivo(tipo, 0, line, column);
-    }
-    else if (tipo.tipo == tipo_1.tipos.DECIMAL) {
-        return new Primitivo_1.Primitivo(tipo, 0.0, line, column);
-    }
-    else if (tipo.tipo == tipo_1.tipos.BOOLEANO) {
-        return new Primitivo_1.Primitivo(tipo, true, line, column);
-    }
-    else if (tipo.tipo == tipo_1.tipos.CARACTER) {
-        return new Primitivo_1.Primitivo(tipo, '', line, column);
-    }
-    else if (tipo.tipo == tipo_1.tipos.STRING) {
-        return new Primitivo_1.Primitivo(tipo, "", line, column);
-    }
-}
-exports.defal = defal;
-function revisar(tipo1, lista) {
-    for (let key in lista.valor) {
-        if (lista.valor[key].tipo.tipo == 6) {
-            return revisar(tipo1, lista.valor[key]);
-        }
-        if (tipo1.tipo != lista.valor[key].tipo.tipo) {
-            return false;
-        }
-    }
-    return true;
-}
 class Struct extends Nodo_1.Nodo {
     constructor(id, lista_declaracion, line, column) {
         super(null, line, column);
         this.id = id;
         this.lista_declaracion = lista_declaracion;
     }
-    //int[] a = [1];
     execute(table, tree) {
         this.newTable = new Table_1.Table(table);
         if ((this.lista_declaracion != null)) {
-            //Declaracion Tipo 2
             let simbolo;
             for (let index = 0; index < this.lista_declaracion.length; index++) {
                 const id_aux = this.lista_declaracion[index].id;
-                this.lista_declaracion[index].id = this.id + "_" + id_aux.toString();
+                this.lista_declaracion[index].id = [this.id + "_" + id_aux];
                 this.lista_declaracion[index].execute(this.newTable, tree);
             }
             simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, this.lista_declaracion, new tipo_1.Tipo(tipo_1.tipos.STRUCTS), this.line, this.column);
+            simbolo.ambito = this.newTable;
             if (table.getVariable(this.id) == null) {
                 table.setVariable(simbolo);
                 tree.Variables.push(simbolo);
@@ -5819,8 +5746,31 @@ class Struct extends Nodo_1.Nodo {
     }
 }
 exports.Struct = Struct;
+/*
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Primitivo":19,"../Simbols/Simbolo":57,"../Simbols/Table":58,"../other/Excepcion":60,"../other/tipo":61}],53:[function(require,module,exports){
+
+struct alv {
+int var1 , int var2,
+
+
+int efe3
+
+};
+
+struct alv2 {
+alv efe , int efe2 ,int [] efe
+
+};
+
+
+
+
+
+print(alv);
+
+*/ 
+
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Simbols/Simbolo":57,"../Simbols/Table":58,"../other/Excepcion":60,"../other/tipo":61}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");

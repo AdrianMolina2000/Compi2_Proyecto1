@@ -66,7 +66,6 @@ export class Declaracion extends Nodo {
             
             
             simbolo = new Simbolo(this.tipo, this.id[key], result, new Tipo(tipos.VARIABLE), this.line, this.column);
-
             const res = table.setVariable(simbolo);
            
         }

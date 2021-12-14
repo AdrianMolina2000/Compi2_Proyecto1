@@ -7,78 +7,47 @@ import { Simbolo } from "../Simbols/Simbolo";
 import { Primitivo } from "../Expresiones/Primitivo";
 import { NodoAST } from "../Abstract/NodoAST";
 
-export function defal(tipo: Tipo, line: Number, column: Number) {
-    if (tipo.tipo == tipos.ENTERO) {
-        return new Primitivo(tipo, 0, line, column);
-    } else if (tipo.tipo == tipos.DECIMAL) {
-        return new Primitivo(tipo, 0.0, line, column);
-    } else if (tipo.tipo == tipos.BOOLEANO) {
-        return new Primitivo(tipo, true, line, column);
-    } else if (tipo.tipo == tipos.CARACTER) {
-        return new Primitivo(tipo, '', line, column);
-    } else if (tipo.tipo == tipos.STRING) {
-        return new Primitivo(tipo, "", line, column);
-    }
-}
-
-function revisar(tipo1: Tipo, lista: Nodo) {
-    for (let key in lista.valor) {
-        if (lista.valor[key].tipo.tipo == 6) {
-            return revisar(tipo1, lista.valor[key])
-        }
-        if (tipo1.tipo != lista.valor[key].tipo.tipo) {
-            return false;
-        }
-    }
-    return true;
-}
 
 export class Struct extends Nodo {
-   
+
     id: String;
     lista_declaracion: Array<Nodo>;
-    alv :Array<Nodo>
-    newTable:Table
-    constructor( id: String, lista_declaracion: Array<Nodo>, line: Number, column: Number) {
+    alv: Array<Nodo>
+    newTable: Table
+    constructor(id: String, lista_declaracion: Array<Nodo>, line: Number, column: Number) {
         super(null, line, column);
         this.id = id;
         this.lista_declaracion = lista_declaracion;
 
     }
-    //int[] a = [1];
     execute(table: Table, tree: Tree) {
+        this.newTable = new Table(table);
 
-
-       this.newTable = new Table(table);
+        
         if ((this.lista_declaracion != null)) {
-            //Declaracion Tipo 2
+            let simbolo: Simbolo;
 
-         
+            for (let index = 0; index < this.lista_declaracion.length; index++) {
+
+                const id_aux = this.lista_declaracion[index].id
+                this.lista_declaracion[index].id = [this.id + "_" + id_aux]               
+                this.lista_declaracion[index].execute(this.newTable, tree)
+            }
+
+           
+            simbolo = new Simbolo(this.tipo, this.id, this.lista_declaracion, new Tipo(tipos.STRUCTS), this.line, this.column);
+            simbolo.ambito = this.newTable;
 
 
-                let simbolo: Simbolo;
-                  
-                for (let index = 0; index < this.lista_declaracion.length; index++) {
-
-                    const id_aux=this.lista_declaracion[index].id
-                     this.lista_declaracion[index].id=this.id+"_"+id_aux.toString()
-                    this.lista_declaracion[index].execute(this.newTable,tree)
-                   
-                    
-                }
-         
-                simbolo = new Simbolo(this.tipo, this.id, this.lista_declaracion, new Tipo(tipos.STRUCTS), this.line, this.column);
-
-                if (table.getVariable(this.id) == null) {
-                    table.setVariable(simbolo);
-                    tree.Variables.push(simbolo)
-                } else {
-                    const error = new Excepcion('Semantico',
-                        `El array ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`,
-                        this.line, this.column);
-                    return error;
-                }
-            
+            if (table.getVariable(this.id) == null) {
+                table.setVariable(simbolo);
+                tree.Variables.push(simbolo)
+            } else {
+                const error = new Excepcion('Semantico',
+                    `El array ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`,
+                    this.line, this.column);
+                return error;
+            }
         }
 
 
@@ -120,3 +89,27 @@ export class Struct extends Nodo {
         return nodo;
     }
 }
+
+/*
+
+
+struct alv {
+int var1 , int var2,
+
+
+int efe3
+
+};
+
+struct alv2 {
+alv efe , int efe2 ,int [] efe
+
+};
+
+
+
+
+
+print(alv);
+
+*/

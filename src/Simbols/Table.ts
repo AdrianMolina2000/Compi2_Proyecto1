@@ -27,6 +27,7 @@ export class Table{
         let ambito: Table;
         for(ambito = this; ambito != null; ambito = ambito.Anterior){
             for(let key of Array.from( ambito.Variables.keys()) ) {
+
                 if(key.toLowerCase() === id.toLowerCase()){
                     return ambito.Variables.get(key.toLocaleLowerCase());
                 }
