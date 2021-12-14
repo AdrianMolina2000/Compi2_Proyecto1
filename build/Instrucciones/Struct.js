@@ -44,14 +44,14 @@ class Struct extends Nodo_1.Nodo {
     }
     //int[] a = [1];
     execute(table, tree) {
-        const newtable = new Table_1.Table(table);
+        this.newTable = new Table_1.Table(table);
         if ((this.lista_declaracion != null)) {
             //Declaracion Tipo 2
             let simbolo;
             for (let index = 0; index < this.lista_declaracion.length; index++) {
                 const id_aux = this.lista_declaracion[index].id;
                 this.lista_declaracion[index].id = this.id + "_" + id_aux.toString();
-                this.lista_declaracion[index].execute(newtable, tree);
+                this.lista_declaracion[index].execute(this.newTable, tree);
             }
             simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, this.lista_declaracion, new tipo_1.Tipo(tipo_1.tipos.STRUCTS), this.line, this.column);
             if (table.getVariable(this.id) == null) {

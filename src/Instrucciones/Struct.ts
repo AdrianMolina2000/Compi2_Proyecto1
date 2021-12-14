@@ -38,17 +38,18 @@ export class Struct extends Nodo {
     id: String;
     lista_declaracion: Array<Nodo>;
     alv :Array<Nodo>
-
+    newTable:Table
     constructor( id: String, lista_declaracion: Array<Nodo>, line: Number, column: Number) {
         super(null, line, column);
         this.id = id;
         this.lista_declaracion = lista_declaracion;
+
     }
     //int[] a = [1];
     execute(table: Table, tree: Tree) {
 
 
-        const newtable = new Table(table);
+       this.newTable = new Table(table);
         if ((this.lista_declaracion != null)) {
             //Declaracion Tipo 2
 
@@ -61,7 +62,8 @@ export class Struct extends Nodo {
 
                     const id_aux=this.lista_declaracion[index].id
                      this.lista_declaracion[index].id=this.id+"_"+id_aux.toString()
-                    this.lista_declaracion[index].execute(newtable,tree)
+                    this.lista_declaracion[index].execute(this.newTable,tree)
+                   
                     
                 }
          

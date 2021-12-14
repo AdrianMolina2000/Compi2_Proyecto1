@@ -41,6 +41,8 @@
     const {DoWhile} = require('../Instrucciones/DoWhile');
     const {Declaracion, defal} = require('../Instrucciones/Declaracion');
     const {DeclaracionArray} = require('../Instrucciones/DeclaracionArray');
+    const {Asignacion_Struct} = require('../Instrucciones/Asignacion_Struct');
+    const {AsignacionVector} = require('../Instrucciones/AsignacionVector');
     const {Asignacion} = require('../Instrucciones/Asignacion');
     const {InDecrement} = require('../Expresiones/InDecrement');
     const {AddLista} = require('../Instrucciones/AddLista');
@@ -49,6 +51,8 @@
     const {ForIn} = require('../Instrucciones/ForIn');
     const {Struct} = require('../Instrucciones/Struct');
     const {DeclaracionMetodo} = require('../Instrucciones/DeclaracionMetodo');
+     const {DeclaracionVarStruct} = require('../Instrucciones/DeclaracionVarStruct');
+     const {Obtener_struct} = require('../Instrucciones/Obtener_struct');
     const {LlamadaMetodo} = require('../Instrucciones/LlamadaMetodo');
 %}
 
@@ -172,8 +176,8 @@ caracter (\'[^☼]\')
 %left '&&' ,'&','^','#','?'
 %left '==', '!='
 %left '>=', '<=', '<', '>'
-%left '+' '-'
-%left '*' '/' '%' 'identifier' '.'
+%left '+' '-'  '.'
+%left '*' '/' '%' 'identifier' 
 %right '!'
 %left UMENOS
 
@@ -182,9 +186,9 @@ caracter (\'[^☼]\')
 %%
 
 
-// INICIO : LISTA_INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
+ INICIO : LISTA_INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
 
-INICIO : INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
+//INICIO : INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
 
 INSTRUCCIONES
             :INSTRUCCIONES INSTRUCCION  {$$ = $1; $1.push($2);}
@@ -286,7 +290,7 @@ DECLARACION
     :TIPO 'identifier' '=' EXPRESION            {$$ = new Declaracion($1, [$2], $4, @1.first_line, @1.first_column);}
     |TIPO LISTA_ID                              {$$ = new Declaracion($1, $2, defal($1), @1.first_line, @1.first_column);}
     |TIPO '[' ']' 'identifier' '=' EXPRESION    {$$ = new DeclaracionArray($1, $4, $6, @1.first_line, @1.first_column);}
-    |'identifier' 'identifier' '=' EXPRESION 
+    |'identifier' 'identifier' '=' EXPRESION    {$$ = new DeclaracionVarStruct(  new Tipo(tipos.STRUCTS),$1, [$2], $4, @1.first_line, @1.first_column);}
 ;
 
 LISTA_ID
@@ -295,22 +299,34 @@ LISTA_ID
 ;
 
 ASIGNACION
-    :'identifier' '=' EXPRESION     {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
-    |'identifier' '.' 'identifier' '=' EXPRESION
-    |'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION
-    |'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION
-    |'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '.' 'identifier' '=' EXPRESION   
+    :
+    'identifier' '=' EXPRESION     {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
+     |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
+  
     |'identifier' '[' EXPRESION ']' '=' EXPRESION   {$$ = new AsignacionVector($1, $3, $6, @1.first_line, @1.first_column);} 
 ;
 
 /*string alv="abcdefgh";
-
+ID..ID
 print(alv);*/
 
-    
+  LISTA_EXPRESION_PTO:
+  LISTA_EXPRESION_PTO OPCION_PTO   { $$ = $1; $$.push($2);}
+    | OPCION_PTO               { $$ = []; $$.push($1);}
+  
+  ;  
+  OPCION_PTO:
+  '.' 'identifier'    { $$ =$2;}
+  |'identifier'      { $$ =$1; console.log("efeeee") }
+  | 'identifier' '[' EXPRESION']'   { $$ =$1;}
+
+  
+  
+  
+  ;
 
 PARAMETROS_LLAMADA
-    :PARAMETROS_LLAMADA ',' EXPRESION       { $$ = $1; $$.push($3);}
+    :PARAMETROS_LLAMADA ',' EXPRESION     
     |EXPRESION                              { $$ = []; $$.push($1);}
 ;
 
@@ -385,8 +401,8 @@ Lista_declaracion:
 
 OPCION_DECLARACIO_Struct
                         :TIPO 'identifier'{$$ = new Declaracion($1, [$2], defal($1), @1.first_line, @1.first_column);}
-                        |'identifier'  'identifier' 
-                        | TIPO   '[' ']' 'identifier'  {$$ = new DeclaracionArray($1, $4, $6, @1.first_line, @1.first_column);}
+                        |'identifier'  'identifier'  {$$ = new DeclaracionVarStruct(  new Tipo(tipos.STRUCTS),$1, [$2], null, @1.first_line, @1.first_column);}
+                        | TIPO   '[' ']' 'identifier'  {$$ = new DeclaracionArray($1, $4, [], @1.first_line, @1.first_column);}
 ;
 
 EXPRESION 
@@ -444,13 +460,12 @@ EXPRESION
         |llamar
         |'[' LISTA_EXPRESION ']'                                {$$ = new Primitivo(new Tipo(tipos.ARREGLO), $2, @1.first_line, @1.first_column);}
         |'identifier' '[' EXPRESION ']'                         {$$ = new Vector($1, $3, @1.first_line, @1.first_column);}
-        |'identifier' '[' EXPRESION ':' EXPRESION ']'
+        |'identifier' '[' EXPRESION ':' EXPRESION ']' 
         | EXPRESION '#'
         |'(' EXPRESION ')'                                      {$$=$2;}
         // |'identifier' '.' 'identifier'
         
-
-
+      
         //Distintas funciones nativas
         |TIPO '.' 'parse' '(' EXPRESION ')'     {$$ = new Nativas_Diferentes($1, $5, @1.first_line, @1.first_column);}
         |'toInt' '(' EXPRESION  ')'             {$$ = new ToInt($3, @1.first_line, @1.first_column);}
@@ -459,6 +474,8 @@ EXPRESION
         |'typeof' '(' EXPRESION ')'             {$$ = new TypeOf($3, @1.first_line, @1.first_column);}
         |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);console.log("adentro del log papa")}
         |'identifier'                           {$$ = new Identificador($1, @1.first_line, @1.first_column);}
+        | EXPRESION '.' LISTA_EXPRESION_PTO               {  console.log($1+"tu puta madre jison"); $$ = new Obtener_struct($1, $3, @1.first_line, @1.first_column);   }
+
 ;
 
 TIPO

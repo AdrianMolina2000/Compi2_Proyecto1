@@ -590,4 +590,6 @@ export class Aritmetica extends Nodo {
         } 
         return nodo;
     }
+
+    
 }

@@ -21,55 +21,47 @@ export function defal(tipo: Tipo, line: Number, column: Number) {
     } else if (tipo.tipo == tipos.STRING) {
         return new Primitivo(tipo, "", line, column);
     }
-      else if (tipo.tipo == tipos.STRUCTS) {
-        return new Primitivo(tipo, null, line, column);
-    } 
-     
-
 }
 
-export class Declaracion extends Nodo {
-    tipo: Tipo;
-    id: Array <String>;
+export class DeclaracionVarStruct extends Nodo {
+    nombre_struct: String
+    id: String;
     valor: Nodo;
 
-    constructor(tipo: Tipo, id: Array <String>, valor: Nodo, line: Number, column: Number) {
+    constructor(tipo: tipo, nombre_struct: String, id: String, valor: Nodo, line: Number, column: Number) {
         super(tipo, line, column);
         this.id = id;
-        this.valor = valor;
+        this.nombre_struct = nombre_struct
+        this.valor=valor;
     }
 
     execute(table: Table, tree: Tree) {
-        const result = this.valor.execute(table, tree);
-        
-        if (result instanceof Excepcion) {
-            return result;
+        // const result = this.valor.execute(table, tree);
+
+        if (this.valor instanceof Excepcion) {
+            return this.valor;
         }
-        
-        if (this.valor.tipo.tipo != this.tipo.tipo) {
-            if (this.tipo.tipo == tipos.DECIMAL && (this.valor.tipo.tipo == tipos.DECIMAL || this.valor.tipo.tipo == tipos.ENTERO)) {
-                this.valor.tipo.tipo = tipos.DECIMAL;
-            } else {
-                const error = new Excepcion('Semantico',
-                    `La variable no puede ser declarada debido a que son de diferentes tipos`,
-                    this.line, this.column);
-                tree.excepciones.push(error);
-                tree.consola.push(error.toString());
-                return error;
-            }
-        }
+
+
 
         let simbolo: Simbolo;
-        
-        
-        for (let key in this.id) {
-            
-            
-            simbolo = new Simbolo(this.tipo, this.id[key], result, new Tipo(tipos.VARIABLE), this.line, this.column);
+        let id_struct: Simbolo;
 
-            const res = table.setVariable(simbolo);
-           
-        }
+        //id_struct = table.getVariable(this.nombre_struct);
+        
+
+        simbolo = new Simbolo(this.tipo, this.id, this.valor, new Tipo(tipos.STRUCTS), this.line, this.column);
+        const res = table.setVariable(simbolo);
+       
+        tree.Variables.push(simbolo); 
+
+
+
+
+
+
+
+
 
         // if (res != null) {
         // const error = new Excepcion('Semantico',
