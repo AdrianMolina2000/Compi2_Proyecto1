@@ -20,7 +20,7 @@ export class DeclaracionVarStruct extends Nodo {
         super(tipo, line, column);
         this.id = id;
         this.nombre_struct = nombre_struct
-        this.valor=valor;
+        this.valor = valor;
     }
 
     execute(table: Table, tree: Tree) {
@@ -33,8 +33,23 @@ export class DeclaracionVarStruct extends Nodo {
 
         simbolo = new Simbolo(this.tipo, this.id[0], this.valor, new Tipo(tipos.STRUCTS), this.line, this.column);
         const res = table.setVariable(simbolo);
-       
-        tree.Variables.push(simbolo); 
+
+        tree.Variables.push(simbolo);
+        if (this.valor != null) {
+            console.log(this.id[0])
+            let struct_padre:Simbolo;
+            struct_padre=table.getVariable(this.id[0]);
+         //   console.log(table);
+
+             
+            
+            for (let index = 0; index < struct_padre.valor.length; index++) {
+                console.log(struct_padre.valor[index]);
+                
+            }
+
+        }
+
 
         return null;
     }

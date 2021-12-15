@@ -6,9 +6,22 @@ import { Simbolo } from "../Simbols/Simbolo";
 import { Tipo, tipos } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
 
-
+//
 function alv(padre: Simbolo, id: String, lista_ids: Array<String>, valor: Nodo, tree: Tree, table: Table): any {
     var name = "";
+
+    /*
+    
+    struct efe {
+
+   int a, int b , int a [] , struct alva
+
+    }
+
+
+efe.a
+    efe_a,efe_b   efe.efe2.efe.fe.f.e
+    */
     for (let index = 0; index < padre.valor.length; index++) {
         if (padre.valor[index].id[0] == padre.id + "_" + id) {
             name = padre.id + "_" + id;
@@ -22,6 +35,8 @@ function alv(padre: Simbolo, id: String, lista_ids: Array<String>, valor: Nodo, 
                     lista_ids.shift();
                     let id_hijo: Simbolo
                     id_hijo = table.getVariable(padre.valor[index].nombre_struct)
+
+
                     alv(id_hijo, lista_ids[0], lista_ids, valor, tree, id_hijo.ambito);
                 }
             } else {
@@ -60,7 +75,7 @@ export class Asignacion_Struct extends Nodo {
         id_struct = table.getVariable(this.id)
         
         if (id_struct.tipo2.tipo == tipos.STRUCTS) {
-            
+            //id.id,id,id
             alv(id_struct, this.posicion[0], this.posicion, this.valor, tree, id_struct.ambito);
             
         } else {

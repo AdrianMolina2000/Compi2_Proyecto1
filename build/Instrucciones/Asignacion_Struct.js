@@ -4,8 +4,21 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+//
 function alv(padre, id, lista_ids, valor, tree, table) {
     var name = "";
+    /*
+    
+    struct efe {
+
+   int a, int b , int a [] , struct alva
+
+    }
+
+
+efe.a
+    efe_a,efe_b   efe.efe2.efe.fe.f.e
+    */
     for (let index = 0; index < padre.valor.length; index++) {
         if (padre.valor[index].id[0] == padre.id + "_" + id) {
             name = padre.id + "_" + id;
@@ -45,6 +58,7 @@ class Asignacion_Struct extends Nodo_1.Nodo {
         let id_struct;
         id_struct = table.getVariable(this.id);
         if (id_struct.tipo2.tipo == tipo_1.tipos.STRUCTS) {
+            //id.id,id,id
             alv(id_struct, this.posicion[0], this.posicion, this.valor, tree, id_struct.ambito);
         }
         else {

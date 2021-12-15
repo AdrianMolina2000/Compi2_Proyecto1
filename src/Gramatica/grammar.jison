@@ -186,9 +186,9 @@ caracter (\'[^☼]\')
 %%
 
 
- INICIO : LISTA_INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
+// INICIO : LISTA_INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
 
-//INICIO : INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
+INICIO : INSTRUCCIONES EOF { $$ = new Tree($1); return $$; } ;
 
 INSTRUCCIONES
             :INSTRUCCIONES INSTRUCCION  {$$ = $1; $1.push($2);}
@@ -199,6 +199,7 @@ INSTRUCCION
     :TIPO 'identifier' '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}'     {$$ = new DeclaracionMetodo($1 ,$2, $4, $7, @1.first_line, @1.first_column);}
     |DECLARACION ';'                                                            {$$ = $1;}
     |llamada
+    |PRINT ';'
 ;
 
 Verificar_params
@@ -207,8 +208,8 @@ Verificar_params
 ;
 
 PARAMETROS
-    :PARAMETROS ',' TIPO 'identifier'   {$$ = $1; $$.push(new Declaracion($3, $4, null,@1.first_line, @1.first_column));}
-    |TIPO 'identifier'                  {$$ = []; $$.push(new Declaracion($1, $2, null,@1.first_line, @1.first_column));} 
+    :PARAMETROS ',' TIPO 'identifier'   {$$ = $1; $$.push(new Declaracion($3, [$4], null,@1.first_line, @1.first_column));}
+    |TIPO 'identifier'                  {$$ = []; $$.push(new Declaracion($1, [$2], null,@1.first_line, @1.first_column));} 
 ;
 
 LISTA_INSTRUCCIONES
@@ -300,8 +301,9 @@ LISTA_ID
 
 ASIGNACION
     :
+    // 
     'identifier' '=' EXPRESION     {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
-     |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {console.log($3);$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
+     |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
   
     |'identifier' '[' EXPRESION ']' '=' EXPRESION   {$$ = new AsignacionVector($1, $3, $6, @1.first_line, @1.first_column);} 
 ;
@@ -373,7 +375,7 @@ forIn
 
 
 forVar
-    :TIPO 'identifier' '=' EXPRESION    {$$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column);}
+    :TIPO 'identifier' '=' EXPRESION    {$$ = new Declaracion($1, [$2], $4, @1.first_line, @1.first_column);}
     |'identifier' '=' EXPRESION         {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
 ;
 
@@ -475,7 +477,7 @@ EXPRESION
         |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);}
         |'identifier'                           {$$ = new Identificador($1, @1.first_line, @1.first_column);}
         | EXPRESION  LISTA_EXPRESION_PTO2     {console.log($2); $$ = new Obtener_struct($1, $2, @1.first_line, @1.first_column);}
-
+//int a = id.id.id  
 ;
   LISTA_EXPRESION_PTO2:
   LISTA_EXPRESION_PTO2 '.' OPCION_PTO2    { $$ = $1; $1.push($3);}

@@ -20,6 +20,15 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
         simbolo = new Simbolo_1.Simbolo(this.tipo, this.id[0], this.valor, new tipo_1.Tipo(tipo_1.tipos.STRUCTS), this.line, this.column);
         const res = table.setVariable(simbolo);
         tree.Variables.push(simbolo);
+        if (this.valor != null) {
+            console.log(this.id[0]);
+            let struct_padre;
+            struct_padre = table.getVariable(this.id[0]);
+            //   console.log(table);
+            for (let index = 0; index < struct_padre.valor.length; index++) {
+                console.log(struct_padre.valor[index]);
+            }
+        }
         return null;
     }
     getNodo() {
