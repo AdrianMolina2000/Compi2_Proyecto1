@@ -15,18 +15,23 @@ function alv(padre: Simbolo, id: String, lista_ids: Array<String>, tree: Tree, t
         if (padre.valor[index].id[0] == padre.id + "_" + id) {
             name = padre.id + "_" + id;
             if (padre.valor[index].tipo.tipo == 11) {
+               
                 if (lista_ids.length == 1) {
+                    
                     let variable = table.getVariable(name);
                     return variable.valor;
                 }
                 else if (lista_ids.length > 1) {
+                    
                     lista_ids.shift();
+                   
                     let id_hijo: Simbolo
                     id_hijo = table.getVariable(padre.valor[index].nombre_struct)
                     return alv(id_hijo, lista_ids[0], lista_ids, tree, id_hijo.ambito);
                 }
             } else {
                 let variable = table.getVariable(name);
+                console.log(variable)
                 return variable;
             }
         }
@@ -54,7 +59,9 @@ export class Obtener_struct extends Nodo {
 
         if (id_struct.tipo2.tipo == tipos.STRUCTS) {
             let retorno = alv(id_struct, this.posicion[0], this.posicion, tree, id_struct.ambito)
+        
             this.tipo = retorno.tipo.tipo
+            retorno.tipo2.tipo=retorno.tipo.tipo
             return retorno.valor;
         }else {
             const error = new Excepcion('Semantico',

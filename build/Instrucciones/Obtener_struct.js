@@ -23,6 +23,7 @@ function alv(padre, id, lista_ids, tree, table) {
             }
             else {
                 let variable = table.getVariable(name);
+                console.log(variable);
                 return variable;
             }
         }
@@ -40,6 +41,7 @@ class Obtener_struct extends Nodo_1.Nodo {
         if (id_struct.tipo2.tipo == tipo_1.tipos.STRUCTS) {
             let retorno = alv(id_struct, this.posicion[0], this.posicion, tree, id_struct.ambito);
             this.tipo = retorno.tipo.tipo;
+            retorno.tipo2.tipo = retorno.tipo.tipo;
             return retorno.valor;
         }
         else {

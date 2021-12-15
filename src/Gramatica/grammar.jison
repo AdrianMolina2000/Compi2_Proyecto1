@@ -474,10 +474,23 @@ EXPRESION
         |'typeof' '(' EXPRESION ')'             {$$ = new TypeOf($3, @1.first_line, @1.first_column);}
         |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);}
         |'identifier'                           {$$ = new Identificador($1, @1.first_line, @1.first_column);}
-        | EXPRESION '.' LISTA_EXPRESION_PTO     {$$ = new Obtener_struct($1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION  LISTA_EXPRESION_PTO2     {$$ = new Obtener_struct($1, $2, @1.first_line, @1.first_column);}
 
 ;
+  LISTA_EXPRESION_PTO2:
+  LISTA_EXPRESION_PTO2 '.' OPCION_PTO2    { $$ = $1; $1.push($3);}
+    | OPCION_PTO                    { $$ = []; $$.push($1);}
+  
+  ;  
+  OPCION_PTO2:
+  '.' 'identifier'                  {$$ =$2;}
+  |'identifier'                     {$$ =$1;}
+  | 'identifier' '[' EXPRESION']'   {$$ =$1;}
 
+  
+  
+  
+  ;
 TIPO
     :double     {$$ = new Tipo(tipos.DECIMAL);}
     |String     {$$ = new Tipo(tipos.STRING);}

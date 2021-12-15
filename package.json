@@ -6,7 +6,7 @@
     "scripts": {
         "ts:node": "ts-node src/",
         "build": "rimraf ./build && tsc -w && cpx \"./src/views/**\" ./build/views &&  cpx \"./src/public/**\" ./build/public",
-        "dev": "nodemon ./build/interfaz/index.js",
+        "dev": "nodemon     ./src/Gramatica/grammar.jison",
         "start": "npm run build && node build/index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
