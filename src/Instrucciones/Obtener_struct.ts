@@ -31,7 +31,7 @@ function alv(padre: Simbolo, id: String, lista_ids: Array<String>, tree: Tree, t
                 }
             } else {
                 let variable = table.getVariable(name);
-                console.log(variable)
+                
                 return variable;
             }
         }

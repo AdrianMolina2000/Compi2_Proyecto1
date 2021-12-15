@@ -219,6 +219,7 @@ var grammar = (function () {
                     this.$ = new Asignacion($$[$0 - 2], $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                     break;
                 case 65:
+                    console.log($$[$0 - 2]);
                     this.$ = new Asignacion_Struct($$[$0 - 4], $$[$0 - 2], $$[$0], _$[$0 - 4].first_line, _$[$0 - 4].first_column);
                     break;
                 case 66:
@@ -445,6 +446,7 @@ var grammar = (function () {
                     this.$ = new Identificador($$[$0], _$[$0].first_line, _$[$0].first_column);
                     break;
                 case 151:
+                    console.log($$[$0]);
                     this.$ = new Obtener_struct($$[$0 - 1], $$[$0], _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                     break;
                 case 152:

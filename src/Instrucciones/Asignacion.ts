@@ -29,6 +29,7 @@ export class Asignacion extends Nodo {
     }
 
     execute(table: Table, tree: Tree) {
+        
         const result = this.valor.execute(table, tree);
         var bandera = true;
         if (result instanceof Excepcion) {
@@ -45,8 +46,7 @@ export class Asignacion extends Nodo {
             tree.consola.push(error.toString());
             return error;
         }
-
-       
+              
             if (this.valor.tipo.tipo != variable.tipo.tipo) {
                 if(variable.tipo2.tipo == 6 && this.valor.tipo.tipo == 6){
                     bandera = false;

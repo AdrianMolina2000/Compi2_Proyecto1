@@ -45,7 +45,8 @@ export class Declaracion extends Nodo {
         if (result instanceof Excepcion) {
             return result;
         }
-        
+     
+       /* 
         if (this.valor.tipo.tipo != this.tipo.tipo) {
             if (this.tipo.tipo == tipos.DECIMAL && (this.valor.tipo.tipo == tipos.DECIMAL || this.valor.tipo.tipo == tipos.ENTERO)) {
                 this.valor.tipo.tipo = tipos.DECIMAL;
@@ -58,7 +59,7 @@ export class Declaracion extends Nodo {
                 return error;
             }
         }
-
+*/
         let simbolo: Simbolo;
         
         

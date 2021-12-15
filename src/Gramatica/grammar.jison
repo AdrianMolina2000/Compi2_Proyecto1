@@ -301,7 +301,7 @@ LISTA_ID
 ASIGNACION
     :
     'identifier' '=' EXPRESION     {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
-     |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
+     |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {console.log($3);$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
   
     |'identifier' '[' EXPRESION ']' '=' EXPRESION   {$$ = new AsignacionVector($1, $3, $6, @1.first_line, @1.first_column);} 
 ;
@@ -474,7 +474,7 @@ EXPRESION
         |'typeof' '(' EXPRESION ')'             {$$ = new TypeOf($3, @1.first_line, @1.first_column);}
         |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);}
         |'identifier'                           {$$ = new Identificador($1, @1.first_line, @1.first_column);}
-        | EXPRESION  LISTA_EXPRESION_PTO2     {$$ = new Obtener_struct($1, $2, @1.first_line, @1.first_column);}
+        | EXPRESION  LISTA_EXPRESION_PTO2     {console.log($2); $$ = new Obtener_struct($1, $2, @1.first_line, @1.first_column);}
 
 ;
   LISTA_EXPRESION_PTO2:

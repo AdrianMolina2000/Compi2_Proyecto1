@@ -38,17 +38,20 @@ class Declaracion extends Nodo_1.Nodo {
         if (result instanceof Excepcion_1.Excepcion) {
             return result;
         }
-        if (this.valor.tipo.tipo != this.tipo.tipo) {
-            if (this.tipo.tipo == tipo_1.tipos.DECIMAL && (this.valor.tipo.tipo == tipo_1.tipos.DECIMAL || this.valor.tipo.tipo == tipo_1.tipos.ENTERO)) {
-                this.valor.tipo.tipo = tipo_1.tipos.DECIMAL;
-            }
-            else {
-                const error = new Excepcion_1.Excepcion('Semantico', `La variable no puede ser declarada debido a que son de diferentes tipos`, this.line, this.column);
-                tree.excepciones.push(error);
-                tree.consola.push(error.toString());
-                return error;
-            }
-        }
+        /*
+         if (this.valor.tipo.tipo != this.tipo.tipo) {
+             if (this.tipo.tipo == tipos.DECIMAL && (this.valor.tipo.tipo == tipos.DECIMAL || this.valor.tipo.tipo == tipos.ENTERO)) {
+                 this.valor.tipo.tipo = tipos.DECIMAL;
+             } else {
+                 const error = new Excepcion('Semantico',
+                     `La variable no puede ser declarada debido a que son de diferentes tipos`,
+                     this.line, this.column);
+                 tree.excepciones.push(error);
+                 tree.consola.push(error.toString());
+                 return error;
+             }
+         }
+ */
         let simbolo;
         for (let key in this.id) {
             simbolo = new Simbolo_1.Simbolo(this.tipo, this.id[key], result, new tipo_1.Tipo(tipo_1.tipos.VARIABLE), this.line, this.column);

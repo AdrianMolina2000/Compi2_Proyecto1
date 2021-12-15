@@ -174,7 +174,7 @@ case 64: case 92: case 95:
 this.$ = new Asignacion($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 65:
-this.$ = new Asignacion_Struct($$[$0-4], $$[$0-2],$$[$0], _$[$0-4].first_line, _$[$0-4].first_column);
+console.log($$[$0-2]);this.$ = new Asignacion_Struct($$[$0-4], $$[$0-2],$$[$0], _$[$0-4].first_line, _$[$0-4].first_column);
 break;
 case 66:
 this.$ = new AsignacionVector($$[$0-5], $$[$0-3], $$[$0], _$[$0-5].first_line, _$[$0-5].first_column);
@@ -393,7 +393,7 @@ case 150:
 this.$ = new Identificador($$[$0], _$[$0].first_line, _$[$0].first_column);
 break;
 case 151:
-this.$ = new Obtener_struct($$[$0-1], $$[$0], _$[$0-1].first_line, _$[$0-1].first_column);
+console.log($$[$0]); this.$ = new Obtener_struct($$[$0-1], $$[$0], _$[$0-1].first_line, _$[$0-1].first_column);
 break;
 case 152:
  this.$ = $$[$0-2]; $$[$0-2].push($$[$0]);

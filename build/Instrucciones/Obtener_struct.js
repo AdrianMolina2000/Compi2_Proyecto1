@@ -23,7 +23,6 @@ function alv(padre, id, lista_ids, tree, table) {
             }
             else {
                 let variable = table.getVariable(name);
-                console.log(variable);
                 return variable;
             }
         }
