@@ -40,8 +40,10 @@ efe.a
                     alv(id_hijo, lista_ids[0], lista_ids, valor, tree, id_hijo.ambito);
                 }
             } else {
+                console.log(name)
                 let variable = table.getVariable(name);
                 variable.valor = valor.execute(table, tree)
+              //  console.log(variable.valor)
                 break;
             }
         }

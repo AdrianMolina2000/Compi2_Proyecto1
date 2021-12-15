@@ -36,8 +36,10 @@ efe.a
                 }
             }
             else {
+                console.log(name);
                 let variable = table.getVariable(name);
                 variable.valor = valor.execute(table, tree);
+                //  console.log(variable.valor)
                 break;
             }
         }

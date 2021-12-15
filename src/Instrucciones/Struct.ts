@@ -23,7 +23,7 @@ export class Struct extends Nodo {
     execute(table: Table, tree: Tree) {
         this.newTable = new Table(table);
 
-        
+        console.log(this.id)
         if ((this.lista_declaracion != null)) {
             let simbolo: Simbolo;
 
@@ -32,6 +32,7 @@ export class Struct extends Nodo {
                 const id_aux = this.lista_declaracion[index].id
                 this.lista_declaracion[index].id = [this.id + "_" + id_aux]               
                 this.lista_declaracion[index].execute(this.newTable, tree)
+                
             }
 
            

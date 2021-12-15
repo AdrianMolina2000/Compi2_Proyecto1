@@ -8,7 +8,7 @@ import { Primitivo } from "../Expresiones/Primitivo";
 import { NodoAST } from "../Abstract/NodoAST";
 import { fork } from "child_process";
 import { forEachChild } from "typescript";
-
+import { Struct } from "./Struct";
 
 
 export class DeclaracionVarStruct extends Nodo {
@@ -23,33 +23,33 @@ export class DeclaracionVarStruct extends Nodo {
         this.valor = valor;
     }
 
+    
+
     execute(table: Table, tree: Tree) {
+      
 
         if (this.valor instanceof Excepcion) {
             return this.valor;
         }
 
         let simbolo: Simbolo;
+        
+        let struct_padre:Simbolo;
+        struct_padre=table.getVariable(this.nombre_struct);
+        
+     /*   let atributos_struct:Struct
+        
+     
+     atributos_struct = new Struct(this.id[0],struct_padre.valor,this.line,this.columns); 
+        
+        
+    
 
-        simbolo = new Simbolo(this.tipo, this.id[0], this.valor, new Tipo(tipos.STRUCTS), this.line, this.column);
+        //this.valor=atributos_struct;*/
+        simbolo = new Simbolo(this.tipo, this.id[0], struct_padre.valor, new Tipo(tipos.STRUCTS), this.line, this.column);
         const res = table.setVariable(simbolo);
-
         tree.Variables.push(simbolo);
-        if (this.valor != null) {
-            console.log(this.id[0])
-            let struct_padre:Simbolo;
-            struct_padre=table.getVariable(this.id[0]);
-         //   console.log(table);
-
-             
-            
-            for (let index = 0; index < struct_padre.valor.length; index++) {
-                console.log(struct_padre.valor[index]);
-                
-            }
-
-        }
-
+    
 
         return null;
     }

@@ -14,6 +14,7 @@ class Struct extends Nodo_1.Nodo {
     }
     execute(table, tree) {
         this.newTable = new Table_1.Table(table);
+        console.log(this.id);
         if ((this.lista_declaracion != null)) {
             let simbolo;
             for (let index = 0; index < this.lista_declaracion.length; index++) {
