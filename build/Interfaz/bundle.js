@@ -4887,7 +4887,6 @@ class DeclaracionArray extends Nodo_1.Nodo {
         if ((this.listaValores != null)) {
             //Declaracion Tipo 2
             if (revisar(this.tipo, this.listaValores, table, tree)) {
-                console.log("ENTRA");
                 let simbolo;
                 simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, this.listaValores, new tipo_1.Tipo(tipo_1.tipos.ARREGLO), this.line, this.column);
                 if (table.getVariable(this.id) == null) {
@@ -5663,16 +5662,31 @@ exports.Obtener_struct = Obtener_struct;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Identificador_1 = require("../Expresiones/Identificador");
 function imprimir(lista, table, tree) {
     var salida = "[";
-    console.log(lista.valor);
     for (let key in lista.valor) {
+        lista.valor[key].execute(table, tree);
         if (lista.valor[key].tipo.tipo == 6) {
-            return salida + imprimir(lista.valor[key], table, tree) + "]";
+            salida = salida + imprimir(lista.valor[key], table, tree);
         }
-        salida += lista.valor[key].execute(table, tree) + ", ";
+        else {
+            if (lista.valor[key] instanceof Identificador_1.Identificador) {
+                try {
+                    if (lista.valor[key].valor.tipo.tipo == 6) {
+                        salida = salida + imprimir(lista.valor[key].valor, table, tree);
+                    }
+                }
+                catch (err) {
+                    salida += lista.valor[key].execute(table, tree) + ", ";
+                }
+            }
+            else {
+                salida += lista.valor[key].execute(table, tree) + ", ";
+            }
+        }
     }
-    salida = salida.substring(0, salida.length - 2) + "]";
+    salida = salida.substring(0, salida.length - 2) + "], ";
     return salida;
 }
 class Print extends Nodo_1.Nodo {
@@ -5691,7 +5705,8 @@ class Print extends Nodo_1.Nodo {
             else {
                 if (valor.tipo) {
                     if (valor.tipo.tipo == 6) {
-                        tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
+                        let texto = imprimir(this.expresion[key].execute(table, tree), table, tree);
+                        tree.consola.push(texto.substring(0, texto.length - 2));
                     }
                 }
                 else {
@@ -5764,7 +5779,7 @@ class Print extends Nodo_1.Nodo {
 }
 exports.Print = Print;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5}],51:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Identificador":12}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");

@@ -47,7 +47,6 @@ class DeclaracionArray extends Nodo_1.Nodo {
         if ((this.listaValores != null)) {
             //Declaracion Tipo 2
             if (revisar(this.tipo, this.listaValores, table, tree)) {
-                console.log("ENTRA");
                 let simbolo;
                 simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, this.listaValores, new tipo_1.Tipo(tipo_1.tipos.ARREGLO), this.line, this.column);
                 if (table.getVariable(this.id) == null) {

@@ -2,16 +2,31 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Identificador_1 = require("../Expresiones/Identificador");
 function imprimir(lista, table, tree) {
     var salida = "[";
-    console.log(lista.valor);
     for (let key in lista.valor) {
+        lista.valor[key].execute(table, tree);
         if (lista.valor[key].tipo.tipo == 6) {
-            return salida + imprimir(lista.valor[key], table, tree) + "]";
+            salida = salida + imprimir(lista.valor[key], table, tree);
         }
-        salida += lista.valor[key].execute(table, tree) + ", ";
+        else {
+            if (lista.valor[key] instanceof Identificador_1.Identificador) {
+                try {
+                    if (lista.valor[key].valor.tipo.tipo == 6) {
+                        salida = salida + imprimir(lista.valor[key].valor, table, tree);
+                    }
+                }
+                catch (err) {
+                    salida += lista.valor[key].execute(table, tree) + ", ";
+                }
+            }
+            else {
+                salida += lista.valor[key].execute(table, tree) + ", ";
+            }
+        }
     }
-    salida = salida.substring(0, salida.length - 2) + "]";
+    salida = salida.substring(0, salida.length - 2) + "], ";
     return salida;
 }
 class Print extends Nodo_1.Nodo {
@@ -30,7 +45,8 @@ class Print extends Nodo_1.Nodo {
             else {
                 if (valor.tipo) {
                     if (valor.tipo.tipo == 6) {
-                        tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
+                        let texto = imprimir(this.expresion[key].execute(table, tree), table, tree);
+                        tree.consola.push(texto.substring(0, texto.length - 2));
                     }
                 }
                 else {

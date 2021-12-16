@@ -52,7 +52,6 @@ export class DeclaracionArray extends Nodo {
             //Declaracion Tipo 2
 
             if (revisar(this.tipo, this.listaValores, table, tree)) {
-                console.log("ENTRA");
                 let simbolo: Simbolo;
                 simbolo = new Simbolo(this.tipo, this.id, this.listaValores, new Tipo(tipos.ARREGLO), this.line, this.column);
 
