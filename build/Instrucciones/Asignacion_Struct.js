@@ -21,7 +21,6 @@ efe.a
     */
     for (let index = 0; index < padre.valor.length; index++) {
         if (padre.valor[index].id[0] == padre.id + "_" + id) {
-            name = padre.id + "_" + id;
             if (padre.valor[index].tipo.tipo == 11) {
                 if (lista_ids.length == 1) {
                     let variable = table.getVariable(name);
@@ -31,13 +30,15 @@ efe.a
                 else if (lista_ids.length > 1) {
                     lista_ids.shift();
                     let id_hijo;
-                    id_hijo = table.getVariable(padre.valor[index].nombre_struct);
+                    id_hijo = table.getVariable(padre.valor[index].id[0]);
+                    console.log(id_hijo);
                     alv(id_hijo, lista_ids[0], lista_ids, valor, tree, id_hijo.ambito);
                 }
             }
             else {
-                console.log(name);
                 let variable = table.getVariable(name);
+                console.log("name" + "==" + name);
+                console.log(variable);
                 variable.valor = valor.execute(table, tree);
                 //  console.log(variable.valor)
                 break;

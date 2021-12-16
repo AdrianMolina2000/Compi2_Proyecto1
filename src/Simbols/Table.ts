@@ -3,10 +3,26 @@ import {Simbolo} from "./Simbolo";
 export class Table{
     Anterior: Table;
     Variables: Map<String, Simbolo>;
+    temporal: number;
+    etiqueta: number;
+    heap: number;
+    stack: number;
+    tempStorage: Array<String>;
+    ambito: Boolean;
+    listaReturn: Array<String>;
+    sizeActual: Array<number>;
 
     constructor(Anterior: Table){
         this.Anterior = Anterior;
         this.Variables = new Map<String, Simbolo>();
+        this.temporal = 0;
+        this.etiqueta = 0;
+        this.heap = 0;
+        this.stack = 0;
+        this.tempStorage = [];
+        this.ambito = false; // false = global, true = local
+        this.listaReturn = [];
+        this.sizeActual = [];
     }
 
     setVariable(simbol: Simbolo){
@@ -34,6 +50,47 @@ export class Table{
             }
         }
         return null;
+    }
+
+    getTemporal(): String {
+        return "t" + ++this.temporal;
+    }
+
+    getTemporalActual(): String {
+        return "t" + this.temporal;
+    }
+
+    getHeap(): number {
+        return this.heap++;
+    }
+
+    getStack(): number {
+        return this.stack++;
+    }
+
+    setStack(value: number): void {
+        this.stack = value;
+    }
+
+    getEtiqueta(): String {
+        return "L" + ++this.etiqueta;
+    }
+
+    getEtiquetaActual(): String {
+        return "L" + this.etiqueta;
+    }
+
+    AgregarTemporal(temp: String): void {
+        if (this.tempStorage.indexOf(temp) == -1) {
+            this.tempStorage.push(temp);
+        }
+    }
+
+    QuitarTemporal(temp: String): void {
+        let index = this.tempStorage.indexOf(temp);
+        if (index > -1) {
+            this.tempStorage.splice(index, 1);
+        }
     }
 
 }

@@ -1973,7 +1973,6 @@ exports.Pow = Pow;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
 const NodoAST_1 = require("../Abstract/NodoAST");
-// Esta clase crea un nodo del tipo primitivo, ya sea int, double, string, char, boolean
 class Primitivo extends Nodo_1.Nodo {
     constructor(tipo, valor, line, column) {
         super(tipo, line, column);
@@ -1998,6 +1997,12 @@ class Primitivo extends Nodo_1.Nodo {
         var nodo = new NodoAST_1.NodoAST("PRIMITIVO");
         nodo.agregarHijo(this.valor + '');
         return nodo;
+    }
+    get3D(table, tree) {
+        const temporal = table.getTemporal();
+        let c3d = `${temporal} = ${this.valor} \n`;
+        table.AgregarTemporal(table.getTemporalActual());
+        return c3d;
     }
 }
 exports.Primitivo = Primitivo;
@@ -4488,7 +4493,7 @@ function revisar(tipo1, lista) {
         if (lista.valor[key].tipo.tipo == 6) {
             return revisar(tipo1, lista.valor[key]);
         }
-        if (tipo1.tipo != lista.valor[key].tipo.tipo) {
+        if (tipo1 != lista.valor[key].tipo.tipo) {
             return false;
         }
     }
@@ -4514,6 +4519,9 @@ class Asignacion extends Nodo_1.Nodo {
             tree.consola.push(error.toString());
             return error;
         }
+        console.log("--------");
+        console.log(variable);
+        console.log("--------");
         if (this.valor.tipo.tipo != variable.tipo.tipo) {
             if (variable.tipo2.tipo == 6 && this.valor.tipo.tipo == 6) {
                 bandera = false;
@@ -4535,7 +4543,9 @@ class Asignacion extends Nodo_1.Nodo {
             let variable;
             variable = table.getVariable(this.valor.id);
             if (variable.tipo2.tipo == tipo_1.tipos.ARREGLO) {
-                val = this.valor.valor;
+                console.log(this.valor.valor);
+                val = this.valor.valor.slice();
+                console.log("aca");
             }
             // else if (variable.tipo2.tipo == tipos.LISTA) {
             //     val = (<any>this.valor).valor;
@@ -4661,7 +4671,6 @@ efe.a
     */
     for (let index = 0; index < padre.valor.length; index++) {
         if (padre.valor[index].id[0] == padre.id + "_" + id) {
-            name = padre.id + "_" + id;
             if (padre.valor[index].tipo.tipo == 11) {
                 if (lista_ids.length == 1) {
                     let variable = table.getVariable(name);
@@ -4671,13 +4680,15 @@ efe.a
                 else if (lista_ids.length > 1) {
                     lista_ids.shift();
                     let id_hijo;
-                    id_hijo = table.getVariable(padre.valor[index].nombre_struct);
+                    id_hijo = table.getVariable(padre.valor[index].id[0]);
+                    console.log(id_hijo);
                     alv(id_hijo, lista_ids[0], lista_ids, valor, tree, id_hijo.ambito);
                 }
             }
             else {
-                console.log(name);
                 let variable = table.getVariable(name);
+                console.log("name" + "==" + name);
+                console.log(variable);
                 variable.valor = valor.execute(table, tree);
                 //  console.log(variable.valor)
                 break;
@@ -5000,6 +5011,7 @@ exports.DeclaracionMetodo = DeclaracionMetodo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
+const Table_1 = require("../Simbols/Table");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const Simbolo_1 = require("../Simbols/Simbolo");
@@ -5012,22 +5024,35 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
         this.valor = valor;
     }
     execute(table, tree) {
+        this.newTable = new Table_1.Table(table);
         if (this.valor instanceof Excepcion_1.Excepcion) {
             return this.valor;
         }
         let simbolo;
+        // console.log(this.nombre_struct+"::")
         let struct_padre;
-        struct_padre = table.getVariable(this.nombre_struct);
-        /*   let atributos_struct:Struct
-           atributos_struct = new Struct(this.id[0],struct_padre.valor,this.line,this.columns);
-           
-           
-       
-   
-           //this.valor=atributos_struct;*/
+        struct_padre = this.newTable.getVariable(this.nombre_struct);
+        this.valor = struct_padre.valor;
+        for (let index = 0; index < this.valor.length; index++) {
+            let id_padre = this.id[0].split("_");
+            let id_hijo = this.valor[index].id[0].split("_");
+            console.log(id_padre[1] + "---" + id_hijo[1]);
+            this.valor[index].id[0] = id_padre[1] + "_" + id_hijo[1];
+            this.valor[index].execute(table, tree);
+            // let id_hijo = this.valor[index].id[0].split("_")
+            //   console.log(id_padre[1]+"--"+id_hijo[1])
+            //   this.valor[index].id[0]=id_padre[1]+"_"+id_hijo[1]
+        }
+        console.log(this.valor);
+        /* atributos_struct = new Struct(this.id[0],struct_padre.valor,this.line,this.columns);
+           console.log("----")
+          console.log(atributos_struct);
+          console.log("---")*/
+        //this.valor=atributos_struct;*/
         simbolo = new Simbolo_1.Simbolo(this.tipo, this.id[0], struct_padre.valor, new tipo_1.Tipo(tipo_1.tipos.STRUCTS), this.line, this.column);
         const res = table.setVariable(simbolo);
         tree.Variables.push(simbolo);
+        simbolo.ambito = this.newTable;
         return null;
     }
     getNodo() {
@@ -5043,7 +5068,7 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
 }
 exports.DeclaracionVarStruct = DeclaracionVarStruct;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Simbols/Simbolo":57,"../other/Excepcion":60,"../other/tipo":61}],43:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Simbols/Simbolo":57,"../Simbols/Table":58,"../other/Excepcion":60,"../other/tipo":61}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -5634,10 +5659,9 @@ exports.Obtener_struct = Obtener_struct;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
-const tipo_1 = require("../other/tipo");
-const tipo_2 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 function imprimir(lista, table, tree) {
+    console.log(lista);
     var salida = "[";
     for (let key in lista.valor) {
         if (lista.valor[key].tipo.tipo == 6) {
@@ -5648,13 +5672,9 @@ function imprimir(lista, table, tree) {
     salida = salida.substring(0, salida.length - 2);
     return salida + "]";
 }
-/*
-
-           var metodo = new Simbolo(this.tipo, nombre, [this.listaParams, this.instrucciones], tipo2, this.line, this.column);
-*/
 class Print extends Nodo_1.Nodo {
     constructor(expresion, line, column, tipo_print) {
-        super(new tipo_1.Tipo(tipo_2.tipos.VOID), line, column);
+        super(null, line, column);
         this.expresion = expresion;
         this.tipo_print = tipo_print;
     }
@@ -5662,15 +5682,18 @@ class Print extends Nodo_1.Nodo {
         console.log(this.expresion);
         for (let key in this.expresion) {
             const valor = this.expresion[key].execute(table, tree);
-            if (valor.tipo == null) {
-                tree.consola.push(valor);
+            if (this.expresion[key].tipo.tipo == 6) {
+                tree.consola.push(imprimir(this.expresion[key], table, tree));
             }
             else {
-                if (this.expresion[key].execute(table, tree).tipo.tipo == 6) {
-                    tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
+                if (valor.tipo) {
+                    if (valor.tipo.tipo == 6) {
+                        tree.consola.push(imprimir(this.expresion[key].execute(table, tree), table, tree));
+                    }
                 }
                 else {
                     tree.consola.push(valor);
+                    this.tipo = this.expresion[key].tipo;
                 }
             }
         }
@@ -5690,10 +5713,55 @@ class Print extends Nodo_1.Nodo {
         nodo.agregarHijo(")");
         return nodo;
     }
+    get3D(table, tree) {
+        let estructura = 'heap';
+        let codigo = '';
+        let condicion = this.expresion.get3D(table, tree);
+        codigo += condicion;
+        let temp = table.getTemporalActual();
+        if (this.tipo.toString() === 'numeric' || this.tipo.toString() == 'boolean') {
+            codigo += `print(%e, ${temp})\n`;
+            tabla.QuitarTemporal(temp);
+        }
+        else {
+            let temp1 = tabla.getTemporal();
+            let temp2 = tabla.getTemporal();
+            let temp3 = tabla.getTemporal();
+            let label = tabla.getEtiqueta();
+            let label2 = tabla.getEtiqueta();
+            codigo += `${temp1} = ${estructura}[${temp}]\n`;
+            tabla.AgregarTemporal(temp1);
+            tabla.QuitarTemporal(temp);
+            codigo += `${temp2} = ${temp} + 1\n`;
+            tabla.AgregarTemporal(temp2);
+            tabla.QuitarTemporal(temp1);
+            codigo += `${temp3} = 0\n`;
+            tabla.AgregarTemporal(temp3);
+            codigo += `${label2}:\n`;
+            codigo += `if(${temp3} >= ${temp1}) goto ${label}\n`;
+            tabla.QuitarTemporal(temp3);
+            tabla.QuitarTemporal(temp1);
+            let temp4 = tabla.getTemporal();
+            codigo += `${temp4} = ${estructura}[${temp2}]\n`;
+            tabla.AgregarTemporal(temp4);
+            tabla.QuitarTemporal(temp3);
+            codigo += `print(%c, ${temp4})\n`;
+            tabla.QuitarTemporal(temp4);
+            codigo += `${temp2} = ${temp2} + 1\n`;
+            tabla.AgregarTemporal(temp2);
+            codigo += `${temp3} = ${temp3} + 1\n`;
+            tabla.AgregarTemporal(temp3);
+            codigo += `${temp4} = ${temp4} + 1\n`;
+            tabla.AgregarTemporal(temp4);
+            codigo += `goto ${label2}\n`;
+            codigo += `${label}:\n`;
+        }
+        return codigo;
+    }
 }
 exports.Print = Print;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/tipo":61}],51:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -6061,6 +6129,14 @@ class Table {
     constructor(Anterior) {
         this.Anterior = Anterior;
         this.Variables = new Map();
+        this.temporal = 0;
+        this.etiqueta = 0;
+        this.heap = 0;
+        this.stack = 0;
+        this.tempStorage = [];
+        this.ambito = false; // false = global, true = local
+        this.listaReturn = [];
+        this.sizeActual = [];
     }
     setVariable(simbol) {
         let ambito;
@@ -6085,6 +6161,38 @@ class Table {
             }
         }
         return null;
+    }
+    getTemporal() {
+        return "t" + ++this.temporal;
+    }
+    getTemporalActual() {
+        return "t" + this.temporal;
+    }
+    getHeap() {
+        return this.heap++;
+    }
+    getStack() {
+        return this.stack++;
+    }
+    setStack(value) {
+        this.stack = value;
+    }
+    getEtiqueta() {
+        return "L" + ++this.etiqueta;
+    }
+    getEtiquetaActual() {
+        return "L" + this.etiqueta;
+    }
+    AgregarTemporal(temp) {
+        if (this.tempStorage.indexOf(temp) == -1) {
+            this.tempStorage.push(temp);
+        }
+    }
+    QuitarTemporal(temp) {
+        let index = this.tempStorage.indexOf(temp);
+        if (index > -1) {
+            this.tempStorage.splice(index, 1);
+        }
     }
 }
 exports.Table = Table;

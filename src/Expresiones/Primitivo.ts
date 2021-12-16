@@ -5,8 +5,6 @@ import { Tipo } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
 
 
-// Esta clase crea un nodo del tipo primitivo, ya sea int, double, string, char, boolean
-
 export class Primitivo extends Nodo {
     valor: Object;
 
@@ -35,4 +33,13 @@ export class Primitivo extends Nodo {
         nodo.agregarHijo(this.valor + '');
         return nodo;
     }
+
+    get3D(table: Table, tree: Tree): String {
+        const temporal = table.getTemporal();
+        let c3d = `${temporal} = ${this.valor} \n`;
+        table.AgregarTemporal(table.getTemporalActual());
+        return c3d;
+    }
+
+    
 }

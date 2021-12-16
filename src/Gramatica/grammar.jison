@@ -303,7 +303,7 @@ ASIGNACION
     :
     // 
     'identifier' '=' EXPRESION     {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
-     |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
+    |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
   
     |'identifier' '[' EXPRESION ']' '=' EXPRESION   {$$ = new AsignacionVector($1, $3, $6, @1.first_line, @1.first_column);} 
 ;

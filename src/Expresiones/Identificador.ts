@@ -26,6 +26,7 @@ export class Identificador extends Nodo {
         }
         this.tipo = variable.tipo;
         this.valor = variable.valor;
+
         return variable.valor;
     }
 

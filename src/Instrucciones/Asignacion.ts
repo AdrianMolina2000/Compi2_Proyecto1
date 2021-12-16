@@ -11,7 +11,7 @@ function revisar(tipo1: Tipo, lista: Nodo) {
         if (lista.valor[key].tipo.tipo == 6) {
             return revisar(tipo1, lista.valor[key])
         }
-        if (tipo1.tipo != lista.valor[key].tipo.tipo) {
+        if (tipo1 != lista.valor[key].tipo.tipo) {
             return false;
         }
     }
@@ -29,7 +29,6 @@ export class Asignacion extends Nodo {
     }
 
     execute(table: Table, tree: Tree) {
-        
         const result = this.valor.execute(table, tree);
         var bandera = true;
         if (result instanceof Excepcion) {
@@ -38,6 +37,7 @@ export class Asignacion extends Nodo {
 
         let variable: Simbolo;
         variable = table.getVariable(this.id);
+
         if (variable == null) {
             const error = new Excepcion('Semantico',
                 `La variable {${this.id}} no ha sido encontrada`,
@@ -46,53 +46,59 @@ export class Asignacion extends Nodo {
             tree.consola.push(error.toString());
             return error;
         }
-              
-            if (this.valor.tipo.tipo != variable.tipo.tipo) {
-                if(variable.tipo2.tipo == 6 && this.valor.tipo.tipo == 6){
-                    bandera = false;
-                }else{
-                    if (variable.tipo.tipo == tipos.DECIMAL && (this.valor.tipo.tipo == tipos.DECIMAL || this.valor.tipo.tipo == tipos.ENTERO)) {
-                        this.valor.tipo.tipo = tipos.DECIMAL;
-                    } else {
 
-                        const error = new Excepcion('Semantico',
+        console.log("--------");
+        console.log(variable);
+        console.log("--------");
+
+        if (this.valor.tipo.tipo != variable.tipo.tipo) {
+            if (variable.tipo2.tipo == 6 && this.valor.tipo.tipo == 6) {
+                bandera = false;
+            } else {
+                if (variable.tipo.tipo == tipos.DECIMAL && (this.valor.tipo.tipo == tipos.DECIMAL || this.valor.tipo.tipo == tipos.ENTERO)) {
+                    this.valor.tipo.tipo = tipos.DECIMAL;
+                } else {
+
+                    const error = new Excepcion('Semantico',
                         `La variable no puede ser declarada debido a que son de diferentes tipos`,
                         this.line, this.column);
-                        tree.excepciones.push(error);
-                        tree.consola.push(error.toString());
-                        return error;
-                    }
+                    tree.excepciones.push(error);
+                    tree.consola.push(error.toString());
+                    return error;
                 }
             }
-        
+        }
+
         var val;
-        
+
 
         try {
             let variable: Simbolo
             variable = table.getVariable((<any>this.valor).id)
             if (variable.tipo2.tipo == tipos.ARREGLO) {
-                val = (<any>this.valor).valor;
+                console.log(this.valor.valor)
+                val = this.valor.valor.slice();
+                console.log("aca")
             }
             // else if (variable.tipo2.tipo == tipos.LISTA) {
             //     val = (<any>this.valor).valor;
             // }
 
         } catch (err) {
-            if(bandera){
+            if (bandera) {
                 val = result;
-            }else{
+            } else {
                 if (revisar(variable.tipo.tipo, this.valor)) {
                     val = this.valor;
-                }else {
+                } else {
                     const error = new Excepcion('Semantico',
-                    `El Array no puede ser declarado debido a que son de diferentes tipos \n`,
+                        `El Array no puede ser declarado debido a que son de diferentes tipos \n`,
                         this.line, this.column);
                     return error;
                 }
             }
         }
-        
+
         variable.valor = val;
         return null;
     }

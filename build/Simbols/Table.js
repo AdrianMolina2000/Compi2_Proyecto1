@@ -4,6 +4,14 @@ class Table {
     constructor(Anterior) {
         this.Anterior = Anterior;
         this.Variables = new Map();
+        this.temporal = 0;
+        this.etiqueta = 0;
+        this.heap = 0;
+        this.stack = 0;
+        this.tempStorage = [];
+        this.ambito = false; // false = global, true = local
+        this.listaReturn = [];
+        this.sizeActual = [];
     }
     setVariable(simbol) {
         let ambito;
@@ -28,6 +36,38 @@ class Table {
             }
         }
         return null;
+    }
+    getTemporal() {
+        return "t" + ++this.temporal;
+    }
+    getTemporalActual() {
+        return "t" + this.temporal;
+    }
+    getHeap() {
+        return this.heap++;
+    }
+    getStack() {
+        return this.stack++;
+    }
+    setStack(value) {
+        this.stack = value;
+    }
+    getEtiqueta() {
+        return "L" + ++this.etiqueta;
+    }
+    getEtiquetaActual() {
+        return "L" + this.etiqueta;
+    }
+    AgregarTemporal(temp) {
+        if (this.tempStorage.indexOf(temp) == -1) {
+            this.tempStorage.push(temp);
+        }
+    }
+    QuitarTemporal(temp) {
+        let index = this.tempStorage.indexOf(temp);
+        if (index > -1) {
+            this.tempStorage.splice(index, 1);
+        }
     }
 }
 exports.Table = Table;

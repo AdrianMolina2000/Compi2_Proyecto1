@@ -9,6 +9,8 @@ export abstract class Nodo{
 
     abstract getNodo():NodoAST;
 
+    abstract get3D(tabla: Table, tree: Tree): String;
+
     abstract execute(table: Table, tree: Tree): any;
  
     constructor(tipo: Tipo, line: Number, column: Number) {

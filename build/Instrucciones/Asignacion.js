@@ -9,7 +9,7 @@ function revisar(tipo1, lista) {
         if (lista.valor[key].tipo.tipo == 6) {
             return revisar(tipo1, lista.valor[key]);
         }
-        if (tipo1.tipo != lista.valor[key].tipo.tipo) {
+        if (tipo1 != lista.valor[key].tipo.tipo) {
             return false;
         }
     }
@@ -35,6 +35,9 @@ class Asignacion extends Nodo_1.Nodo {
             tree.consola.push(error.toString());
             return error;
         }
+        console.log("--------");
+        console.log(variable);
+        console.log("--------");
         if (this.valor.tipo.tipo != variable.tipo.tipo) {
             if (variable.tipo2.tipo == 6 && this.valor.tipo.tipo == 6) {
                 bandera = false;
@@ -56,7 +59,9 @@ class Asignacion extends Nodo_1.Nodo {
             let variable;
             variable = table.getVariable(this.valor.id);
             if (variable.tipo2.tipo == tipo_1.tipos.ARREGLO) {
-                val = this.valor.valor;
+                console.log(this.valor.valor);
+                val = this.valor.valor.slice();
+                console.log("aca");
             }
             // else if (variable.tipo2.tipo == tipos.LISTA) {
             //     val = (<any>this.valor).valor;
