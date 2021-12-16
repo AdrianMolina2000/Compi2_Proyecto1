@@ -51,8 +51,8 @@
     const {ForIn} = require('../Instrucciones/ForIn');
     const {Struct} = require('../Instrucciones/Struct');
     const {DeclaracionMetodo} = require('../Instrucciones/DeclaracionMetodo');
-     const {DeclaracionVarStruct} = require('../Instrucciones/DeclaracionVarStruct');
-     const {Obtener_struct} = require('../Instrucciones/Obtener_struct');
+    const {DeclaracionVarStruct} = require('../Instrucciones/DeclaracionVarStruct');
+    const {Obtener_struct} = require('../Instrucciones/Obtener_struct');
     const {LlamadaMetodo} = require('../Instrucciones/LlamadaMetodo');
 %}
 
@@ -291,7 +291,8 @@ DECLARACION
     :TIPO 'identifier' '=' EXPRESION            {$$ = new Declaracion($1, [$2], $4, @1.first_line, @1.first_column);}
     |TIPO LISTA_ID                              {$$ = new Declaracion($1, $2, defal($1), @1.first_line, @1.first_column);}
     |TIPO '[' ']' 'identifier' '=' EXPRESION    {$$ = new DeclaracionArray($1, $4, $6, @1.first_line, @1.first_column);}
-    |'identifier' 'identifier' '=' EXPRESION    {$$ = new DeclaracionVarStruct(  new Tipo(tipos.STRUCTS),$1, [$2], $4, @1.first_line, @1.first_column);}
+    |TIPO '[' ']' 'identifier'                  {$$ = new DeclaracionArray($1, $4, new Primitivo(new Tipo(tipos.ARREGLO), [], @1.first_line, @1.first_column), @1.first_line, @1.first_column);}
+    |'identifier' 'identifier' '=' llamar       {$$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS),$1, [$2], $4, @1.first_line, @1.first_column);}
 ;
 
 LISTA_ID
@@ -300,11 +301,9 @@ LISTA_ID
 ;
 
 ASIGNACION
-    :
-    // 
-    'identifier' '=' EXPRESION     {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
-    |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
-  
+    
+    :'identifier' '=' EXPRESION     {$$ = new Asignacion($1, $3, @1.first_line, @1.first_column);}
+    // |'identifier' '.' LISTA_EXPRESION_PTO '=' EXPRESION  {$$ = new Asignacion_Struct($1, $3,$5, @1.first_line, @1.first_column);}
     |'identifier' '[' EXPRESION ']' '=' EXPRESION   {$$ = new AsignacionVector($1, $3, $6, @1.first_line, @1.first_column);} 
 ;
 
@@ -317,10 +316,10 @@ print(alv);*/
     | OPCION_PTO                    { $$ = []; $$.push($1);}
   
   ;  
-  OPCION_PTO:
-  '.' 'identifier'                  {$$ =$2;}
+  OPCION_PTO
+  :'.' 'identifier'                 {$$ =$2;}
   |'identifier'                     {$$ =$1;}
-  | 'identifier' '[' EXPRESION']'   {$$ =$1;}
+  |'identifier' '[' EXPRESION']'    {$$ =$1;}
 
   
   
@@ -390,21 +389,19 @@ RETURN
     |'return'                   {$$ = new Retorno(null, @1.first_line, @1.first_column);}
 ;
 
-STRUCT:
-    'struct' 'identifier' '{' Lista_declaracion '}'   {$$ = new Struct($2,$4, @1.first_line, @1.first_column);} 
+STRUCT
+    :'struct' 'identifier' '{' Lista_declaracion '}'   {$$ = new Struct($2,$4, @1.first_line, @1.first_column);} 
 ;
 
-Lista_declaracion:
-                Lista_declaracion ',' OPCION_DECLARACIO_Struct      {$$ = $1; $1.push($3);}
+Lista_declaracion
+                :Lista_declaracion ',' OPCION_DECLARACIO_Struct      {$$ = $1; $1.push($3);}
                 |OPCION_DECLARACIO_Struct                           {$$ = []; $$.push($1);}
 ;
 
-
-
 OPCION_DECLARACIO_Struct
-                        :TIPO 'identifier'{$$ = new Declaracion($1, [$2], defal($1), @1.first_line, @1.first_column);}
-                        |'identifier'  'identifier'  {$$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS),$1, $2, null, @1.first_line, @1.first_column);}
-                        | TIPO   '[' ']' 'identifier'  {$$ = new DeclaracionArray($1, $4, [], @1.first_line, @1.first_column);}
+                        :TIPO 'identifier'              {$$ = new Declaracion($1, [$2], defal($1), @1.first_line, @1.first_column);}
+                        // |'identifier'  'identifier'     {$$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS),$1, $2, null, @1.first_line, @1.first_column);}
+                        | TIPO  '[' ']' 'identifier'    {$$ = new DeclaracionArray($1, $4, new Primitivo(new Tipo(tipos.ARREGLO), [], @1.first_line, @1.first_column), @1.first_line, @1.first_column);}
 ;
 
 EXPRESION 
@@ -476,18 +473,17 @@ EXPRESION
         |'typeof' '(' EXPRESION ')'             {$$ = new TypeOf($3, @1.first_line, @1.first_column);}
         |'log10'  '(' EXPRESION ')'             {$$ = new Log($3, @1.first_line, @1.first_column);}
         |'identifier'                           {$$ = new Identificador($1, @1.first_line, @1.first_column);}
-        | EXPRESION  LISTA_EXPRESION_PTO2     {console.log($2); $$ = new Obtener_struct($1, $2, @1.first_line, @1.first_column);}
+        |EXPRESION  LISTA_EXPRESION_PTO2        {$$ = new Obtener_struct($1, $2, @1.first_line, @1.first_column);}
 //int a = id.id.id  
 ;
-  LISTA_EXPRESION_PTO2:
-  LISTA_EXPRESION_PTO2 '.' OPCION_PTO2    { $$ = $1; $1.push($3);}
-    | OPCION_PTO                    { $$ = []; $$.push($1);}
-  
-  ;  
-  OPCION_PTO2:
-  '.' 'identifier'                  {$$ =$2;}
-  |'identifier'                     {$$ =$1;}
-  | 'identifier' '[' EXPRESION']'   {$$ =$1;}
+  LISTA_EXPRESION_PTO2
+    :LISTA_EXPRESION_PTO2 '.' OPCION_PTO2    { $$ = $1; $1.push($3);}
+    |'.' OPCION_PTO                    { $$ = []; $$.push($2);}
+;  
+
+OPCION_PTO2:    
+    |'identifier'                     {$$ =$1;}
+    |'identifier' '[' EXPRESION']'    {$$ =$1;}
 
   
   

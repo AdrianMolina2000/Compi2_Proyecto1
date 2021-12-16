@@ -7,20 +7,15 @@ const NodoAST_1 = require("../Abstract/NodoAST");
 //
 function alv(padre, id, lista_ids, valor, tree, table) {
     var name = "";
-    /*
-    
-    struct efe {
-
-   int a, int b , int a [] , struct alva
-
+    var new_name = padre.id.split("_");
+    if (padre.id.includes('_')) {
+        name = new_name[1] + "_" + id;
     }
-
-
-efe.a
-    efe_a,efe_b   efe.efe2.efe.fe.f.e
-    */
+    else {
+        name = padre.id + "_" + id;
+    }
     for (let index = 0; index < padre.valor.length; index++) {
-        if (padre.valor[index].id[0] == padre.id + "_" + id) {
+        if (padre.valor[index].id == name) {
             if (padre.valor[index].tipo.tipo == 11) {
                 if (lista_ids.length == 1) {
                     let variable = table.getVariable(name);
@@ -31,16 +26,11 @@ efe.a
                     lista_ids.shift();
                     let id_hijo;
                     id_hijo = table.getVariable(padre.valor[index].id[0]);
-                    console.log(id_hijo);
                     alv(id_hijo, lista_ids[0], lista_ids, valor, tree, id_hijo.ambito);
                 }
             }
             else {
-                let variable = table.getVariable(name);
-                console.log("name" + "==" + name);
-                console.log(variable);
-                variable.valor = valor.execute(table, tree);
-                //  console.log(variable.valor)
+                padre.valor[index].valor.valor = valor.execute(table, tree);
                 break;
             }
         }
@@ -58,8 +48,9 @@ class Asignacion_Struct extends Nodo_1.Nodo {
         if (result instanceof Excepcion_1.Excepcion) {
             return result;
         }
-        let id_struct;
-        id_struct = table.getVariable(this.id);
+        let struct;
+        struct = table.getVariable(this.id);
+        console.log(struct);
         if (id_struct.tipo2.tipo == tipo_1.tipos.STRUCTS) {
             //id.id,id,id
             alv(id_struct, this.posicion[0], this.posicion, this.valor, tree, id_struct.ambito);

@@ -6,8 +6,6 @@ import { Tipo, tipos } from "../other/tipo";
 import { Simbolo } from "../Simbols/Simbolo";
 import { Primitivo } from "../Expresiones/Primitivo";
 import { NodoAST } from "../Abstract/NodoAST";
-import { fork } from "child_process";
-import { forEachChild } from "typescript";
 
 export function defal(tipo: Tipo, line: Number, column: Number) {
     if (tipo.tipo == tipos.ENTERO) {
@@ -21,19 +19,19 @@ export function defal(tipo: Tipo, line: Number, column: Number) {
     } else if (tipo.tipo == tipos.STRING) {
         return new Primitivo(tipo, "", line, column);
     }
-      else if (tipo.tipo == tipos.STRUCTS) {
+    else if (tipo.tipo == tipos.STRUCTS) {
         return new Primitivo(tipo, null, line, column);
-    } 
-     
+    }
+
 
 }
 
 export class Declaracion extends Nodo {
     tipo: Tipo;
-    id: Array <String>;
+    id: Array<String>;
     valor: Nodo;
 
-    constructor(tipo: Tipo, id: Array <String>, valor: Nodo, line: Number, column: Number) {
+    constructor(tipo: Tipo, id: Array<String>, valor: Nodo, line: Number, column: Number) {
         super(tipo, line, column);
         this.id = id;
         this.valor = valor;
@@ -41,12 +39,11 @@ export class Declaracion extends Nodo {
 
     execute(table: Table, tree: Tree) {
         const result = this.valor.execute(table, tree);
-        
+
         if (result instanceof Excepcion) {
             return result;
         }
-     
-     
+
         if (this.valor.tipo.tipo != this.tipo.tipo) {
             if (this.tipo.tipo == tipos.DECIMAL && (this.valor.tipo.tipo == tipos.DECIMAL || this.valor.tipo.tipo == tipos.ENTERO)) {
                 this.valor.tipo.tipo = tipos.DECIMAL;
@@ -61,14 +58,15 @@ export class Declaracion extends Nodo {
         }
 
         let simbolo: Simbolo;
-        
-        
+
+
         for (let key in this.id) {
-            
-            
+
+
             simbolo = new Simbolo(this.tipo, this.id[key], result, new Tipo(tipos.VARIABLE), this.line, this.column);
             const res = table.setVariable(simbolo);
-           
+            tree.Variables.push(simbolo)
+
         }
 
         // if (res != null) {

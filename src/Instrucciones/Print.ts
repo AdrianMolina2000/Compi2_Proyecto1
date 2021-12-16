@@ -5,6 +5,7 @@ import { Tipo } from "../other/tipo";
 import { tipos } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
 import { Identificador } from "../Expresiones/Identificador";
+import { Primitivo } from "../Expresiones/Primitivo";
 
 function imprimir(lista: Nodo, table: Table, tree: Tree) {
     var salida = "[";
@@ -12,22 +13,22 @@ function imprimir(lista: Nodo, table: Table, tree: Tree) {
         lista.valor[key].execute(table, tree);
         if (lista.valor[key].tipo.tipo == 6) {
             salida = salida + imprimir(lista.valor[key], table, tree);
-        }else{
+        } else {
             if (lista.valor[key] instanceof Identificador) {
-                try{
-                    if(lista.valor[key].valor.tipo.tipo == 6){
+                try {
+                    if (lista.valor[key].valor.tipo.tipo == 6) {
                         salida = salida + imprimir(lista.valor[key].valor, table, tree);
                     }
-                }catch(err){
+                } catch (err) {
                     salida += lista.valor[key].execute(table, tree) + ", ";
                 }
-            }else{
+            } else {
                 salida += lista.valor[key].execute(table, tree) + ", ";
             }
         }
     }
     salida = salida.substring(0, salida.length - 2) + "], ";
-    return salida 
+    return salida
 }
 
 export class Print extends Nodo {
@@ -41,17 +42,18 @@ export class Print extends Nodo {
     }
 
     execute(table: Table, tree: Tree): any {
-
+        console.log("PRINT");
         console.log(this.expresion)
+        console.log("PRINT");
         for (let key in this.expresion) {
             var valor = this.expresion[key].execute(table, tree);
-            
+
             if (this.expresion[key].tipo.tipo == 6) {
                 tree.consola.push(imprimir(this.expresion[key], table, tree));
             } else {
                 if (valor.tipo) {
                     if (valor.tipo.tipo == 6) {
-                        let texto = imprimir(this.expresion[key].execute(table, tree), table, tree)
+                        let texto = imprimir(valor, table, tree)
                         tree.consola.push(texto.substring(0, texto.length - 2));
                     }
                 } else {

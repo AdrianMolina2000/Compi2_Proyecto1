@@ -17,6 +17,10 @@ var editor2 = CodeMirror.fromTextArea(document.getElementById('editor2'), {
     readOnly: "nocursor"
 });
 editor2.save();
+global.grafo = function grafica() {
+    let prueba = "digraph G { a->b; }";
+    d3.select("#AST").graphviz().renderDot(prueba);
+};
 global.Enviar = function entrada() {
     const entrada = editor.getValue();
     const tree = parser.parse(entrada);

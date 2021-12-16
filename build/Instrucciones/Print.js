@@ -36,7 +36,9 @@ class Print extends Nodo_1.Nodo {
         this.tipo_print = tipo_print;
     }
     execute(table, tree) {
+        console.log("PRINT");
         console.log(this.expresion);
+        console.log("PRINT");
         for (let key in this.expresion) {
             var valor = this.expresion[key].execute(table, tree);
             if (this.expresion[key].tipo.tipo == 6) {
@@ -45,7 +47,7 @@ class Print extends Nodo_1.Nodo {
             else {
                 if (valor.tipo) {
                     if (valor.tipo.tipo == 6) {
-                        let texto = imprimir(this.expresion[key].execute(table, tree), table, tree);
+                        let texto = imprimir(valor, table, tree);
                         tree.consola.push(texto.substring(0, texto.length - 2));
                     }
                 }

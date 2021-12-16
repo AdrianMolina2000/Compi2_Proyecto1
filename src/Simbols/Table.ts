@@ -35,6 +35,7 @@ export class Table{
                 }
             }
         }
+
         this.Variables.set(simbol.id.toLowerCase(), simbol);
         return null;
     }

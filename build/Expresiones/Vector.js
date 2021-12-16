@@ -4,6 +4,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const NodoAST_1 = require("../Abstract/NodoAST");
 const tipo_1 = require("../other/tipo");
+const Obtener_struct_1 = require("../Instrucciones/Obtener_struct");
 class Vector extends Nodo_1.Nodo {
     constructor(id, posicion, line, column) {
         super(null, line, column);
@@ -20,7 +21,13 @@ class Vector extends Nodo_1.Nodo {
         }
         this.tipo = variable.tipo;
         var arreglo;
-        arreglo = variable.valor.valor;
+        if (variable.valor instanceof Obtener_struct_1.Obtener_struct) {
+            variable.valor.execute(table, tree);
+            arreglo = variable.valor.valor.valor;
+        }
+        else {
+            arreglo = variable.valor.valor;
+        }
         this.pos = this.posicion.execute(table, tree);
         if (this.posicion.tipo.tipo == tipo_1.tipos.ENTERO) {
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {

@@ -4,7 +4,6 @@ import { Tree } from "../Simbols/Tree";
 import { Excepcion } from "../other/Excepcion";
 import { Tipo, tipos } from "../other/tipo";
 import { Simbolo } from "../Simbols/Simbolo";
-import { Primitivo } from "../Expresiones/Primitivo";
 import { NodoAST } from "../Abstract/NodoAST";
 
 
@@ -23,26 +22,21 @@ export class Struct extends Nodo {
     execute(table: Table, tree: Tree) {
         this.newTable = new Table(table);
 
-        console.log(this.id)
         if ((this.lista_declaracion != null)) {
+            
             let simbolo: Simbolo;
 
             for (let index = 0; index < this.lista_declaracion.length; index++) {
-
-                const id_aux = this.lista_declaracion[index].id
-                this.lista_declaracion[index].id = [this.id + "_" + id_aux]               
                 this.lista_declaracion[index].execute(this.newTable, tree)
-                
             }
 
-           
             simbolo = new Simbolo(this.tipo, this.id, this.lista_declaracion, new Tipo(tipos.STRUCTS), this.line, this.column);
             simbolo.ambito = this.newTable;
 
 
             if (table.getVariable(this.id) == null) {
                 table.setVariable(simbolo);
-                tree.Variables.push(simbolo)
+                tree.Variables.push(simbolo);
             } else {
                 const error = new Excepcion('Semantico',
                     `El array ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`,
@@ -50,7 +44,6 @@ export class Struct extends Nodo {
                 return error;
             }
         }
-
 
         return null;
     }
