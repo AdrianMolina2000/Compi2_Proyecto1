@@ -24,8 +24,9 @@ function defal(tipo, line, column) {
     }
 }
 exports.defal = defal;
-function revisar(tipo1, lista) {
+function revisar(tipo1, lista, table, tree) {
     for (let key in lista.valor) {
+        lista.valor[key].execute(table, tree);
         if (lista.valor[key].tipo.tipo == 6) {
             return revisar(tipo1, lista.valor[key]);
         }
@@ -45,7 +46,8 @@ class DeclaracionArray extends Nodo_1.Nodo {
     execute(table, tree) {
         if ((this.listaValores != null)) {
             //Declaracion Tipo 2
-            if (revisar(this.tipo, this.listaValores)) {
+            if (revisar(this.tipo, this.listaValores, table, tree)) {
+                console.log("ENTRA");
                 let simbolo;
                 simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, this.listaValores, new tipo_1.Tipo(tipo_1.tipos.ARREGLO), this.line, this.column);
                 if (table.getVariable(this.id) == null) {

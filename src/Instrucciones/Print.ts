@@ -4,17 +4,19 @@ import { Tree } from "../Simbols/Tree";
 import { Tipo } from "../other/tipo";
 import { tipos } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
+import { Identificador } from "../Expresiones/Identificador";
 
 function imprimir(lista: Nodo, table: Table, tree: Tree) {
     var salida = "[";
+    console.log(lista.valor)
     for (let key in lista.valor) {
         if (lista.valor[key].tipo.tipo == 6) {
             return salida + imprimir(lista.valor[key], table, tree) + "]";
         }
         salida += lista.valor[key].execute(table, tree) + ", ";
     }
-    salida = salida.substring(0, salida.length - 2);
-    return salida + "]";
+    salida = salida.substring(0, salida.length - 2) + "]";
+    return salida 
 }
 
 export class Print extends Nodo {
@@ -29,11 +31,10 @@ export class Print extends Nodo {
 
     execute(table: Table, tree: Tree): any {
 
-        console.log("PRINT");
         console.log(this.expresion)
-        console.log("PRINT");
         for (let key in this.expresion) {
-            const valor = this.expresion[key].execute(table, tree);
+            var valor = this.expresion[key].execute(table, tree);
+            
             if (this.expresion[key].tipo.tipo == 6) {
                 tree.consola.push(imprimir(this.expresion[key], table, tree));
             } else {

@@ -17,8 +17,11 @@ class Identificador extends Nodo_1.Nodo {
             return error;
         }
         this.tipo = variable.tipo;
+        if (variable.valor instanceof Identificador) {
+            variable.valor = variable.valor.execute(table, tree);
+        }
         this.valor = variable.valor;
-        return variable.valor;
+        return this.valor;
     }
     getNodo() {
         var nodo = new NodoAST_1.NodoAST("IDENTIFICADOR");

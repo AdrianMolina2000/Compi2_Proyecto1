@@ -25,14 +25,18 @@ export class Identificador extends Nodo {
             return error;
         }
         this.tipo = variable.tipo;
+
+        if (variable.valor instanceof Identificador) {
+            variable.valor = variable.valor.execute(table, tree)
+        }
         this.valor = variable.valor;
 
-        return variable.valor;
+        return this.valor;
     }
 
     getNodo() {
-        var nodo:NodoAST  = new NodoAST("IDENTIFICADOR");
-        var nodo2:NodoAST  = new NodoAST(this.id + "");
+        var nodo: NodoAST = new NodoAST("IDENTIFICADOR");
+        var nodo2: NodoAST = new NodoAST(this.id + "");
         nodo2.agregarHijo(this.valor + "");
         nodo.agregarHijo(nodo2);
         return nodo;
