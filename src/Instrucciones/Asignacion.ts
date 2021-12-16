@@ -3,8 +3,9 @@ import { Table } from "../Simbols/Table";
 import { Tree } from "../Simbols/Tree";
 import { Excepcion } from "../other/Excepcion";
 import { Simbolo } from "../Simbols/Simbolo";
-import { tipos } from "../other/tipo";
+import { Tipo, tipos } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
+import { Primitivo } from "../Expresiones/Primitivo";
 
 function revisar(tipo1: Tipo, lista: Nodo) {
     for (let key in lista.valor) {
@@ -47,9 +48,6 @@ export class Asignacion extends Nodo {
             return error;
         }
 
-        console.log("--------");
-        console.log(variable);
-        console.log("--------");
 
         if (this.valor.tipo.tipo != variable.tipo.tipo) {
             if (variable.tipo2.tipo == 6 && this.valor.tipo.tipo == 6) {
@@ -76,13 +74,15 @@ export class Asignacion extends Nodo {
             let variable: Simbolo
             variable = table.getVariable((<any>this.valor).id)
             if (variable.tipo2.tipo == tipos.ARREGLO) {
-                console.log(this.valor.valor)
-                val = this.valor.valor.slice();
-                console.log("aca")
+                let nuevoArray = new Array<Nodo>();
+                for(let x = 0; x < this.valor.valor.valor.length; x++){
+                    nuevoArray.push(Object.assign(Object.create(this.valor.valor.valor[x]), this.valor.valor.valor[x]));
+                }
+
+                let nuevoObjeto = new Primitivo(new Tipo(tipos.ARREGLO), nuevoArray, this.valor.line, this.valor.column);
+                val = nuevoObjeto;
             }
-            // else if (variable.tipo2.tipo == tipos.LISTA) {
-            //     val = (<any>this.valor).valor;
-            // }
+
 
         } catch (err) {
             if (bandera) {

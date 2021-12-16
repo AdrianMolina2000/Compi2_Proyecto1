@@ -6,7 +6,6 @@ import { tipos } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
 
 function imprimir(lista: Nodo, table: Table, tree: Tree) {
-    console.log(lista)
     var salida = "[";
     for (let key in lista.valor) {
         if (lista.valor[key].tipo.tipo == 6) {
@@ -30,7 +29,9 @@ export class Print extends Nodo {
 
     execute(table: Table, tree: Tree): any {
 
+        console.log("PRINT");
         console.log(this.expresion)
+        console.log("PRINT");
         for (let key in this.expresion) {
             const valor = this.expresion[key].execute(table, tree);
             if (this.expresion[key].tipo.tipo == 6) {

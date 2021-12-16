@@ -4,6 +4,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Primitivo_1 = require("../Expresiones/Primitivo");
 function revisar(tipo1, lista) {
     for (let key in lista.valor) {
         if (lista.valor[key].tipo.tipo == 6) {
@@ -35,9 +36,6 @@ class Asignacion extends Nodo_1.Nodo {
             tree.consola.push(error.toString());
             return error;
         }
-        console.log("--------");
-        console.log(variable);
-        console.log("--------");
         if (this.valor.tipo.tipo != variable.tipo.tipo) {
             if (variable.tipo2.tipo == 6 && this.valor.tipo.tipo == 6) {
                 bandera = false;
@@ -59,13 +57,13 @@ class Asignacion extends Nodo_1.Nodo {
             let variable;
             variable = table.getVariable(this.valor.id);
             if (variable.tipo2.tipo == tipo_1.tipos.ARREGLO) {
-                console.log(this.valor.valor);
-                val = this.valor.valor.slice();
-                console.log("aca");
+                let nuevoArray = new Array();
+                for (let x = 0; x < this.valor.valor.valor.length; x++) {
+                    nuevoArray.push(Object.assign(Object.create(this.valor.valor.valor[x]), this.valor.valor.valor[x]));
+                }
+                let nuevoObjeto = new Primitivo_1.Primitivo(new tipo_1.Tipo(tipo_1.tipos.ARREGLO), nuevoArray, this.valor.line, this.valor.column);
+                val = nuevoObjeto;
             }
-            // else if (variable.tipo2.tipo == tipos.LISTA) {
-            //     val = (<any>this.valor).valor;
-            // }
         }
         catch (err) {
             if (bandera) {

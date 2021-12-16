@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 function imprimir(lista, table, tree) {
-    console.log(lista);
     var salida = "[";
     for (let key in lista.valor) {
         if (lista.valor[key].tipo.tipo == 6) {
@@ -21,7 +20,9 @@ class Print extends Nodo_1.Nodo {
         this.tipo_print = tipo_print;
     }
     execute(table, tree) {
+        console.log("PRINT");
         console.log(this.expresion);
+        console.log("PRINT");
         for (let key in this.expresion) {
             const valor = this.expresion[key].execute(table, tree);
             if (this.expresion[key].tipo.tipo == 6) {
