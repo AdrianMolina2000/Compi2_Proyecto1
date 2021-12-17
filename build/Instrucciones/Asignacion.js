@@ -52,7 +52,7 @@ class Asignacion extends Nodo_1.Nodo {
                 }
             }
         }
-        var val;
+        var val = result;
         try {
             let variable;
             variable = table.getVariable(this.valor.id);

@@ -42,7 +42,8 @@ class Print extends Nodo_1.Nodo {
         for (let key in this.expresion) {
             var valor = this.expresion[key].execute(table, tree);
             if (this.expresion[key].tipo.tipo == 6) {
-                tree.consola.push(imprimir(this.expresion[key], table, tree));
+                let texto = imprimir(this.expresion[key], table, tree);
+                tree.consola.push(texto.substring(0, texto.length - 2));
             }
             else {
                 if (valor.tipo) {
@@ -63,6 +64,9 @@ class Print extends Nodo_1.Nodo {
         else if (this.tipo_print == 2) {
             tree.consola.push("\n");
         }
+        console.log("TIPO");
+        console.log(this.tipo);
+        console.log("TIPO");
         return null;
     }
     getNodo() {
@@ -76,45 +80,45 @@ class Print extends Nodo_1.Nodo {
     get3D(table, tree) {
         let estructura = 'heap';
         let codigo = '';
-        let condicion = this.expresion.get3D(table, tree);
+        let condicion = this.expresion[0].get3D(table, tree);
         codigo += condicion;
         let temp = table.getTemporalActual();
-        if (this.tipo.toString() === 'numeric' || this.tipo.toString() == 'boolean') {
+        if (this.tipo.tipo == 0 || this.tipo.tipo == 1 || this.tipo.tipo == 5) {
             codigo += `print(%e, ${temp})\n`;
-            tabla.QuitarTemporal(temp);
+            table.QuitarTemporal(temp);
         }
         else {
-            let temp1 = tabla.getTemporal();
-            let temp2 = tabla.getTemporal();
-            let temp3 = tabla.getTemporal();
-            let label = tabla.getEtiqueta();
-            let label2 = tabla.getEtiqueta();
-            codigo += `${temp1} = ${estructura}[${temp}]\n`;
-            tabla.AgregarTemporal(temp1);
-            tabla.QuitarTemporal(temp);
-            codigo += `${temp2} = ${temp} + 1\n`;
-            tabla.AgregarTemporal(temp2);
-            tabla.QuitarTemporal(temp1);
-            codigo += `${temp3} = 0\n`;
-            tabla.AgregarTemporal(temp3);
+            let tmp1 = table.getTemporal();
+            let tmp2 = table.getTemporal();
+            let tmp3 = table.getTemporal();
+            let label1 = table.getEtiqueta();
+            let label2 = table.getEtiqueta();
+            codigo += `${tmp1} = ${estructura}[${temp}]\n`;
+            table.AgregarTemporal(tmp1);
+            table.QuitarTemporal(temp);
+            codigo += `${tmp2} = ${temp} + 1\n`;
+            table.AgregarTemporal(tmp2);
+            table.QuitarTemporal(tmp1);
+            codigo += `${tmp3} = 0\n`;
+            table.AgregarTemporal(tmp3);
             codigo += `${label2}:\n`;
-            codigo += `if(${temp3} >= ${temp1}) goto ${label}\n`;
-            tabla.QuitarTemporal(temp3);
-            tabla.QuitarTemporal(temp1);
-            let temp4 = tabla.getTemporal();
-            codigo += `${temp4} = ${estructura}[${temp2}]\n`;
-            tabla.AgregarTemporal(temp4);
-            tabla.QuitarTemporal(temp3);
+            codigo += `if(${tmp3} >= ${tmp1}) goto ${label1}\n`;
+            table.QuitarTemporal(tmp3);
+            table.QuitarTemporal(tmp1);
+            let temp4 = table.getTemporal();
+            codigo += `${temp4} = ${estructura}[${tmp2}]\n`;
+            table.AgregarTemporal(temp4);
+            table.QuitarTemporal(tmp3);
             codigo += `print(%c, ${temp4})\n`;
-            tabla.QuitarTemporal(temp4);
-            codigo += `${temp2} = ${temp2} + 1\n`;
-            tabla.AgregarTemporal(temp2);
-            codigo += `${temp3} = ${temp3} + 1\n`;
-            tabla.AgregarTemporal(temp3);
+            table.QuitarTemporal(temp4);
+            codigo += `${tmp2} = ${tmp2} + 1\n`;
+            table.AgregarTemporal(tmp2);
+            codigo += `${tmp3} = ${tmp3} + 1\n`;
+            table.AgregarTemporal(tmp3);
             codigo += `${temp4} = ${temp4} + 1\n`;
-            tabla.AgregarTemporal(temp4);
+            table.AgregarTemporal(temp4);
             codigo += `goto ${label2}\n`;
-            codigo += `${label}:\n`;
+            codigo += `${label1}:\n`;
         }
         return codigo;
     }

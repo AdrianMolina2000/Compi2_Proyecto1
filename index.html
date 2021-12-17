@@ -41,16 +41,29 @@
     <center>
         <button class="btn btn-primary" id="ejecutar" onclick="Enviar()">Ejecutar</button>
         <input type="file" id="archivoTexto" class="btn btn-primary">
-        <button class="btn btn-primary" onclick="grafo()">graficaAst</button>
+        <button class="btn btn-primary" onclick="grafo()">AST</button>
+        <button class="btn btn-primary" onclick="reporte()">Simbols</button>
     </center>
 
     
     
     
-    <div id="AST"  > 
+ 
+
+    <div class="responsive-table" id="simbols"  > 
+     
+           
+          
+                
+
+
+    </div>
+    <div id="AST"> 
         
     
     </div>
+
+    
     <script src="./build/Interfaz/bundle.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>

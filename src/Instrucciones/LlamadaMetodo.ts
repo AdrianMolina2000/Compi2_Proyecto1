@@ -23,13 +23,7 @@ export class LlamadaMetodo extends Nodo {
 
     execute(table: Table, tree: Tree): any {
         const newtable = new Table(table);
-/**
- * 
- * 
- * 
- * 
- * 
- */
+
         var nombre = this.id + "$";
         // var nombre = this.id;
         var index = 0;

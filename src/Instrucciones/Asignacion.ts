@@ -67,7 +67,7 @@ export class Asignacion extends Nodo {
             }
         }
 
-        var val;
+        var val = result;
 
 
         try {
@@ -82,8 +82,6 @@ export class Asignacion extends Nodo {
                 let nuevoObjeto = new Primitivo(new Tipo(tipos.ARREGLO), nuevoArray, this.valor.line, this.valor.column);
                 val = nuevoObjeto;
             }
-
-
         } catch (err) {
             if (bandera) {
                 val = result;

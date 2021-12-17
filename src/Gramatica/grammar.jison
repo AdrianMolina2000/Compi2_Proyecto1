@@ -1,11 +1,9 @@
-
 %{ 
     const {Tree} = require('../Simbols/Tree');
     const {Tipo, tipos, esEntero} = require('../other/tipo');
     const {Primitivo} = require('../Expresiones/Primitivo');
     const {Identificador} = require('../Expresiones/Identificador');
     const {Vector} = require('../Expresiones/Vector');
-
      //Expresion
     const {Aritmetica} = require('../Expresiones/Aritmetica');
     const {Logico} = require('../Expresiones/Logico');
@@ -28,7 +26,6 @@
     const {Pow} = require('../Expresiones/Pow');
     const {Nativas_Diferentes} = require('../Expresiones/Nativas_Diferentes');
     const {Ternario} = require('../Expresiones/Ternario');
-
     //Instrucciones
     const {Print} = require('../Instrucciones/Print');
     const {If} = require('../Instrucciones/If');
@@ -497,5 +494,3 @@ TIPO
     |char       {$$ = new Tipo(tipos.CARACTER);}
     |void       {$$ = new Tipo(tipos.VOID);}
 ;
-
-

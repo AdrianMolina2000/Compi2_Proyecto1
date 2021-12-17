@@ -16,13 +16,6 @@ class LlamadaMetodo extends Nodo_1.Nodo {
     }
     execute(table, tree) {
         const newtable = new Table_1.Table(table);
-        /**
-         *
-         *
-         *
-         *
-         *
-         */
         var nombre = this.id + "$";
         // var nombre = this.id;
         var index = 0;
