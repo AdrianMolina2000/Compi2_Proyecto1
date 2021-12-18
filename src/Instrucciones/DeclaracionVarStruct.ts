@@ -89,7 +89,7 @@ export class DeclaracionVarStruct extends Nodo {
     }
 
     getNodo() {
-        var nodo: NodoAST = new NodoAST("DECLARACION");
+        var nodo: NodoAST = new NodoAST("VAR_STRUCT");
         nodo.agregarHijo(this.tipo + "");
         nodo.agregarHijo(this.id);
 

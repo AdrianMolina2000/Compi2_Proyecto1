@@ -38,10 +38,12 @@ export class Pow extends Nodo {
 
     getNodo() {
         try {
-            var nodo: NodoAST = new NodoAST("TOLOWER");
-            nodo.agregarHijo("ToLower");
+            var nodo: NodoAST = new NodoAST("POW");
+            nodo.agregarHijo("POW");
             nodo.agregarHijo("(");
             nodo.agregarHijo(this.base.getNodo());
+            nodo.agregarHijo(",");
+            nodo.agregarHijo(this.exponente.getNodo());
             nodo.agregarHijo(")");
             return nodo;
         } catch (err) {

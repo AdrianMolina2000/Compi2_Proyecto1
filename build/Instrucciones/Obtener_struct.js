@@ -51,11 +51,12 @@ class Obtener_struct extends Nodo_1.Nodo {
         }
     }
     getNodo() {
-        var nodo = new NodoAST_1.NodoAST("ASIGNACION VECTOR");
+        var nodo = new NodoAST_1.NodoAST("OBTENER_STRUCT");
         nodo.agregarHijo(this.id + "");
-        nodo.agregarHijo(`[${this.pos}]`);
-        nodo.agregarHijo("=");
-        //nodo.agregarHijo(this.valor.getNodo());
+        for (let index = 0; index < this.posicion.length; index++) {
+            nodo.agregarHijo(this.id + ".");
+            nodo.agregarHijo(this.posicion[index]);
+        }
         return nodo;
     }
 }

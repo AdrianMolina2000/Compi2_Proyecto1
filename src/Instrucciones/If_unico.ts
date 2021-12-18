@@ -22,7 +22,7 @@ export class If_unico extends Nodo {
         this.listaIf = listaIf;
         this.listaElse = listaElse;
         this.tipos = tipos;
-        this.listaIf2;
+        this.listaIf2=listaIf2;
     }
 
     execute(table: Table, tree: Tree) {
@@ -98,21 +98,21 @@ export class If_unico extends Nodo {
         nodo.agregarHijo("(");
         nodo.agregarHijo(this.condicion.getNodo());
         nodo.agregarHijo(")");
-        nodo.agregarHijo("{");
+     
         var nodo2: NodoAST = new NodoAST("INSTRUCCIONES IF");
         nodo2.agregarHijo(this.listaIf.getNodo());
 
         nodo.agregarHijo(nodo2);
-        nodo.agregarHijo("}");
+    
         if (this.listaElse != null) { // ELSE
             nodo.agregarHijo("else");
-            nodo.agregarHijo("{");
+          
             var nodo3: NodoAST = new NodoAST("INSTRUCCIONES ELSE");
 
             nodo3.agregarHijo(this.listaElse.getNodo());
 
             nodo.agregarHijo(nodo3);
-            nodo.agregarHijo("}");
+            
         }
         return nodo;
     }

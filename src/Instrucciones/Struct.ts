@@ -56,30 +56,18 @@ export class Struct extends Nodo {
     getNodo() {
 
         var nodo: NodoAST = new NodoAST("DECLARACION ARRAY");
-        // if ((this.tipo2 != null) && (this.num != null) && (this.lista_declaracion == null)) {
-        //     nodo.agregarHijo(`${this.tipo}[]`);
-        //     nodo.agregarHijo(this.id + "");
-        //     nodo.agregarHijo("=");
-        //     nodo.agregarHijo("new");
-        //     var nodo2: NodoAST = new NodoAST("Tamaño del Array");
-        //     nodo2.agregarHijo("int");
-        //     nodo2.agregarHijo("[");
-        //     nodo2.agregarHijo(this.num.getNodo());
-        //     nodo2.agregarHijo("]");
-        //     nodo.agregarHijo(nodo2);
+        nodo.agregarHijo("struct");
+        nodo.agregarHijo(this.id + "");
 
-        // } else if ((this.tipo2 == null) && (this.num == null) && (this.lista_declaracion != null)) {
-        //     nodo.agregarHijo(`${this.tipo}[]`);
-        //     nodo.agregarHijo(this.id + "");
-        //     nodo.agregarHijo("=");
-        //     nodo.agregarHijo("{");
-        //     var nodo2: NodoAST = new NodoAST("Lista Valores");
-        //     for (let i = 0; i < this.lista_declaracion.length; i++) {
-        //         nodo2.agregarHijo(this.lista_declaracion[i].getNodo());
-        //     }
-        //     nodo.agregarHijo(nodo2);
-        //     nodo.agregarHijo("}");
-        // }
+        nodo.agregarHijo("{");
+
+        for (let index = 0; index < this.lista_declaracion.length; index++) {
+            
+            nodo.agregarHijo(this.lista_declaracion[index].getNodo())
+            
+            
+        }
+        nodo.agregarHijo("}");
         return nodo;
     }
 }

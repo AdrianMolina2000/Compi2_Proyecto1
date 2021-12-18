@@ -87,15 +87,15 @@ export class ForIn extends Nodo {
     }
 
     getNodo() {
-        var nodo: NodoAST = new NodoAST("FOR");
-        nodo.agregarHijo("for");
-        nodo.agregarHijo("(");
-        nodo.agregarHijo(this.inicio.getNodo());
-        nodo.agregarHijo(";");
-        nodo.agregarHijo(this.fin.getNodo());
-        nodo.agregarHijo(";");
-        nodo.agregarHijo(this.paso.getNodo());
-        nodo.agregarHijo(")");
+        var nodo: NodoAST = new NodoAST("FOR_IN");
+        nodo.agregarHijo("forIn");
+      
+        nodo.agregarHijo(this.id);
+      
+      
+    
+        
+        nodo.agregarHijo(this.cadena.getNodo());
         nodo.agregarHijo("{");
         var nodo2: NodoAST = new NodoAST("INSTRUCCIONES");
 

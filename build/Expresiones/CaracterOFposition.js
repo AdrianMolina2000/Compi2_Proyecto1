@@ -30,15 +30,16 @@ class CaracterOFposition extends Nodo_1.Nodo {
     }
     getNodo() {
         try {
-            var nodo = new NodoAST_1.NodoAST("TOLOWER");
-            nodo.agregarHijo("ToLower");
-            nodo.agregarHijo("(");
+            var nodo = new NodoAST_1.NodoAST("CaracterOfPosition");
             nodo.agregarHijo(this.expresion.getNodo());
+            nodo.agregarHijo("CaracterOfPosition");
+            nodo.agregarHijo("(");
+            nodo.agregarHijo(this.posicion.getNodo());
             nodo.agregarHijo(")");
             return nodo;
         }
         catch (err) {
-            var nodo = new NodoAST_1.NodoAST("ToLower");
+            var nodo = new NodoAST_1.NodoAST("CaracterOfPosition");
             return nodo;
         }
     }

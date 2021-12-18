@@ -62,7 +62,7 @@ class Asignacion_Struct extends Nodo_1.Nodo {
         return null;
     }
     getNodo() {
-        var nodo = new NodoAST_1.NodoAST("ASIGNACION VECTOR");
+        var nodo = new NodoAST_1.NodoAST("ASIGNACION_STRUCT");
         nodo.agregarHijo(this.id + "");
         nodo.agregarHijo(`[${this.pos}]`);
         nodo.agregarHijo("=");

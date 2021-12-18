@@ -47,9 +47,9 @@ export class Pop extends Nodo {
     }
 
     getNodo() {
-        var nodo: NodoAST = new NodoAST("ADD");
+        var nodo: NodoAST = new NodoAST("POP");
         nodo.agregarHijo(this.id + "");
-        nodo.agregarHijo(".add");
+        nodo.agregarHijo(".pop");
         nodo.agregarHijo("(");
         nodo.agregarHijo(")");
         return nodo;

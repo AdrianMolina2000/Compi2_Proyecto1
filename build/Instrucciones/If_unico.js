@@ -15,7 +15,7 @@ class If_unico extends Nodo_1.Nodo {
         this.listaIf = listaIf;
         this.listaElse = listaElse;
         this.tipos = tipos;
-        this.listaIf2;
+        this.listaIf2 = listaIf2;
     }
     execute(table, tree) {
         let cont1 = 0;
@@ -62,18 +62,14 @@ class If_unico extends Nodo_1.Nodo {
         nodo.agregarHijo("(");
         nodo.agregarHijo(this.condicion.getNodo());
         nodo.agregarHijo(")");
-        nodo.agregarHijo("{");
         var nodo2 = new NodoAST_1.NodoAST("INSTRUCCIONES IF");
         nodo2.agregarHijo(this.listaIf.getNodo());
         nodo.agregarHijo(nodo2);
-        nodo.agregarHijo("}");
         if (this.listaElse != null) { // ELSE
             nodo.agregarHijo("else");
-            nodo.agregarHijo("{");
             var nodo3 = new NodoAST_1.NodoAST("INSTRUCCIONES ELSE");
             nodo3.agregarHijo(this.listaElse.getNodo());
             nodo.agregarHijo(nodo3);
-            nodo.agregarHijo("}");
         }
         return nodo;
     }

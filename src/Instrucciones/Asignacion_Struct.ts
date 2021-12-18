@@ -90,7 +90,7 @@ export class Asignacion_Struct extends Nodo {
     }
 
     getNodo() {
-        var nodo: NodoAST = new NodoAST("ASIGNACION VECTOR");
+        var nodo: NodoAST = new NodoAST("ASIGNACION_STRUCT");
         nodo.agregarHijo(this.id + "");
         nodo.agregarHijo(`[${this.pos}]`);
         nodo.agregarHijo("=");

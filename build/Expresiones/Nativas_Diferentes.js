@@ -51,15 +51,16 @@ class Nativas_Diferentes extends Nodo_1.Nodo {
     }
     getNodo() {
         try {
-            var nodo = new NodoAST_1.NodoAST("TOLOWER");
-            nodo.agregarHijo("ToLower");
+            var nodo = new NodoAST_1.NodoAST("Nativas_Indiferentes");
+            nodo.agregarHijo(this.tipo);
+            nodo.agregarHijo("parse");
             nodo.agregarHijo("(");
             nodo.agregarHijo(this.expresion.getNodo());
             nodo.agregarHijo(")");
             return nodo;
         }
         catch (err) {
-            var nodo = new NodoAST_1.NodoAST("ToLower");
+            var nodo = new NodoAST_1.NodoAST("Nativas_Indiferentes");
             return nodo;
         }
     }

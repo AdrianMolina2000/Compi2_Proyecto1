@@ -31,9 +31,9 @@ class Pop extends Nodo_1.Nodo {
         }
     }
     getNodo() {
-        var nodo = new NodoAST_1.NodoAST("ADD");
+        var nodo = new NodoAST_1.NodoAST("POP");
         nodo.agregarHijo(this.id + "");
-        nodo.agregarHijo(".add");
+        nodo.agregarHijo(".pop");
         nodo.agregarHijo("(");
         nodo.agregarHijo(")");
         return nodo;

@@ -1,9 +1,12 @@
 import { Table } from '../Simbols/Table';
-import { Tree } from '../Simbols/Tree';
+import { ReporteGramatica } from '../Simbols/ReporteGramatica';
 import { Simbolo } from '../Simbols/Simbolo';
-
+import {getDot} from './Grafica'
+import { Nodo } from '../Abstract/Nodo';
+import { NodoAST } from '../Abstract/NodoAST';
 const parser = require('../Gramatica/grammar.js');
 let simbolos ="";
+let graficas="";
 var editor = CodeMirror.fromTextArea(document.getElementById('editor1'), {
     mode: "javascript",
     lineNumbers: true,
@@ -27,7 +30,7 @@ global.grafo =function grafo(){
 
     let prueba ="digraph G { a->b; }";
 
-    d3.select("#AST").graphviz().renderDot(prueba)
+    d3.select("#AST").graphviz().renderDot(graficas)
   
     
     
@@ -41,7 +44,7 @@ global.reporte =function reporte(){
     
    
 
-    document.getElementById("AST").innerHTML = simbolos;
+    document.getElementById("gramatical").innerHTML = simbolos;
 
    
   
@@ -49,14 +52,65 @@ global.reporte =function reporte(){
     
 
 }
+global.Gramatical =function Gramatical(){
+
+
+   
+       let reporte_gramatical=`  <h1 style="color:beige;">Reporte Gramatical</h1>   
+    
+       <table style=" color:beige; float=left;"    \">
+       <thead>
+         <tr>
+            <th>#</th>
+         
+             <th>Produccion</th>
+             <th>Regla Semantica</th>
+           
+             
+             
+         </tr>
+       </thead>
+       
+       
+       `
+       for (let index = 0; index < ReporteGramatica.Lista.length; index++) {
+        var alv:ReporteGramatica=ReporteGramatica.Lista.length[index]
+        reporte_gramatical+="<tr>"
+        reporte_gramatical+=`   <th><strong>   ${index} </strong></th>`; 
+        reporte_gramatical+=`   <th><strong>   ${ReporteGramatica.Lista[index].produccion} </strong></th>`; 
+        reporte_gramatical+=`   <th><strong>   ${ReporteGramatica.Lista[index].regla_semantica} </strong></th>  `; 
+
+        reporte_gramatical+="</tr>"
+        
+   }
+    
+   
+   reporte_gramatical+="</table>"
+
+    
+   
+
+    document.getElementById("gramatical").innerHTML = reporte_gramatical;
+
+   
+  
+    
+    
+
+}
+
+
 function graph_Simbols(tabla:Array<Simbolo>){
+   
     simbolos="";
 
     simbolos+= `  <h1 style="color: beige;">Tabla de SIMBOLOS</h1>   
     
-    <table style=" color: beige;"    \">
+    <table style=" color: beige;float=right;"    \">
     <thead>
       <tr>
+      <th>#</th>
+       
           <th>ID</th>
           <th>Tipo</th>
           <th>tipo</th>
@@ -74,6 +128,7 @@ function graph_Simbols(tabla:Array<Simbolo>){
     for (let index = 0; index < tabla.length; index++) {
          var alv:Simbolo=tabla[index]
         simbolos+="<tr>"
+        simbolos+=`   <th><strong>   ${index} </strong></th>`; 
         simbolos+=`   <th><strong>   ${alv.id} </strong></th>`; 
         simbolos+=`   <th><strong>   ${alv.tipo} </strong></th>  `; 
         simbolos+=`   <th><strong>   ${alv.tipo2} </strong></th>  `; 
@@ -85,6 +140,8 @@ function graph_Simbols(tabla:Array<Simbolo>){
         simbolos+="</tr>"
          
     }
+
+
      
     
     simbolos+="</table>"
@@ -101,26 +158,13 @@ function graph_Simbols(tabla:Array<Simbolo>){
 
 
 global.Enviar = function entrada() {
+
+  //  ReporteGramatica.Lista= null
     const entrada = editor.getValue();
 
     const tree = parser.parse(entrada);
     
-    /**
-     * Generacion del reporte de la tabla de simbolos
-     * 
-     * 
-    */
 
-  
-
-
-  
-  
-
-    /**
-     * Generacion del reporte de la tabla de simbolos
-     * 
-     * */
 
 
     const tabla = new Table(null);
@@ -141,7 +185,39 @@ global.Enviar = function entrada() {
     });
     
 
-    graph_Simbols(tree.Variables)
+ /**
+ * 
+ *  
+ * 
+ */
+
+
+    /**
+     * Generacion del reporte de la tabla de simbolos
+     * 
+     * 
+    */
+
+  
+      graph_Simbols(tree.Variables)
+
+      var init: NodoAST = new NodoAST("RAIZ");
+      var instr: NodoAST = new NodoAST("INSTRUCCIONES");
+      tree.instrucciones.map((m: Nodo) => {
+        instr.agregarHijo(m.getNodo());
+      });
+      init.agregarHijo(instr);
+      graficas=getDot(init)
+
+    /**
+     * Generacion del reporte de la tabla de simbolos
+     * 
+     * */
+
+   // console.log(ReporteGramatica.Lista)
+ 
+
+    
 }
 
 

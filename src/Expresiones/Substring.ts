@@ -41,14 +41,14 @@ export class Substring extends Nodo {
 
     getNodo() {
         try {
-            var nodo: NodoAST = new NodoAST("TOLOWER");
-            nodo.agregarHijo("ToLower");
+            var nodo: NodoAST = new NodoAST("Substring");
+            nodo.agregarHijo("Substring");
             nodo.agregarHijo("(");
             nodo.agregarHijo(this.expresion.getNodo());
             nodo.agregarHijo(")");
             return nodo;
         } catch (err) {
-            var nodo: NodoAST = new NodoAST("ToLower");
+            var nodo: NodoAST = new NodoAST("Substring");
             return nodo;
         }
     }

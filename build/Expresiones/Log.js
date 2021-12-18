@@ -28,15 +28,15 @@ class Log extends Nodo_1.Nodo {
     }
     getNodo() {
         try {
-            var nodo = new NodoAST_1.NodoAST("TOLOWER");
-            nodo.agregarHijo("ToLower");
+            var nodo = new NodoAST_1.NodoAST("Log10");
+            nodo.agregarHijo("Log10");
             nodo.agregarHijo("(");
             nodo.agregarHijo(this.expresion.getNodo());
             nodo.agregarHijo(")");
             return nodo;
         }
         catch (err) {
-            var nodo = new NodoAST_1.NodoAST("ToLower");
+            var nodo = new NodoAST_1.NodoAST("Log10");
             return nodo;
         }
     }

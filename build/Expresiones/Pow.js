@@ -30,10 +30,12 @@ class Pow extends Nodo_1.Nodo {
     }
     getNodo() {
         try {
-            var nodo = new NodoAST_1.NodoAST("TOLOWER");
-            nodo.agregarHijo("ToLower");
+            var nodo = new NodoAST_1.NodoAST("POW");
+            nodo.agregarHijo("POW");
             nodo.agregarHijo("(");
             nodo.agregarHijo(this.base.getNodo());
+            nodo.agregarHijo(",");
+            nodo.agregarHijo(this.exponente.getNodo());
             nodo.agregarHijo(")");
             return nodo;
         }

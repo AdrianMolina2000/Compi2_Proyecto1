@@ -83,11 +83,18 @@ export class Obtener_struct extends Nodo {
     }
 
     getNodo() {
-        var nodo: NodoAST = new NodoAST("ASIGNACION VECTOR");
+        var nodo: NodoAST = new NodoAST("OBTENER_STRUCT");
         nodo.agregarHijo(this.id + "");
-        nodo.agregarHijo(`[${this.pos}]`);
-        nodo.agregarHijo("=");
-        //nodo.agregarHijo(this.valor.getNodo());
+        
+        
+        
+       for (let index = 0; index < this.posicion.length; index++) {
+        nodo.agregarHijo(this.id + ".");
+        nodo.agregarHijo(this.posicion[index] );
+        
+           
+       }
+ 
         return nodo;
     }
 }
