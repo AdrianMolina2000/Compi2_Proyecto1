@@ -54,7 +54,7 @@ class Obtener_struct extends Nodo_1.Nodo {
         var nodo = new NodoAST_1.NodoAST("OBTENER_STRUCT");
         nodo.agregarHijo(this.id + "");
         for (let index = 0; index < this.posicion.length; index++) {
-            nodo.agregarHijo(this.id + ".");
+            nodo.agregarHijo(".");
             nodo.agregarHijo(this.posicion[index]);
         }
         return nodo;

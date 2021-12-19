@@ -68,8 +68,10 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
     }
     getNodo() {
         var nodo = new NodoAST_1.NodoAST("VAR_STRUCT");
-        nodo.agregarHijo(this.tipo + "");
+        nodo.agregarHijo(this.nombre_struct);
+        nodo.agregarHijo(".");
         nodo.agregarHijo(this.id);
+        nodo.agregarHijo(this.expresion.getNodo());
         if (this.valor != null) {
             nodo.agregarHijo("=");
             nodo.agregarHijo(this.valor.getNodo());

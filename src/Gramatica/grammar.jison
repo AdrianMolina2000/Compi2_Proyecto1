@@ -1,6 +1,6 @@
-%{ 
+%{  const {Excepcion} = require('../other/Excepcion');
     const {Tree} = require('../Simbols/Tree');
-       const {ReporteGramatica} = require('../Simbols/ReporteGramatica');
+    const {ReporteGramatica} = require('../Simbols/ReporteGramatica');
     const {Tipo, tipos, esEntero} = require('../other/tipo');
     const {Primitivo} = require('../Expresiones/Primitivo');
     const {Identificador} = require('../Expresiones/Identificador');
@@ -70,7 +70,7 @@ caracter (\'[^☼]\')
 [ \t\r\n\f]         {}
 \n                  {}                 
 "/""/".*            {}
-[/][*][^*/]*[*][/]  {}
+"/*"((\*+[^/*])|([^*]))*\**"*/"     {/*Ignorar comentarios con multiples lineas*/}
 
 {caracter}            return 'caracter'
 {stringliteral}       return 'cadena'
@@ -168,7 +168,15 @@ caracter (\'[^☼]\')
 
 
 
-<<EOF>>	              return 'EOF'
+<<EOF>>               return 'EOF'
+.                     {console.log("Error Lexico " + yytext
+                        + "linea "+ yylineno
+                        + "columna " +(yylloc.last_column+1));
+                       tree.Excepcion.push(  new Exepcion('Lexico','El caracter '+ yytext
+                                + ' no forma parte del lenguaje',
+                                yylineno+1,
+                                yylloc.last_column+1));
+                        }
 /lex
 %left 'else'
 %left '||'
@@ -239,6 +247,13 @@ INSTRUCCION
 
 
     |PRINT ';'
+
+    | error {console.log("Error Sintactico "  + yytext
+                           + " linea: " + this._$.first_line
+                           +" columna: "+ this._$.first_column);
+                          tree.excepciones.push( new Excepcion("Sintactico", "No se esperaba el caracter "+
+                                           this._$.first_line, this._$.first_column));
+                           }
 ;
 
 Verificar_params
@@ -442,7 +457,12 @@ ListaIns
     
     
     }
-    | error ';'                                 {console.log(yytext+"error sintactico") }
+    | error {console.log("Error Sintactico "  + yytext
+                           + " linea: " + this._$.first_line
+                           +" columna: "+ this._$.first_column);
+                          tree.excepciones.push( new Excepcion("Sintactico", "No se esperaba el caracter "+
+                                           this._$.first_line, this._$.first_column));
+                           }
 
 
 ;
@@ -556,7 +576,12 @@ ListaIns2
     
     
     }
-    | error ';'                                 {console.log(yytext+"error sintactico") }
+         | error {console.log("Error Sintactico "  + yytext
+                           + " linea: " + this._$.first_line
+                           +" columna: "+ this._$.first_column);
+                          tree.excepciones.push( new Excepcion("Sintactico", "No se esperaba el caracter "+
+                                           this._$.first_line, this._$.first_column));
+                           }
 
 
 ;

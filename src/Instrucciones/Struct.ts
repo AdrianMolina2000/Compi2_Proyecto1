@@ -20,6 +20,8 @@ export class Struct extends Nodo {
 
     }
     execute(table: Table, tree: Tree) {
+
+        this.tipo = new Tipo(tipos.STRUCTS)
         this.newTable = new Table(table);
 
         if ((this.lista_declaracion != null)) {
@@ -29,7 +31,7 @@ export class Struct extends Nodo {
             for (let index = 0; index < this.lista_declaracion.length; index++) {
                 this.lista_declaracion[index].execute(this.newTable, tree)
             }
-
+          
             simbolo = new Simbolo(this.tipo, this.id, this.lista_declaracion, new Tipo(tipos.STRUCTS), this.line, this.column);
             simbolo.ambito = this.newTable;
 
@@ -55,7 +57,7 @@ export class Struct extends Nodo {
 
     getNodo() {
 
-        var nodo: NodoAST = new NodoAST("DECLARACION ARRAY");
+        var nodo: NodoAST = new NodoAST("DECLARACION STRUCT");
         nodo.agregarHijo("struct");
         nodo.agregarHijo(this.id + "");
 

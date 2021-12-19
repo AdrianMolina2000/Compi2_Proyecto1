@@ -34,7 +34,7 @@ function imprimir(lista: Nodo, table: Table, tree: Tree) {
 export class Print extends Nodo {
     expresion: Array<Nodo>;
     tipo_print: Number;
-
+    valor2: any;
     constructor(expresion: Array<Nodo>, line: Number, column: Number, tipo_print: Number) {
         super(null, line, column);
         this.expresion = expresion;
@@ -58,6 +58,7 @@ export class Print extends Nodo {
                         tree.consola.push(texto.substring(0, texto.length - 2));
                     }
                 } else {
+                    this.valor2 = valor;
                     tree.consola.push(valor);
                     this.tipo = this.expresion[key].tipo
                 }
@@ -91,13 +92,14 @@ export class Print extends Nodo {
         let codigo = '';
 
 
-        let condicion = this.expresion[0].get3D(table, tree);
-        codigo += condicion;
+        // let condicion = this.expresion[0].get3D(table, tree);
+        // codigo += condicion;
 
         let temp = table.getTemporalActual();
-
+        console.log();
         if (this.tipo.tipo == 0 || this.tipo.tipo == 1 || this.tipo.tipo == 5) {
-            codigo += `print(%e, ${temp})\n`;
+            codigo += `printf("%f", (double)${this.valor2});\n`;
+            codigo += `printf("%c", (char)10);\n\n`;
             table.QuitarTemporal(temp);
         } else {
             let tmp1 = table.getTemporal();

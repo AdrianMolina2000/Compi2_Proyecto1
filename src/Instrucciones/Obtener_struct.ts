@@ -89,7 +89,7 @@ export class Obtener_struct extends Nodo {
         
         
        for (let index = 0; index < this.posicion.length; index++) {
-        nodo.agregarHijo(this.id + ".");
+        nodo.agregarHijo(".");
         nodo.agregarHijo(this.posicion[index] );
         
            

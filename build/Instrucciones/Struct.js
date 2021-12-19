@@ -13,6 +13,7 @@ class Struct extends Nodo_1.Nodo {
         this.lista_declaracion = lista_declaracion;
     }
     execute(table, tree) {
+        this.tipo = new tipo_1.Tipo(tipo_1.tipos.STRUCTS);
         this.newTable = new Table_1.Table(table);
         if ((this.lista_declaracion != null)) {
             let simbolo;
@@ -33,7 +34,7 @@ class Struct extends Nodo_1.Nodo {
         return null;
     }
     getNodo() {
-        var nodo = new NodoAST_1.NodoAST("DECLARACION ARRAY");
+        var nodo = new NodoAST_1.NodoAST("DECLARACION STRUCT");
         nodo.agregarHijo("struct");
         nodo.agregarHijo(this.id + "");
         nodo.agregarHijo("{");

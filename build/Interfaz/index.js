@@ -12,15 +12,18 @@ var editor = CodeMirror.fromTextArea(document.getElementById('editor1'), {
     lineNumbers: true,
     theme: "material-darker",
     smartIndent: true,
+    indentUnit: 4,
 });
+editor.setSize(500, 400);
 editor.save();
 var editor2 = CodeMirror.fromTextArea(document.getElementById('editor2'), {
     mode: "javascript",
     lineNumbers: true,
     theme: "material-darker",
     smartIndent: true,
-    readOnly: "nocursor"
+    indentUnit: 4,
 });
+editor2.setSize(500, 400);
 editor2.save();
 global.grafo = function grafo() {
     let prueba = "digraph G { a->b; }";
@@ -136,4 +139,58 @@ global.Enviar = function entrada() {
      *
      * */
     // console.log(ReporteGramatica.Lista)
+};
+global.Traducir = function entrada() {
+    const entrada = editor.getValue();
+    const tree = parser.parse(entrada);
+    const tabla = new Table_1.Table(null);
+    tree.instrucciones.map((m) => {
+        try {
+            const res = m.execute(tabla, tree);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+    var C3D = `/*------ENCABEZADO------*/
+#include <stdio.h>
+float heap[16384];
+float stack[16394];
+float P;
+float H;
+`;
+    C3D += `float t0, t1, t2, t3, t4, t5;
+
+`;
+    C3D += `/*------Funcion Imprimir------*/
+void print() {
+    t1 = P+1;
+    t2 = stack[(int)t1];
+    L1:
+        t3 = heap[(int)t2];
+        if(t3 == -1) goto L0;
+        printf("%c", (char)t3);
+        t2 = t2+1;
+        goto L1;
+    L0:
+        return;
+}
+
+`;
+    C3D += `void main() {
+P = 0; H = 0;
+
+`;
+    C3D += ``;
+    tree.instrucciones.map((m) => {
+        try {
+            C3D += m.get3D(tabla, tree);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+    C3D += `return;
+}`;
+    editor2.setValue(C3D);
 };
