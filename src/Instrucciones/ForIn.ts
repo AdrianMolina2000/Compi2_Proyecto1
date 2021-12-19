@@ -41,6 +41,8 @@ export class ForIn extends Nodo {
             const error = new Excepcion('Semantico',
                 `La variable {${this.id}} no ha sido encontrada`,
                 this.line, this.column);
+                tree.excepciones.push(error)
+                tree.consola.push(error.toString());
             return error;
         }
 
@@ -53,9 +55,11 @@ export class ForIn extends Nodo {
             cadena = cadena.valor;
         }catch(err){}
 
+        
         if (this.cadena.tipo.tipo == 6 || tipo2 == 6) {
             for (const key in cadena) {
                 this.cadenaSalida.push(cadena[key].execute(newtable, tree));
+                variable.tipo = cadena[key].tipo
             }
         } else if (this.cadena.tipo.tipo == 4) {
             for (const key in cadena) {

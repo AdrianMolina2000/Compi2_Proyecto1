@@ -46,6 +46,8 @@ export class AsignacionVector extends Nodo {
                 const error = new Excepcion('Semantico',
                     `La Posicion especificada no es valida para el vector {${this.id}}`,
                     this.line, this.column);
+                    tree.excepciones.push(error)
+                    tree.consola.push(error.toString());
                 return error;
             } else {
                 if (variable.tipo.tipo != this.valor.tipo.tipo) {
@@ -59,6 +61,8 @@ export class AsignacionVector extends Nodo {
                         const error = new Excepcion('Semantico',
                             `la posicion del vector no puede reasignarse debido a que son de diferentes tipos`,
                             this.line, this.column);
+                            tree.excepciones.push(error)
+                            tree.consola.push(error.toString());
                         return error;
                     }
                 } else {
@@ -71,6 +75,8 @@ export class AsignacionVector extends Nodo {
             const error = new Excepcion('Semantico',
                 `Se esperaba un valor entero en la posicion`,
                 this.line, this.column);
+                tree.excepciones.push(error)
+                tree.consola.push(error.toString());
             return error;
         }
     }

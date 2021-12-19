@@ -19,9 +19,11 @@ export class Length extends Nodo {
             if (resultado instanceof Excepcion) {
                 return resultado;
             } 
-
+//vos una duda xd  podes hacer pull porfa xd push xd hace push xd 
             if(this.expresion.tipo.tipo == 6){
-                return this.expresion.valor.length
+                let ret = this.expresion.valor.length;
+                
+                return 
             }else if(resultado.tipo.tipo == 6){
                 return resultado.valor.length;
             }else{
@@ -32,6 +34,8 @@ export class Length extends Nodo {
             const error = new Excepcion('Semantico',
                 `Ha ocurrido un error con la longitud buscada`,
                 this.line, this.column);
+                tree.excepciones.push(error)
+                tree.consola.push(error.toString());
             return error;
         }
     }

@@ -138,12 +138,14 @@ case 6:
 
     
 break;
-case 8: case 37: case 54:
+case 8:
 console.log("Error Sintactico "  + yytext
                            + " linea: " + this._$.first_line
                            +" columna: "+ this._$.first_column);
-                          tree.excepciones.push( new Excepcion("Sintactico", "No se esperaba el caracter "+
-                                           this._$.first_line, this._$.first_column));
+
+                           new Error(   "Error Sintactico"," no se esperaba el token  "+yytext,yylineno,2            );
+                           
+            
                            
 break;
 case 9:
@@ -384,6 +386,13 @@ this.$ = $$[$0]
     
     
 break;
+case 37:
+console.log("Error Sintactico "  + yytext
+                           + " linea: " + this._$.first_line
+                           +" columna: "+ this._$.first_column);
+                  new Error(   "Error Sintactico"," no se esperaba el token  "+yytext,yylineno,2       );
+                           
+break;
 case 47:
 this.$ = new InDecrement($$[$0-2], "++", _$[$0-2].first_line, _$[$0-2].first_column);
     
@@ -416,6 +425,13 @@ this.$ = $$[$0];
     
     
     
+break;
+case 54:
+console.log("Error Sintactico "  + yytext
+                           + " linea: " + this._$.first_line
+                           +" columna: "+ this._$.first_column);
+                     new Error(   "Error Sintactico"," no se esperaba el token  "+yytext,yylineno,2       );
+                           
 break;
 case 55:
 this.$ = new Print($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column,1); 
@@ -1514,6 +1530,8 @@ _handle_error:
     return true;
 }};
   const {Excepcion} = require('../other/Excepcion');
+
+    const {Error} = require('../Simbols/Error');
     const {Tree} = require('../Simbols/Tree');
     const {ReporteGramatica} = require('../Simbols/ReporteGramatica');
     const {Tipo, tipos, esEntero} = require('../other/tipo');
@@ -2077,10 +2095,8 @@ break;
 case 89:console.log("Error Lexico " + yy_.yytext
                         + "linea "+ yy_.yylineno
                         + "columna " +(yy_.yylloc.last_column+1));
-                       tree.Excepcion.push(  new Exepcion('Lexico','El caracter '+ yy_.yytext
-                                + ' no forma parte del lenguaje',
-                                yy_.yylineno+1,
-                                yy_.yylloc.last_column+1));
+               
+               new Error(   "Error LEXICO","Token no reconocido por el lenguaje",yy_.yylineno,2);
                         
 break;
 }

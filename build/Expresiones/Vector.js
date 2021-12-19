@@ -17,6 +17,7 @@ class Vector extends Nodo_1.Nodo {
         variable = table.getVariable(this.id);
         if (variable == null) {
             const error = new Excepcion_1.Excepcion('Semantico', `El Vector {${this.id}} no ha sido encontrada`, this.line, this.column);
+            tree.excepciones.push(error);
             return error;
         }
         this.tipo = variable.tipo;
@@ -29,6 +30,7 @@ class Vector extends Nodo_1.Nodo {
             arreglo = variable.valor.valor;
         }
         this.pos = this.posicion.execute(table, tree);
+        console.log(this.pos);
         if (this.posicion.tipo.tipo == tipo_1.tipos.ENTERO) {
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {
                 const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
@@ -42,12 +44,14 @@ class Vector extends Nodo_1.Nodo {
                 }
                 catch (err) {
                     const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
+                    tree.excepciones.push(error);
                     return error;
                 }
             }
         }
         else {
             const error = new Excepcion_1.Excepcion('Semantico', `Se esperaba un valor entero en la posicion`, this.line, this.column);
+            tree.excepciones.push(error);
             return error;
         }
     }

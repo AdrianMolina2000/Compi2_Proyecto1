@@ -41,11 +41,14 @@ class Nativas_Diferentes extends Nodo_1.Nodo {
             }
             else {
                 const error = new Excepcion_1.Excepcion('Semantico', `La entrada debe ser del tipo String para realizar esta operacion `, this.line, this.column);
+                tree.excepciones.push(error);
                 return error;
             }
         }
         catch (err) {
             const error = new Excepcion_1.Excepcion('Semantico', `Ha ocurrido un error al querrer convertir `, this.line, this.column);
+            tree.excepciones.push(error);
+            tree.consola.push(error.toString());
             return error;
         }
     }

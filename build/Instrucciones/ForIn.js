@@ -25,6 +25,8 @@ class ForIn extends Nodo_1.Nodo {
         variable = newtable.getVariable(this.id.id[0]);
         if (variable == null) {
             const error = new Excepcion_1.Excepcion('Semantico', `La variable {${this.id}} no ha sido encontrada`, this.line, this.column);
+            tree.excepciones.push(error);
+            tree.consola.push(error.toString());
             return error;
         }
         var cadena = this.cadena.valor;
@@ -38,6 +40,7 @@ class ForIn extends Nodo_1.Nodo {
         if (this.cadena.tipo.tipo == 6 || tipo2 == 6) {
             for (const key in cadena) {
                 this.cadenaSalida.push(cadena[key].execute(newtable, tree));
+                variable.tipo = cadena[key].tipo;
             }
         }
         else if (this.cadena.tipo.tipo == 4) {

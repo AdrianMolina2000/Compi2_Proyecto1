@@ -27,6 +27,8 @@ class AsignacionVector extends Nodo_1.Nodo {
         if (this.posicion.tipo.tipo == tipo_1.tipos.ENTERO) {
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {
                 const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
+                tree.excepciones.push(error);
+                tree.consola.push(error.toString());
                 return error;
             }
             else {
@@ -40,6 +42,8 @@ class AsignacionVector extends Nodo_1.Nodo {
                     }
                     else {
                         const error = new Excepcion_1.Excepcion('Semantico', `la posicion del vector no puede reasignarse debido a que son de diferentes tipos`, this.line, this.column);
+                        tree.excepciones.push(error);
+                        tree.consola.push(error.toString());
                         return error;
                     }
                 }
@@ -52,6 +56,8 @@ class AsignacionVector extends Nodo_1.Nodo {
         }
         else {
             const error = new Excepcion_1.Excepcion('Semantico', `Se esperaba un valor entero en la posicion`, this.line, this.column);
+            tree.excepciones.push(error);
+            tree.consola.push(error.toString());
             return error;
         }
     }

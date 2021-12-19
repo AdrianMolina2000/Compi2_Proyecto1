@@ -81,17 +81,14 @@ export class Table{
         return "L" + this.etiqueta;
     }
 
-    AgregarTemporal(temp: String): void {
-        if (this.tempStorage.indexOf(temp) == -1) {
-            this.tempStorage.push(temp);
-        }
+    AgregarTemporal(temp: String){
+        this.tempStorage.push(temp);
     }
 
     QuitarTemporal(temp: String): void {
         let index = this.tempStorage.indexOf(temp);
-        if (index > -1) {
-            this.tempStorage.splice(index, 1);
-        }
+        this.tempStorage.splice(index, 1);
+        
     }
 
 }

@@ -34,7 +34,8 @@ export class Substring extends Nodo {
                 const error = new Excepcion('Semantico',
                     `Ambas posiciones deben ser un numero entero `,
                     this.line, this.column);
-
+                    tree.excepciones.push(error)
+                    tree.consola.push(error.toString());
                 return error;
         }
     }

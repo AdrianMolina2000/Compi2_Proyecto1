@@ -35,6 +35,7 @@ export class CaracterOFposition extends Nodo {
             const error = new Excepcion('Semantico',
                 `Ha ocurrido un error querer imprimir la posicion del string joven`,
                 this.line, this.column);
+                tree.excepciones.push(error)
             return error;
         }
     }

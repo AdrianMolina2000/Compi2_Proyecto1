@@ -4,9 +4,12 @@ import { Simbolo } from '../Simbols/Simbolo';
 import { getDot } from './Grafica'
 import { Nodo } from '../Abstract/Nodo';
 import { NodoAST } from '../Abstract/NodoAST';
+import { Excepcion } from '../other/Excepcion';
+import { Error } from '../Simbols/Error';
 const parser = require('../Gramatica/grammar.js');
 let simbolos = "";
 let graficas = "";
+let err="";
 var editor = CodeMirror.fromTextArea(document.getElementById('editor1'), {
     mode: "javascript",
     lineNumbers: true,
@@ -48,6 +51,23 @@ global.reporte = function reporte() {
 
 
     document.getElementById("gramatical").innerHTML = simbolos;
+
+
+
+
+
+
+}
+
+
+global.efe = function efe() {
+
+
+
+
+
+
+    document.getElementById("gramatical").innerHTML = err;
 
 
 
@@ -107,7 +127,7 @@ function graph_Simbols(tabla: Array<Simbolo>) {
 
     simbolos = "";
 
-    simbolos += `  <h1 style="color: beige;">Tabla de SIMBOLOS</h1>   
+    simbolos += `  <h1 style="color: beige;">Tabla de Errores</h1>   
     
     <table style=" color: beige;float=right;"    \">
     <thead>
@@ -155,7 +175,71 @@ function graph_Simbols(tabla: Array<Simbolo>) {
 
 
 }
+function graph_err(tabla: Array<Excepcion>) {
 
+    err = "";
+
+    err += `  <h1 style="color: beige;">Tabla de SIMBOLOS</h1>   
+    
+    <table style=" color: beige;float=right;"    \">
+    <thead>
+      <tr>
+      <th>#</th>
+       
+          <th>ID</th>
+          <th>Tipo</th>
+          <th>Descripcion</th>
+          <th>linea</th>
+          <th>columna</th> 
+      
+          
+          
+      </tr>
+    </thead>
+    
+    
+    `
+
+    for (let index = 0; index < Error.Errores.length; index++) {
+        var alv: Excepcion = Error.Errores[index]
+        err += "<tr>"
+        err += `   <th><strong>   ${index} </strong></th>`;
+        err += `   <th><strong>   ${alv.tipo} </strong></th>`;
+        err += `   <th><strong>   ${alv.descripcion} </strong></th>  `;
+        err += `   <th><strong>   ${alv.line} </strong></th>  `;
+
+        err += `   <th><strong>   ${alv.column} </strong></th>  `;
+
+      
+        err += "</tr>"
+
+    }
+    for (let index = 0; index <tabla.length; index++) {
+        var alv: Excepcion = tabla[index]
+        err += "<tr>"
+        err += `   <th><strong>   ${index} </strong></th>`;
+        err += `   <th><strong>   ${alv.tipo} </strong></th>`;
+        err += `   <th><strong>   ${alv.descripcion} </strong></th>  `;
+        err += `   <th><strong>   ${alv.line} </strong></th>  `;
+
+        err += `   <th><strong>   ${alv.column} </strong></th>  `;
+
+      
+        err += "</tr>"
+
+    }
+
+
+
+
+    err += "</table>"
+
+
+
+
+
+
+}
 
 
 
@@ -201,6 +285,7 @@ global.Enviar = function entrada() {
 
 
     graph_Simbols(tree.Variables)
+    graph_err(tree.excepciones)
 
     var init: NodoAST = new NodoAST("RAIZ");
     var instr: NodoAST = new NodoAST("INSTRUCCIONES");
@@ -238,12 +323,31 @@ global.Traducir = function entrada() {
 float heap[16384];
 float stack[16394];
 float P;
-float H;
-`;
+float H;\n`;
 
-    C3D += `float t0, t1, t2, t3, t4, t5;
+    var C3D2 = ``;
 
-`;
+    tabla.tempStorage.push(tabla.getTemporal());
+    tabla.tempStorage.push(tabla.getTemporal());
+    tabla.tempStorage.push(tabla.getTemporal());
+
+    tree.instrucciones.map((m: any) => {
+        try {
+            C3D2 += m.get3D(tabla, tree);
+
+        } catch (error) {
+            console.log(error)
+        }
+    });
+
+    C3D += `float `
+
+    for (let i = 0; i < tabla.tempStorage.length; i++) {
+        C3D += `${tabla.tempStorage[i]}, `;
+    }
+    C3D = C3D.substring(0, C3D.length - 2);
+
+    C3D += `;\n\n`
 
     C3D += `/*------Funcion Imprimir------*/
 void print() {
@@ -257,28 +361,16 @@ void print() {
         goto L1;
     L0:
         return;
-}
+}\n\n`;
 
-`;
+    C3D += `/*------Funcion Main------*/
+ void main() {
+    P = 0; H = 0;\n\n`;
 
-    C3D += `void main() {
-P = 0; H = 0;
+    C3D += C3D2
 
-`;
-    C3D += ``;
-    
-    tree.instrucciones.map((m: any) => {
-        try {
-            C3D += m.get3D(tabla, tree);
+    C3D += `\nreturn;\n}`;
 
-        } catch (error) {
-            console.log(error)
-        }
-    });
-
-
-    C3D += `return;
-}`;
     editor2.setValue(C3D);
 
 

@@ -24,6 +24,8 @@ class Substring extends Nodo_1.Nodo {
         }
         else {
             const error = new Excepcion_1.Excepcion('Semantico', `Ambas posiciones deben ser un numero entero `, this.line, this.column);
+            tree.excepciones.push(error);
+            tree.consola.push(error.toString());
             return error;
         }
     }

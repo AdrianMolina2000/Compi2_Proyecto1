@@ -35,9 +35,7 @@ export class Primitivo extends Nodo {
     }
 
     get3D(table: Table, tree: Tree): String {
-        const temporal = table.getTemporal();
-        let c3d = `${temporal} = ${this.valor} \n`;
-        table.AgregarTemporal(table.getTemporalActual());
+        let c3d = `${this.valor}`;
         return c3d;
     }
 

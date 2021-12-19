@@ -9,7 +9,7 @@ export abstract class Nodo{
 
     abstract getNodo():NodoAST;
 
-    abstract get3D(tabla: Table, tree: Tree): String;
+    abstract get3D(table: Table, tree: Tree): String;
 
     abstract execute(table: Table, tree: Tree): any;
  

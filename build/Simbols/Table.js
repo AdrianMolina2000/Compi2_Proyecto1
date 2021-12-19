@@ -59,15 +59,11 @@ class Table {
         return "L" + this.etiqueta;
     }
     AgregarTemporal(temp) {
-        if (this.tempStorage.indexOf(temp) == -1) {
-            this.tempStorage.push(temp);
-        }
+        this.tempStorage.push(temp);
     }
     QuitarTemporal(temp) {
         let index = this.tempStorage.indexOf(temp);
-        if (index > -1) {
-            this.tempStorage.splice(index, 1);
-        }
+        this.tempStorage.splice(index, 1);
     }
 }
 exports.Table = Table;

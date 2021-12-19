@@ -50,16 +50,16 @@ export class Print extends Nodo {
 
             if (this.expresion[key].tipo.tipo == 6) {
                 let texto = imprimir(this.expresion[key], table, tree);
-                tree.consola.push(texto.substring(0, texto.length - 2));
+                tree.consola.push(texto.substring(0, texto.length - 2) + " ");
             } else {
                 if (valor.tipo) {
                     if (valor.tipo.tipo == 6) {
                         let texto = imprimir(valor, table, tree)
-                        tree.consola.push(texto.substring(0, texto.length - 2));
+                        tree.consola.push(texto.substring(0, texto.length - 2) + " ");
                     }
                 } else {
                     this.valor2 = valor;
-                    tree.consola.push(valor);
+                    tree.consola.push(valor + " ");
                     this.tipo = this.expresion[key].tipo
                 }
             }
@@ -88,62 +88,39 @@ export class Print extends Nodo {
     }
 
     get3D(table: Table, tree: Tree): String {
-        let estructura = 'heap';
+        let temporal;
         let codigo = '';
 
+        if (this.tipo.tipo == 0 || this.tipo.tipo == 1) {
+            codigo += this.expresion[0].get3D(table, tree);
 
-        // let condicion = this.expresion[0].get3D(table, tree);
-        // codigo += condicion;
+            codigo += `    printf("%f", (double)${table.getTemporalActual()});\n`;
+            codigo += `    printf("%c", (char)10);\n`;
+        } else if(this.tipo.tipo == 4){
+            temporal = table.getTemporal();
+            table.AgregarTemporal(temporal);
+            codigo += `    ${temporal} = H;\n`
 
-        let temp = table.getTemporalActual();
-        console.log();
-        if (this.tipo.tipo == 0 || this.tipo.tipo == 1 || this.tipo.tipo == 5) {
-            codigo += `printf("%f", (double)${this.valor2});\n`;
-            codigo += `printf("%c", (char)10);\n\n`;
-            table.QuitarTemporal(temp);
-        } else {
-            let tmp1 = table.getTemporal();
-            let tmp2 = table.getTemporal();
-            let tmp3 = table.getTemporal();
-            let label1 = table.getEtiqueta();
-            let label2 = table.getEtiqueta();
-            codigo += `${tmp1} = ${estructura}[${temp}]\n`
-            table.AgregarTemporal(tmp1);
-            table.QuitarTemporal(temp);
+            for(let i in this.valor2){
+                codigo += `    heap[(int)H] = ${this.valor2[i].charCodeAt(0)};\n`
+                codigo += `    H = H + 1;\n`
+            }
+            codigo += `    heap[(int)H] = -1;\n`
+            codigo += `    H = H + 1;\n`
 
-            codigo += `${tmp2} = ${temp} + 1\n`
-            table.AgregarTemporal(tmp2);
-            table.QuitarTemporal(tmp1);
+            let tempActual1 = table.getTemporalActual();
+            temporal = table.getTemporal();
+            table.AgregarTemporal(temporal);
+            codigo += `    ${temporal} = P + 1;\n`
 
-            codigo += `${tmp3} = 0\n`
-            table.AgregarTemporal(tmp3);
+            let tempActual2 = table.getTemporalActual();
 
-            codigo += `${label2}:\n`
-            codigo += `if(${tmp3} >= ${tmp1}) goto ${label1}\n`
-            table.QuitarTemporal(tmp3);
-            table.QuitarTemporal(tmp1);
-
-
-            let temp4 = table.getTemporal();
-            codigo += `${temp4} = ${estructura}[${tmp2}]\n`
-            table.AgregarTemporal(temp4);
-            table.QuitarTemporal(tmp3);
-
-
-            codigo += `print(%c, ${temp4})\n`
-            table.QuitarTemporal(temp4);
-
-            codigo += `${tmp2} = ${tmp2} + 1\n`
-            table.AgregarTemporal(tmp2);
-
-            codigo += `${tmp3} = ${tmp3} + 1\n`
-            table.AgregarTemporal(tmp3);
-
-            codigo += `${temp4} = ${temp4} + 1\n`
-            table.AgregarTemporal(temp4);
-
-            codigo += `goto ${label2}\n`
-            codigo += `${label1}:\n`
+            codigo += `    stack[(int)${tempActual2}] = ${tempActual1};\n`
+            codigo += `    print();\n`
+            temporal = table.getTemporal();
+            table.AgregarTemporal(temporal);
+            codigo += `    ${temporal} = stack[(int)P];\n`
+            codigo += `    printf("%c", (char)10);\n\n`
         }
         return codigo;
     }

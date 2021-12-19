@@ -48,12 +48,16 @@ export class Nativas_Diferentes extends Nodo {
                 const error = new Excepcion('Semantico',
                     `La entrada debe ser del tipo String para realizar esta operacion `,
                     this.line, this.column);
+
+                    tree.excepciones.push(error)
                 return error;
             }
         } catch (err) {
             const error = new Excepcion('Semantico',
                 `Ha ocurrido un error al querrer convertir `,
                 this.line, this.column);
+                tree.excepciones.push(error)
+                tree.consola.push(error.toString());
             return error;
         }
     }

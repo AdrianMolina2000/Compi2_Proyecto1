@@ -1,4 +1,6 @@
 %{  const {Excepcion} = require('../other/Excepcion');
+
+    const {Error} = require('../Simbols/Error');
     const {Tree} = require('../Simbols/Tree');
     const {ReporteGramatica} = require('../Simbols/ReporteGramatica');
     const {Tipo, tipos, esEntero} = require('../other/tipo');
@@ -172,10 +174,8 @@ caracter (\'[^☼]\')
 .                     {console.log("Error Lexico " + yytext
                         + "linea "+ yylineno
                         + "columna " +(yylloc.last_column+1));
-                       tree.Excepcion.push(  new Exepcion('Lexico','El caracter '+ yytext
-                                + ' no forma parte del lenguaje',
-                                yylineno+1,
-                                yylloc.last_column+1));
+               
+               new Error(   "Error LEXICO","Token no reconocido por el lenguaje",yylineno,2);
                         }
 /lex
 %left 'else'
@@ -251,8 +251,10 @@ INSTRUCCION
     | error {console.log("Error Sintactico "  + yytext
                            + " linea: " + this._$.first_line
                            +" columna: "+ this._$.first_column);
-                          tree.excepciones.push( new Excepcion("Sintactico", "No se esperaba el caracter "+
-                                           this._$.first_line, this._$.first_column));
+
+                           new Error(   "Error Sintactico"," no se esperaba el token  "+yytext,yylineno,2            );
+                           
+            
                            }
 ;
 
@@ -460,8 +462,7 @@ ListaIns
     | error {console.log("Error Sintactico "  + yytext
                            + " linea: " + this._$.first_line
                            +" columna: "+ this._$.first_column);
-                          tree.excepciones.push( new Excepcion("Sintactico", "No se esperaba el caracter "+
-                                           this._$.first_line, this._$.first_column));
+                  new Error(   "Error Sintactico"," no se esperaba el token  "+yytext,yylineno,2       );
                            }
 
 
@@ -579,8 +580,7 @@ ListaIns2
          | error {console.log("Error Sintactico "  + yytext
                            + " linea: " + this._$.first_line
                            +" columna: "+ this._$.first_column);
-                          tree.excepciones.push( new Excepcion("Sintactico", "No se esperaba el caracter "+
-                                           this._$.first_line, this._$.first_column));
+                     new Error(   "Error Sintactico"," no se esperaba el token  "+yytext,yylineno,2       );
                            }
 
 

@@ -2,6 +2,7 @@ import { Nodo } from "../Abstract/Nodo";
 import { NodoAST } from "../Abstract/NodoAST";
 import { Table } from "../Simbols/Table";
 import { Tree } from "../Simbols/Tree";
+import { Error } from "../Simbols/Error";
 import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
 
@@ -589,6 +590,54 @@ export class Aritmetica extends Nodo {
             nodo.agregarHijo(this.operadorDer.getNodo());
         } 
         return nodo;
+    }
+
+    get3D(table: Table, tree: Tree): String {
+        let c3d = ``;
+        let izq;
+        let der;
+        let op;
+        let temp;
+        let temp2;
+        let temp3;
+        
+        if (this.operadorDer instanceof Aritmetica && this.operadorIzq instanceof Aritmetica) {
+            op  = this.operador;
+            c3d += this.operadorIzq.get3D(table, tree);
+            temp = table.getTemporalActual();
+            c3d += this.operadorDer.get3D(table, tree);
+            temp2 = table.getTemporalActual();
+
+            temp3 = table.getTemporal();
+            table.AgregarTemporal(temp3);
+            c3d += `    ${temp3} = ${temp} ${op} ${temp2};\n`;
+        }else if (this.operadorIzq instanceof Aritmetica) {
+            der = this.operadorDer.get3D(table, tree);
+            op  = this.operador;
+            c3d += this.operadorIzq.get3D(table, tree);
+            temp = table.getTemporalActual();
+            temp2 = table.getTemporal();
+            table.AgregarTemporal(temp2);
+            c3d += `    ${temp2} = ${temp} ${op} ${der};\n`;
+            
+        }else if (this.operadorDer instanceof Aritmetica) {
+            izq = this.operadorIzq.get3D(table, tree);
+            op  = this.operador;
+            c3d += this.operadorDer.get3D(table, tree);
+            temp = table.getTemporalActual();
+            temp2 = table.getTemporal();
+            table.AgregarTemporal(temp2);
+            c3d += `    ${temp2} = ${izq} ${op} ${temp};\n`;
+        }else{
+            izq = this.operadorIzq.get3D(table, tree);
+            der = this.operadorDer.get3D(table, tree);
+            op  = this.operador;
+            temp = table.getTemporal();
+            table.AgregarTemporal(temp);
+            c3d += `    ${temp} = ${izq} ${op} ${der};\n`;
+        }
+
+        return c3d;
     }
 
     

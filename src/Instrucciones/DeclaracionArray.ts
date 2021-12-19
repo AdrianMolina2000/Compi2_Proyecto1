@@ -68,6 +68,8 @@ export class DeclaracionArray extends Nodo {
                 const error = new Excepcion('Semantico',
                     `El Array no puede ser declarado debido a que son de diferentes tipos \n`,
                     this.line, this.column);
+                    tree.excepciones.push(error)
+                    tree.consola.push(error.toString());
                 return error;
             }
         }

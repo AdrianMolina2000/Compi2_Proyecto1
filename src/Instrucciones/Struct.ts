@@ -43,6 +43,8 @@ export class Struct extends Nodo {
                 const error = new Excepcion('Semantico',
                     `El array ${this.id} no puede ser declarado debido a que ya ha sido declarado anteriormente`,
                     this.line, this.column);
+                    tree.excepciones.push(error)
+                    tree.consola.push(error.toString());
                 return error;
             }
         }
