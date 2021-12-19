@@ -1385,6 +1385,7 @@ class Aritmetica extends Nodo_1.Nodo {
         let temp;
         let temp2;
         let temp3;
+        op = this.operador;
         if (this.operadorDer instanceof Aritmetica && this.operadorIzq instanceof Aritmetica) {
             op = this.operador;
             c3d += this.operadorIzq.get3D(table, tree);
@@ -1393,33 +1394,50 @@ class Aritmetica extends Nodo_1.Nodo {
             temp2 = table.getTemporalActual();
             temp3 = table.getTemporal();
             table.AgregarTemporal(temp3);
-            c3d += `    ${temp3} = ${temp} ${op} ${temp2};\n`;
+            if (op == "%") {
+                c3d += `    ${temp3} = fmod(${temp}, ${temp2});\n`;
+            }
+            else {
+                c3d += `    ${temp3} = ${temp} ${op} ${temp2};\n`;
+            }
         }
         else if (this.operadorIzq instanceof Aritmetica) {
             der = this.operadorDer.get3D(table, tree);
-            op = this.operador;
             c3d += this.operadorIzq.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
             table.AgregarTemporal(temp2);
-            c3d += `    ${temp2} = ${temp} ${op} ${der};\n`;
+            if (op == "%") {
+                c3d += `    ${temp2} = fmod(${temp}, ${der});\n`;
+            }
+            else {
+                c3d += `    ${temp2} = ${temp} ${op} ${der};\n`;
+            }
         }
         else if (this.operadorDer instanceof Aritmetica) {
             izq = this.operadorIzq.get3D(table, tree);
-            op = this.operador;
             c3d += this.operadorDer.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
             table.AgregarTemporal(temp2);
-            c3d += `    ${temp2} = ${izq} ${op} ${temp};\n`;
+            if (op == "%") {
+                c3d += `    ${temp2} = fmod(${izq}, ${temp});\n`;
+            }
+            else {
+                c3d += `    ${temp2} = ${izq} ${op} ${temp};\n`;
+            }
         }
         else {
             izq = this.operadorIzq.get3D(table, tree);
             der = this.operadorDer.get3D(table, tree);
-            op = this.operador;
             temp = table.getTemporal();
             table.AgregarTemporal(temp);
-            c3d += `    ${temp} = ${izq} ${op} ${der};\n`;
+            if (op == "%") {
+                c3d += `    ${temp} = fmod(${izq}, ${der});\n`;
+            }
+            else {
+                c3d += `    ${temp} = ${izq} ${op} ${der};\n`;
+            }
         }
         return c3d;
     }
@@ -1731,7 +1749,6 @@ class Length extends Nodo_1.Nodo {
             if (resultado instanceof Excepcion_1.Excepcion) {
                 return resultado;
             }
-            //vos operaciones de todo tipo? osea  *  maaaano relajate
             if (this.expresion.tipo.tipo == 6) {
                 return this.expresion.valor.length;
             }
@@ -3089,7 +3106,6 @@ class Vector extends Nodo_1.Nodo {
         variable = table.getVariable(this.id);
         if (variable == null) {
             const error = new Excepcion_1.Excepcion('Semantico', `El Vector {${this.id}} no ha sido encontrada`, this.line, this.column);
-            tree.excepciones.push(error);
             return error;
         }
         this.tipo = variable.tipo;
@@ -3102,7 +3118,6 @@ class Vector extends Nodo_1.Nodo {
             arreglo = variable.valor.valor;
         }
         this.pos = this.posicion.execute(table, tree);
-        console.log(this.pos);
         if (this.posicion.tipo.tipo == tipo_1.tipos.ENTERO) {
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {
                 const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
@@ -3116,14 +3131,12 @@ class Vector extends Nodo_1.Nodo {
                 }
                 catch (err) {
                     const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
-                    tree.excepciones.push(error);
                     return error;
                 }
             }
         }
         else {
             const error = new Excepcion_1.Excepcion('Semantico', `Se esperaba un valor entero en la posicion`, this.line, this.column);
-            tree.excepciones.push(error);
             return error;
         }
     }
@@ -6549,7 +6562,7 @@ global.Gramatical = function Gramatical() {
 };
 function graph_Simbols(tabla) {
     simbolos = "";
-    simbolos += `  <h1 style="color: beige;">Tabla de Errores</h1>   
+    simbolos += `  <h1 style="color: beige;">Tabla de SIMBOLOS</h1>   
     
     <table style=" color: beige;float=right;"    \">
     <thead>
@@ -6585,14 +6598,14 @@ function graph_Simbols(tabla) {
 }
 function graph_err(tabla) {
     err = "";
-    err += `  <h1 style="color: beige;">Tabla de SIMBOLOS</h1>   
+    err += `  <h1 style="color: beige;">Tabla de errores</h1>   
     
     <table style=" color: beige;float=right;"    \">
     <thead>
       <tr>
       <th>#</th>
        
-          <th>ID</th>
+  
           <th>Tipo</th>
           <th>Descripcion</th>
           <th>linea</th>
@@ -6685,6 +6698,8 @@ global.Traducir = function entrada() {
     });
     var C3D = `/*------ENCABEZADO------*/
 #include <stdio.h>
+#include <math.h>
+
 float heap[16384];
 float stack[16394];
 float P;

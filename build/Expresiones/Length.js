@@ -15,10 +15,8 @@ class Length extends Nodo_1.Nodo {
             if (resultado instanceof Excepcion_1.Excepcion) {
                 return resultado;
             }
-            //vos una duda xd  podes hacer pull porfa xd push xd hace push xd 
             if (this.expresion.tipo.tipo == 6) {
-                let ret = this.expresion.valor.length;
-                return;
+                return this.expresion.valor.length;
             }
             else if (resultado.tipo.tipo == 6) {
                 return resultado.valor.length;

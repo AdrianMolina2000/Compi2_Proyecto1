@@ -605,6 +605,7 @@ class Aritmetica extends Nodo_1.Nodo {
         let temp;
         let temp2;
         let temp3;
+        op = this.operador;
         if (this.operadorDer instanceof Aritmetica && this.operadorIzq instanceof Aritmetica) {
             op = this.operador;
             c3d += this.operadorIzq.get3D(table, tree);
@@ -613,33 +614,50 @@ class Aritmetica extends Nodo_1.Nodo {
             temp2 = table.getTemporalActual();
             temp3 = table.getTemporal();
             table.AgregarTemporal(temp3);
-            c3d += `    ${temp3} = ${temp} ${op} ${temp2};\n`;
+            if (op == "%") {
+                c3d += `    ${temp3} = fmod(${temp}, ${temp2});\n`;
+            }
+            else {
+                c3d += `    ${temp3} = ${temp} ${op} ${temp2};\n`;
+            }
         }
         else if (this.operadorIzq instanceof Aritmetica) {
             der = this.operadorDer.get3D(table, tree);
-            op = this.operador;
             c3d += this.operadorIzq.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
             table.AgregarTemporal(temp2);
-            c3d += `    ${temp2} = ${temp} ${op} ${der};\n`;
+            if (op == "%") {
+                c3d += `    ${temp2} = fmod(${temp}, ${der});\n`;
+            }
+            else {
+                c3d += `    ${temp2} = ${temp} ${op} ${der};\n`;
+            }
         }
         else if (this.operadorDer instanceof Aritmetica) {
             izq = this.operadorIzq.get3D(table, tree);
-            op = this.operador;
             c3d += this.operadorDer.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
             table.AgregarTemporal(temp2);
-            c3d += `    ${temp2} = ${izq} ${op} ${temp};\n`;
+            if (op == "%") {
+                c3d += `    ${temp2} = fmod(${izq}, ${temp});\n`;
+            }
+            else {
+                c3d += `    ${temp2} = ${izq} ${op} ${temp};\n`;
+            }
         }
         else {
             izq = this.operadorIzq.get3D(table, tree);
             der = this.operadorDer.get3D(table, tree);
-            op = this.operador;
             temp = table.getTemporal();
             table.AgregarTemporal(temp);
-            c3d += `    ${temp} = ${izq} ${op} ${der};\n`;
+            if (op == "%") {
+                c3d += `    ${temp} = fmod(${izq}, ${der});\n`;
+            }
+            else {
+                c3d += `    ${temp} = ${izq} ${op} ${der};\n`;
+            }
         }
         return c3d;
     }

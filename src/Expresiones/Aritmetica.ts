@@ -118,7 +118,7 @@ export class Aritmetica extends Nodo {
                 }
             } else if (this.operador === '&') {
                 //ENTERO &
-                if (this.operadorIzq.tipo.tipo === tipos.ENTERO || 
+                if (this.operadorIzq.tipo.tipo === tipos.ENTERO ||
                     this.operadorIzq.tipo.tipo === tipos.DECIMAL ||
                     this.operadorIzq.tipo.tipo === tipos.BOOLEANO ||
                     this.operadorIzq.tipo.tipo === tipos.STRING ||
@@ -126,13 +126,13 @@ export class Aritmetica extends Nodo {
 
                     if (this.operadorDer.tipo.tipo === tipos.STRING ||
                         this.operadorDer.tipo.tipo === tipos.ENTERO ||
-                        this.operadorDer.tipo.tipo === tipos.DECIMAL || 
+                        this.operadorDer.tipo.tipo === tipos.DECIMAL ||
                         this.operadorDer.tipo.tipo === tipos.BOOLEANO ||
                         this.operadorDer.tipo.tipo === tipos.CARACTER) {
-                        
+
                         this.tipo = new Tipo(tipos.STRING);
                         return resultadoIzq + "" + resultadoDerecho;
-                    }else {
+                    } else {
                         const error = new Excepcion('Semantico',
                             `No se pueden concatenar los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                             this.line, this.column);
@@ -149,7 +149,7 @@ export class Aritmetica extends Nodo {
                     // tree.consola.push(error.toString());
                     return error;
                 }
-                
+
             } else if (this.operador === '-') {
                 if (this.operadorIzq.tipo.tipo === tipos.ENTERO) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
@@ -292,7 +292,7 @@ export class Aritmetica extends Nodo {
                     } else if (this.operadorDer.tipo.tipo === tipos.CARACTER) {
                         this.tipo = new Tipo(tipos.ENTERO);
                         return resultadoIzq.charCodeAt(0) * resultadoDerecho.charCodeAt(0);
-                    }else {
+                    } else {
                         const error = new Excepcion('Semantico',
                             `No se pueden Multiplicar los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                             this.line, this.column);
@@ -319,10 +319,10 @@ export class Aritmetica extends Nodo {
                 if (this.operadorIzq.tipo.tipo === tipos.ENTERO) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         var x = resultadoIzq / resultadoDerecho;
-                        if(esEntero(x)){
+                        if (esEntero(x)) {
                             this.tipo = new Tipo(tipos.ENTERO);
                             return parseInt(x.toString());
-                        }else{
+                        } else {
                             this.tipo = new Tipo(tipos.DECIMAL);
                             return x
                         }
@@ -370,7 +370,7 @@ export class Aritmetica extends Nodo {
                     } else if (this.operadorDer.tipo.tipo === tipos.CARACTER) {
                         this.tipo = new Tipo(tipos.DECIMAL);
                         return resultadoIzq.charCodeAt(0) / resultadoDerecho.charCodeAt(0);
-                    }else {
+                    } else {
                         const error = new Excepcion('Semantico',
                             `No se pueden Dividir los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                             this.line, this.column);
@@ -391,7 +391,7 @@ export class Aritmetica extends Nodo {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.STRING);
                         var cadena = "";
-                        for(let k = 0; k < resultadoDerecho; k++){
+                        for (let k = 0; k < resultadoDerecho; k++) {
                             cadena += resultadoIzq;
                         }
                         return cadena;
@@ -403,11 +403,11 @@ export class Aritmetica extends Nodo {
                         // tree.consola.push(error.toString());
                         return error;
                     }
-                }else if (this.operadorIzq.tipo.tipo === tipos.DECIMAL) {
+                } else if (this.operadorIzq.tipo.tipo === tipos.DECIMAL) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.STRING);
                         var cadena = "";
-                        for(let k = 0; k < resultadoDerecho; k++){
+                        for (let k = 0; k < resultadoDerecho; k++) {
                             cadena += resultadoIzq;
                         }
                         return cadena;
@@ -419,11 +419,11 @@ export class Aritmetica extends Nodo {
                         // tree.consola.push(error.toString());
                         return error;
                     }
-                }else if (this.operadorIzq.tipo.tipo === tipos.BOOLEANO) {
+                } else if (this.operadorIzq.tipo.tipo === tipos.BOOLEANO) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.STRING);
                         var cadena = "";
-                        for(let k = 0; k < resultadoDerecho; k++){
+                        for (let k = 0; k < resultadoDerecho; k++) {
                             cadena += resultadoIzq;
                         }
                         return cadena;
@@ -435,11 +435,11 @@ export class Aritmetica extends Nodo {
                         // tree.consola.push(error.toString());
                         return error;
                     }
-                }else if (this.operadorIzq.tipo.tipo === tipos.CARACTER) {
+                } else if (this.operadorIzq.tipo.tipo === tipos.CARACTER) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.STRING);
                         var cadena = "";
-                        for(let k = 0; k < resultadoDerecho; k++){
+                        for (let k = 0; k < resultadoDerecho; k++) {
                             cadena += resultadoIzq;
                         }
                         return cadena;
@@ -451,11 +451,11 @@ export class Aritmetica extends Nodo {
                         // tree.consola.push(error.toString());
                         return error;
                     }
-                }else if (this.operadorIzq.tipo.tipo === tipos.STRING) {
+                } else if (this.operadorIzq.tipo.tipo === tipos.STRING) {
                     if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                         this.tipo = new Tipo(tipos.STRING);
                         var cadena = "";
-                        for(let k = 0; k < resultadoDerecho; k++){
+                        for (let k = 0; k < resultadoDerecho; k++) {
                             cadena += resultadoIzq;
                         }
                         return cadena;
@@ -531,7 +531,7 @@ export class Aritmetica extends Nodo {
                         // tree.consola.push(error.toString());
                         return error;
                     }
-                }else {
+                } else {
                     const error = new Excepcion('Semantico',
                         `No se puede aplicar modulo los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                         this.line, this.column);
@@ -578,17 +578,17 @@ export class Aritmetica extends Nodo {
         }
     }
 
-    getNodo(){
-        var nodo:NodoAST = new NodoAST("ARITMETICA");
-        if(this.operadorIzq != null){
+    getNodo() {
+        var nodo: NodoAST = new NodoAST("ARITMETICA");
+        if (this.operadorIzq != null) {
             nodo.agregarHijo(this.operadorIzq.getNodo());
             nodo.agregarHijo(this.operador + "");
             nodo.agregarHijo(this.operadorDer.getNodo());
-            
-        }else{
+
+        } else {
             nodo.agregarHijo(this.operador + "");
             nodo.agregarHijo(this.operadorDer.getNodo());
-        } 
+        }
         return nodo;
     }
 
@@ -600,9 +600,12 @@ export class Aritmetica extends Nodo {
         let temp;
         let temp2;
         let temp3;
-        
+
+
+        op = this.operador;
+
         if (this.operadorDer instanceof Aritmetica && this.operadorIzq instanceof Aritmetica) {
-            op  = this.operador;
+            op = this.operador;
             c3d += this.operadorIzq.get3D(table, tree);
             temp = table.getTemporalActual();
             c3d += this.operadorDer.get3D(table, tree);
@@ -610,35 +613,48 @@ export class Aritmetica extends Nodo {
 
             temp3 = table.getTemporal();
             table.AgregarTemporal(temp3);
-            c3d += `    ${temp3} = ${temp} ${op} ${temp2};\n`;
-        }else if (this.operadorIzq instanceof Aritmetica) {
+            if (op == "%") {
+                c3d += `    ${temp3} = fmod(${temp}, ${temp2});\n`;
+            } else {
+                c3d += `    ${temp3} = ${temp} ${op} ${temp2};\n`;
+            }
+        } else if (this.operadorIzq instanceof Aritmetica) {
             der = this.operadorDer.get3D(table, tree);
-            op  = this.operador;
             c3d += this.operadorIzq.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
             table.AgregarTemporal(temp2);
-            c3d += `    ${temp2} = ${temp} ${op} ${der};\n`;
-            
-        }else if (this.operadorDer instanceof Aritmetica) {
+            if (op == "%") {
+                c3d += `    ${temp2} = fmod(${temp}, ${der});\n`;
+            } else {
+                c3d += `    ${temp2} = ${temp} ${op} ${der};\n`;
+            }
+
+        } else if (this.operadorDer instanceof Aritmetica) {
             izq = this.operadorIzq.get3D(table, tree);
-            op  = this.operador;
             c3d += this.operadorDer.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
             table.AgregarTemporal(temp2);
-            c3d += `    ${temp2} = ${izq} ${op} ${temp};\n`;
-        }else{
+            if (op == "%") {
+                c3d += `    ${temp2} = fmod(${izq}, ${temp});\n`;
+            } else {
+                c3d += `    ${temp2} = ${izq} ${op} ${temp};\n`;
+            }
+        } else {
             izq = this.operadorIzq.get3D(table, tree);
             der = this.operadorDer.get3D(table, tree);
-            op  = this.operador;
             temp = table.getTemporal();
             table.AgregarTemporal(temp);
-            c3d += `    ${temp} = ${izq} ${op} ${der};\n`;
+            if (op == "%") {
+                c3d += `    ${temp} = fmod(${izq}, ${der});\n`;
+            }else{
+                c3d += `    ${temp} = ${izq} ${op} ${der};\n`;
+            }
         }
 
         return c3d;
     }
 
-    
+
 }

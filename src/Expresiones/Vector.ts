@@ -28,7 +28,6 @@ export class Vector extends Nodo {
             const error = new Excepcion('Semantico',
             `El Vector {${this.id}} no ha sido encontrada`,
             this.line, this.column);
-            tree.excepciones.push(error)
             return error;
         }
         
@@ -42,7 +41,6 @@ export class Vector extends Nodo {
         }
 
         this.pos = this.posicion.execute(table, tree);
-        console.log(this.pos);
         if (this.posicion.tipo.tipo == tipos.ENTERO) {
             
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {
@@ -64,7 +62,6 @@ export class Vector extends Nodo {
                     const error = new Excepcion('Semantico',
                         `La Posicion especificada no es valida para el vector {${this.id}}`,
                         this.line, this.column);
-                        tree.excepciones.push(error)
                     return error;
                 }
             }
@@ -72,7 +69,6 @@ export class Vector extends Nodo {
             const error = new Excepcion('Semantico',
                 `Se esperaba un valor entero en la posicion`,
                 this.line, this.column);
-                tree.excepciones.push(error)
             return error;
         }
     }

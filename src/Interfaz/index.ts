@@ -127,7 +127,7 @@ function graph_Simbols(tabla: Array<Simbolo>) {
 
     simbolos = "";
 
-    simbolos += `  <h1 style="color: beige;">Tabla de Errores</h1>   
+    simbolos += `  <h1 style="color: beige;">Tabla de SIMBOLOS</h1>   
     
     <table style=" color: beige;float=right;"    \">
     <thead>
@@ -179,14 +179,14 @@ function graph_err(tabla: Array<Excepcion>) {
 
     err = "";
 
-    err += `  <h1 style="color: beige;">Tabla de SIMBOLOS</h1>   
+    err += `  <h1 style="color: beige;">Tabla de errores</h1>   
     
     <table style=" color: beige;float=right;"    \">
     <thead>
       <tr>
       <th>#</th>
        
-          <th>ID</th>
+  
           <th>Tipo</th>
           <th>Descripcion</th>
           <th>linea</th>
@@ -320,6 +320,8 @@ global.Traducir = function entrada() {
 
     var C3D = `/*------ENCABEZADO------*/
 #include <stdio.h>
+#include <math.h>
+
 float heap[16384];
 float stack[16394];
 float P;
