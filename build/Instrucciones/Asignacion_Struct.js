@@ -6,16 +6,8 @@ const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 //
 function alv(padre, id, lista_ids, valor, tree, table) {
-    var name = "";
-    var new_name = padre.id.split("_");
-    if (padre.id.includes('_')) {
-        name = new_name[1] + "_" + id;
-    }
-    else {
-        name = padre.id + "_" + id;
-    }
     for (let index = 0; index < padre.valor.length; index++) {
-        if (padre.valor[index].id == name) {
+        if (padre.valor[index].id == id) {
             if (padre.valor[index].tipo.tipo == 11) {
                 if (lista_ids.length == 1) {
                     let variable = table.getVariable(name);
@@ -30,7 +22,7 @@ function alv(padre, id, lista_ids, valor, tree, table) {
                 }
             }
             else {
-                padre.valor[index].valor.valor = valor.execute(table, tree);
+                padre.valor[index].valor = valor.execute(table, tree);
                 break;
             }
         }

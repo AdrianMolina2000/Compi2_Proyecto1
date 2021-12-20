@@ -8,6 +8,7 @@ const NodoAST_1 = require("../Abstract/NodoAST");
 const Continue_1 = require("../Expresiones/Continue");
 const Break_1 = require("../Expresiones/Break");
 const Retorno_1 = require("./Retorno");
+const DeclaracionArray_1 = require("./DeclaracionArray");
 class LlamadaMetodo extends Nodo_1.Nodo {
     constructor(id, listaParams, line, column) {
         super(null, line, column);
@@ -35,12 +36,23 @@ class LlamadaMetodo extends Nodo_1.Nodo {
         }
         var parametros = simboloMetodo.valor[0];
         for (let i = 0; i < parametros.length; i++) {
-            var para;
-            var crear;
-            para = parametros[i];
-            crear = para;
-            crear.valor = this.listaParams[i];
-            crear.execute(newtable, tree);
+            if (parametros[i] instanceof DeclaracionArray_1.DeclaracionArray) {
+                var para;
+                var crear;
+                para = parametros[i];
+                crear = para;
+                crear.listaValores = this.listaParams[i].valor;
+                console.log(crear.listaValores);
+                crear.execute(newtable, tree);
+            }
+            else {
+                var para;
+                var crear;
+                para = parametros[i];
+                crear = para;
+                crear.valor = this.listaParams[i];
+                crear.execute(newtable, tree);
+            }
         }
         var result = simboloMetodo.valor[1];
         if (result) {

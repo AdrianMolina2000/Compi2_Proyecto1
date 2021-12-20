@@ -8,19 +8,9 @@ import { NodoAST } from "../Abstract/NodoAST";
 
 //
 function alv(padre: Simbolo, id: String, lista_ids: Array<String>, valor: Nodo, tree: Tree, table: Table): any {
-    var name = "";
-    var new_name = padre.id.split("_")
-
-    if (padre.id.includes('_')) {
-
-        name = new_name[1] + "_" + id
-
-    } else {
-
-        name = padre.id + "_" + id;
-    }
+   
     for (let index = 0; index < padre.valor.length; index++) {
-        if (padre.valor[index].id == name) {
+        if (padre.valor[index].id == id) {
             if (padre.valor[index].tipo.tipo == 11) {
                 if (lista_ids.length == 1) {
                     let variable = table.getVariable(name);
@@ -36,7 +26,7 @@ function alv(padre: Simbolo, id: String, lista_ids: Array<String>, valor: Nodo, 
 
                 }
             } else {
-                padre.valor[index].valor.valor = valor.execute(table, tree)
+                padre.valor[index].valor = valor.execute(table, tree)
                 break;
             }
         }

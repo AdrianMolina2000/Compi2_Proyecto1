@@ -49,9 +49,11 @@ class If_unico extends Nodo_1.Nodo {
             }
         }
         else {
-            const res = this.listaElse.execute(newtable, tree);
-            if (res instanceof Continue_1.Continue || res instanceof Break_1.Break || res instanceof Retorno_1.Retorno) {
-                return res;
+            if (this.listaElse != null) {
+                const res = this.listaElse.execute(newtable, tree);
+                if (res instanceof Continue_1.Continue || res instanceof Break_1.Break || res instanceof Retorno_1.Retorno) {
+                    return res;
+                }
             }
         }
         return null;

@@ -278,17 +278,41 @@ Verificar_params
 ;
 
 PARAMETROS
-    :PARAMETROS ',' TIPO 'identifier'   {$$ = $1; $$.push(new Declaracion($3, [$4], null,@1.first_line, @1.first_column));
+    :PARAMETROS ',' OPCION_PARAMETROS   {$$ = $1; $$.push($3);
            new ReporteGramatica("PARAMETROS ->  PARAMETROS , TIPO identifier ", " PARAMETROS=new Array(Declaracion)   PARAMETROS.push (new Declaracion(PARAMETROS.val,TIPO.val,identifier.lexval))"      );
 
     
     }
-    |TIPO 'identifier'                  {$$ = []; $$.push(new Declaracion($1, [$2], null,@1.first_line, @1.first_column));
+    |OPCION_PARAMETROS               {$$ = []; $$.push($1);
          new ReporteGramatica("PARAMETROS ->  PARAMETROS , TIPO identifier ", " PARAMETROS= [new Declaracion(TIPO.val,identifier.lexval)]"      )
 
     
     
     } 
+;
+/*
+  |TIPO LISTA_ID                              {  $$ = new Declaracion($1, $2, defal($1), @1.first_line, @1.first_column);
+       new ReporteGramatica("DECLARACION-> TIPO LISTA_ID "
+    ,"DECLARACION=new Declaracion(TIPO.val,LISTA_ID.val)");
+    
+    }
+    |TIPO '[' ']' 'identifier' '=' EXPRESION    {$$ = new DeclaracionArray($1, $4, $6, @1.first_line, @1.first_column);
+        new ReporteGramatica("DECLARACION-> TIPO [] identifier = EXPRESION "
+    ,"DECLARACION=new DeclaracionArray(TIPO.val,identifier.lexval,EXPRESION.val)");
+    
+    }
+
+*/
+OPCION_PARAMETROS:
+ TIPO 'identifier'   {$$ = new Declaracion($1, [$2], defal($1), @1.first_line, @1.first_column);}
+|TIPO  '[' ']' 'identifier'   { $$ = new DeclaracionArray($1, $4, new Primitivo(new Tipo(tipos.ARREGLO), [], @1.first_line, @1.first_column), @1.first_line, @1.first_column);
+
+
+
+
+}
+
+
 ;
 
 LISTA_INSTRUCCIONES

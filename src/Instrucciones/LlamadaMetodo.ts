@@ -9,7 +9,7 @@ import { Declaracion } from "./Declaracion";
 import { Continue } from "../Expresiones/Continue";
 import { Break } from "../Expresiones/Break";
 import { Retorno } from "./Retorno";
-
+import {DeclaracionArray} from './DeclaracionArray'
 
 export class LlamadaMetodo extends Nodo {
     id: String;
@@ -48,13 +48,37 @@ export class LlamadaMetodo extends Nodo {
 
         var parametros: Array<Nodo> = (<any>simboloMetodo).valor[0];
         for (let i = 0; i < parametros.length; i++) {
+
+            
+           if(parametros[i] instanceof DeclaracionArray){
+           
+            var para: DeclaracionArray;
+            var crear: DeclaracionArray;
+            para = <DeclaracionArray>parametros[i];
+          
+           
+            crear = para;
+
+          
+            
+            crear.listaValores = this.listaParams[i].valor;
+
+
+            console.log(crear.listaValores)
+
+
+            
+            crear.execute(newtable, tree);
+           
+           } else {
+               
             var para: Declaracion;
             var crear: Declaracion;
             para = <Declaracion>parametros[i];
             crear = para;
             crear.valor = this.listaParams[i];
             crear.execute(newtable, tree);
-        }
+        }}
 
         var result: Array<Nodo> = (<any>simboloMetodo).valor[1];
 

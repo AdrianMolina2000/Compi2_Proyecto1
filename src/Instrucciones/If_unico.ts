@@ -16,13 +16,13 @@ export class If_unico extends Nodo {
     tipos: Number;
 
 
-    constructor(condicion: Nodo, listaIf: Nodo,listaIf2: Array<Nodo>, listaElse: Nodo, tipos: Number, line: Number, column: Number) {
+    constructor(condicion: Nodo, listaIf: Nodo, listaIf2: Array<Nodo>, listaElse: Nodo, tipos: Number, line: Number, column: Number) {
         super(null, line, column);
         this.condicion = condicion;
         this.listaIf = listaIf;
         this.listaElse = listaElse;
         this.tipos = tipos;
-        this.listaIf2=listaIf2;
+        this.listaIf2 = listaIf2;
     }
 
     execute(table: Table, tree: Tree) {
@@ -74,10 +74,11 @@ export class If_unico extends Nodo {
         } else {
 
 
-
-            const res = this.listaElse.execute(newtable, tree);
-            if (res instanceof Continue || res instanceof Break || res instanceof Retorno) {
-                return res;
+            if (this.listaElse != null) {
+                const res = this.listaElse.execute(newtable, tree);
+                if (res instanceof Continue || res instanceof Break || res instanceof Retorno) {
+                    return res;
+                }
             }
 
 
@@ -98,21 +99,21 @@ export class If_unico extends Nodo {
         nodo.agregarHijo("(");
         nodo.agregarHijo(this.condicion.getNodo());
         nodo.agregarHijo(")");
-     
+
         var nodo2: NodoAST = new NodoAST("INSTRUCCIONES IF");
         nodo2.agregarHijo(this.listaIf.getNodo());
 
         nodo.agregarHijo(nodo2);
-    
+
         if (this.listaElse != null) { // ELSE
             nodo.agregarHijo("else");
-          
+
             var nodo3: NodoAST = new NodoAST("INSTRUCCIONES ELSE");
 
             nodo3.agregarHijo(this.listaElse.getNodo());
 
             nodo.agregarHijo(nodo3);
-            
+
         }
         return nodo;
     }
