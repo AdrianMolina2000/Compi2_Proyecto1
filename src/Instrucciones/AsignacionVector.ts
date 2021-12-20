@@ -6,7 +6,7 @@ import { Simbolo } from "../Simbols/Simbolo";
 import { Tipo, tipos } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
 import { Vector } from "../Expresiones/Vector";
-
+import { DeclaracionArray } from "./DeclaracionArray";
 
 export class AsignacionVector extends Nodo {
     id: String;
@@ -68,31 +68,28 @@ export class AsignacionVector extends Nodo {
                 } else {
                      
                      let Alv = new Array<Nodo>();
-                    //Ni me acordaba jjajajaja, ni cuenta me di
-                     //  jaja nome que la pases alegre men jaja aunque se
-                     ,/* n*eteib a decir que voy a hacer push, y que trabajaras local que ya gaste todo mi cerebro
-                     
-                       let dec = arreglo[this.pos];
-                        let exp = this.expresion.listaParams[index];
-                        let nuevoArray2 = new Array<Nodo>();
-                        for(let i = 0; i < exp.valor.length; i++){
-                            nuevoArray2.push(Object.assign(Object.create(exp.valor[i]), exp.valor[i]));
+                     let prim2 = Object.assign(Object.create(this.valor), this.valor);
+                  
+                       arreglo[this.pos].valor=prim2.valor
+                        
+                       let prim = Object.assign(Object.create(arreglo), arreglo);
+
+                        for (let index = 0; index < prim.length; index++) {
+                            
+                            Alv.push(Object.assign(Object.create(prim[index]), prim[index]))
                         }
+                     
 
-                        let prim = Object.assign(Object.create(exp), exp);
-                        prim.valor = nuevoArray2;
-                        let new_dec = new DeclaracionArray(dec.tipo, dec.id, null, dec.line, dec.column);
-                        new_dec.listaValores = prim
-                        nuevoArray.push(new_dec);
-                      
-                    arreglo[this.pos] =this.valor
-                    for (let index = 0; index < arreglo.length; index++) {
-                       
-                        Alv.push(Object.assign(Object.create(arreglo[index]), arreglo[index]))
-                    }
+                        
 
-                    console.log(Alv)
-                    variable.valor.valor = Alv
+                        
+                        let new_dec = new DeclaracionArray(variable.tipo,this.id,Alv,this.line,this.column)
+                         
+                   
+                   
+
+                    console.log(new_dec.listaValores)
+                    variable.valor.valor = new_dec.listaValores
                     console.log("--------------------------------")
                     
                     return null;

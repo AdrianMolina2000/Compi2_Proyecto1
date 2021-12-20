@@ -5011,6 +5011,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const DeclaracionArray_1 = require("./DeclaracionArray");
 class AsignacionVector extends Nodo_1.Nodo {
     constructor(id, posicion, valor, line, column) {
         super(null, line, column);
@@ -5056,28 +5057,15 @@ class AsignacionVector extends Nodo_1.Nodo {
                 }
                 else {
                     let Alv = new Array();
-                    /**
-                     * let dec = struct_padre.valor[index];
-                       let exp = this.expresion.listaParams[index];
-                       let nuevoArray2 = new Array<Nodo>();
-                       for(let i = 0; i < exp.valor.length; i++){
-                           nuevoArray2.push(Object.assign(Object.create(exp.valor[i]), exp.valor[i]));
-                       }
-
-                       let prim = Object.assign(Object.create(exp), exp);
-                       prim.valor = nuevoArray2;
-                       let new_dec = new DeclaracionArray(dec.tipo, dec.id, null, dec.line, dec.column);
-                       new_dec.listaValores = prim
-                       nuevoArray.push(new_dec);
-                     *
-                     *
-                    */
-                    arreglo[this.pos] = this.valor;
-                    for (let index = 0; index < arreglo.length; index++) {
-                        Alv.push(Object.assign(Object.create(arreglo[index]), arreglo[index]));
+                    let prim2 = Object.assign(Object.create(this.valor), this.valor);
+                    arreglo[this.pos].valor = prim2.valor;
+                    let prim = Object.assign(Object.create(arreglo), arreglo);
+                    for (let index = 0; index < prim.length; index++) {
+                        Alv.push(Object.assign(Object.create(prim[index]), prim[index]));
                     }
-                    console.log(Alv);
-                    variable.valor.valor = Alv;
+                    let new_dec = new DeclaracionArray_1.DeclaracionArray(variable.tipo, this.id, Alv, this.line, this.column);
+                    console.log(new_dec.listaValores);
+                    variable.valor.valor = new_dec.listaValores;
                     console.log("--------------------------------");
                     return null;
                 }
@@ -5101,7 +5089,7 @@ class AsignacionVector extends Nodo_1.Nodo {
 }
 exports.AsignacionVector = AsignacionVector;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":64,"../other/tipo":65}],36:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":64,"../other/tipo":65,"./DeclaracionArray":40}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
