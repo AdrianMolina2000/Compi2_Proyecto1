@@ -500,4 +500,77 @@ export class Relacional extends Nodo {
         nodo.agregarHijo(this.operadorDer.getNodo());
         return nodo;
     }
+
+    get3D(table: Table, tree: Tree): String {
+        let c3d = ``;
+        let izq;
+        let der;
+        let op = this.operador;
+        let temp;
+        let temp2;
+        let temp3;
+
+        let etiq;
+        let etiq2;
+        let etiq3;
+
+        if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
+            table.bandera = 1;
+            etiq = table.getEtiqueta();
+            etiq2 = table.getEtiqueta();
+            
+            c3d += this.operadorIzq.get3D(table, tree);
+            c3d += `goto ${etiq};\n`;
+            c3d += `    goto ${etiq2};\n`;
+            c3d += `    ${etiq}:\n`;
+            
+            temp = table.getTemporal();
+            table.AgregarTemporal(temp);
+            etiq = table.getEtiqueta();
+            
+            c3d += `    ${temp} = 1;\n`;
+            c3d += `    goto ${etiq};\n`;
+            c3d += `    ${etiq2}:\n`;
+            
+            c3d += `    ${temp} = 0;\n`;
+            c3d += `    ${etiq}:\n`;
+
+            etiq = table.getEtiqueta();
+            etiq2 = table.getEtiqueta();
+
+            c3d += this.operadorDer.get3D(table, tree);
+            c3d += `goto ${etiq};\n`;
+            c3d += `    goto ${etiq2};\n`;
+            c3d += `    ${etiq}:\n`;
+            
+            temp2 = table.getTemporal();
+            table.AgregarTemporal(temp2);
+            etiq = table.getEtiqueta();
+            
+            c3d += `    ${temp2} = 1;\n`;
+            c3d += `    goto ${etiq};\n`;
+            c3d += `    ${etiq2}:\n`;
+            
+            c3d += `    ${temp2} = 0;\n`;
+            c3d += `    ${etiq}:\n`;
+            
+            c3d += `    if(${temp} ${op} ${temp2}) goto ${table.getTrue()};\n`;
+            c3d += `    goto ${table.getFalse()};\n`;
+
+        } else if (this.operadorIzq instanceof Relacional) {
+        } else if (this.operadorDer instanceof Relacional) {
+        } else {
+            izq = this.operadorIzq.get3D(table, tree);
+            der = this.operadorDer.get3D(table, tree);
+
+            if (table.bandera == 0) {
+                c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;
+                c3d += `    goto ${table.getFalse()};\n`;
+            }else{
+                c3d += `    if(${izq} ${op} ${der}) `;
+            }
+        }
+
+        return c3d;
+    }
 }

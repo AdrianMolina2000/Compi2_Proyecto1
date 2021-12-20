@@ -51,22 +51,74 @@ export class LlamadaMetodo extends Nodo {
 
             
            if(parametros[i] instanceof DeclaracionArray){
-           
+           /**
+            * 
+            * 
+            * let dec = struct_padre.valor[index];
+                        let exp = this.expresion.listaParams[index];
+                        let nuevoArray2 = new Array<Nodo>();
+                        for(let i = 0; i < exp.valor.length; i++){
+                            nuevoArray2.push(Object.assign(Object.create(exp.valor[i]), exp.valor[i]));
+                        }
+
+                        let prim = Object.assign(Object.create(exp), exp);
+                        prim.valor = nuevoArray2;
+                        let new_dec = new DeclaracionArray(dec.tipo, dec.id, null, dec.line, dec.column);
+                        new_dec.listaValores = prim
+                        nuevoArray.push(new_dec);
+                    }
+            * 
+            */
             var para: DeclaracionArray;
             var crear: DeclaracionArray;
             para = <DeclaracionArray>parametros[i];
-          
+            let Alv = new Array<Nodo>();
            
             crear = para;
 
+            for (let index = 0; index < this.listaParams.length; index++) {
+             Alv.push(Object.assign(Object.create(this.listaParams[index]), this.listaParams[index]))
+                
+            }
           
-            
-            crear.listaValores = this.listaParams[i].valor;
+            //es que cuando vos cambias  ponete xd 
+            /**
+             * 
+             * void efe(){
+     int i=0;
+     int j=1;
+     int [] array = [10,20,30,40,50,60];
+    array[j]=array[5];
+    array[i]=array[j];
+    print(array);
+}
+ efe();
+ esa entrada si jala ponete asigancion vector n
+             * 
+             * 
+             * void swap(int i, int j, int [] array) {
+   array[j] = 10;
+    array[i] = array[j];
+    
+     
 
+      
+  
+}
+   int [] array=[1,2,3,4,5,6];
 
-            console.log(crear.listaValores)
+int efe=0;
+swap(efe,efe+1,array);
 
+ println(array);
+ pero aca no xd
 
+             * 
+             * 
+             * 
+             * 
+            */
+            crear.listaValores=Alv;
             
             crear.execute(newtable, tree);
            

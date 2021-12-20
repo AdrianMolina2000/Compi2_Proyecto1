@@ -113,6 +113,7 @@ class Print extends Nodo_1.Nodo {
             table.setTrue(table.etiqueta);
             Etiq = table.getEtiqueta();
             table.setFalse(table.etiqueta);
+            codigo += this.expresion[0].get3D(table, tree);
             codigo += `    ${table.getTrue()}:\n`;
             codigo += `    printf("%c", (char)116);\n`;
             codigo += `    printf("%c", (char)114);\n`;

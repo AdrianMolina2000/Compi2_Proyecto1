@@ -44,7 +44,7 @@ export class AsignacionVector extends Nodo {
         if (this.posicion.tipo.tipo == tipos.ENTERO) {
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {
                 const error = new Excepcion('Semantico',
-                    `La Posicion especificada no es valida para el vector {${this.id}}`,
+                    `efe arriba   La Posicion especificada no es valida para el vector {${this.id}}`,
                     this.line, this.column);
                     tree.excepciones.push(error)
                     tree.consola.push(error.toString());
@@ -59,15 +59,42 @@ export class AsignacionVector extends Nodo {
                         return null;
                     } else {
                         const error = new Excepcion('Semantico',
-                            `la posicion del vector no puede reasignarse debido a que son de diferentes tipos`,
+                            `efeeee la posicion del vector no puede reasignarse debido a que son de diferentes tipos`,
                             this.line, this.column);
                             tree.excepciones.push(error)
                             tree.consola.push(error.toString());
                         return error;
                     }
                 } else {
-                    arreglo[this.pos] = this.valor;
-                    variable.valor.valor = arreglo;
+                     
+                     let Alv = new Array<Nodo>();
+                    //Ni me acordaba jjajajaja, ni cuenta me di
+                     //  jaja nome que la pases alegre men jaja aunque se
+                     ,/* n*eteib a decir que voy a hacer push, y que trabajaras local que ya gaste todo mi cerebro
+                     
+                       let dec = arreglo[this.pos];
+                        let exp = this.expresion.listaParams[index];
+                        let nuevoArray2 = new Array<Nodo>();
+                        for(let i = 0; i < exp.valor.length; i++){
+                            nuevoArray2.push(Object.assign(Object.create(exp.valor[i]), exp.valor[i]));
+                        }
+
+                        let prim = Object.assign(Object.create(exp), exp);
+                        prim.valor = nuevoArray2;
+                        let new_dec = new DeclaracionArray(dec.tipo, dec.id, null, dec.line, dec.column);
+                        new_dec.listaValores = prim
+                        nuevoArray.push(new_dec);
+                      
+                    arreglo[this.pos] =this.valor
+                    for (let index = 0; index < arreglo.length; index++) {
+                       
+                        Alv.push(Object.assign(Object.create(arreglo[index]), arreglo[index]))
+                    }
+
+                    console.log(Alv)
+                    variable.valor.valor = Alv
+                    console.log("--------------------------------")
+                    
                     return null;
                 }
             }

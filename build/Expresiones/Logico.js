@@ -87,5 +87,35 @@ class Logico extends Nodo_1.Nodo {
         }
         return nodo;
     }
+    get3D(table, tree) {
+        let c3d = ``;
+        let izq;
+        let der;
+        let op = this.operador;
+        let temp;
+        let temp2;
+        let temp3;
+        let etiq;
+        let etiq2;
+        let etiq3;
+        if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
+        }
+        else if (this.operadorIzq instanceof Relacional) {
+        }
+        else if (this.operadorDer instanceof Relacional) {
+        }
+        else {
+            izq = this.operadorIzq.get3D(table, tree);
+            der = this.operadorDer.get3D(table, tree);
+            if (table.bandera == 0) {
+                c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;
+                c3d += `    goto ${table.getFalse()};\n`;
+            }
+            else {
+                c3d += `    if(${izq} ${op} ${der}) `;
+            }
+        }
+        return c3d;
+    }
 }
 exports.Logico = Logico;

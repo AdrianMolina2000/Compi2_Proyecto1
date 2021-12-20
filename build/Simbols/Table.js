@@ -12,6 +12,7 @@ class Table {
         this.ambito = false; // false = global, true = local
         this.listaReturn = [];
         this.sizeActual = [];
+        this.bandera = 0;
     }
     setVariable(simbol) {
         let ambito;

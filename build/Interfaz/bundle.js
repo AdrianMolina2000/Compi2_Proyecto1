@@ -1919,6 +1919,36 @@ class Logico extends Nodo_1.Nodo {
         }
         return nodo;
     }
+    get3D(table, tree) {
+        let c3d = ``;
+        let izq;
+        let der;
+        let op = this.operador;
+        let temp;
+        let temp2;
+        let temp3;
+        let etiq;
+        let etiq2;
+        let etiq3;
+        if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
+        }
+        else if (this.operadorIzq instanceof Relacional) {
+        }
+        else if (this.operadorDer instanceof Relacional) {
+        }
+        else {
+            izq = this.operadorIzq.get3D(table, tree);
+            der = this.operadorDer.get3D(table, tree);
+            if (table.bandera == 0) {
+                c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;
+                c3d += `    goto ${table.getFalse()};\n`;
+            }
+            else {
+                c3d += `    if(${izq} ${op} ${der}) `;
+            }
+        }
+        return c3d;
+    }
 }
 exports.Logico = Logico;
 
@@ -2605,6 +2635,67 @@ class Relacional extends Nodo_1.Nodo {
         nodo.agregarHijo(this.operadorDer.getNodo());
         return nodo;
     }
+    get3D(table, tree) {
+        let c3d = ``;
+        let izq;
+        let der;
+        let op = this.operador;
+        let temp;
+        let temp2;
+        let temp3;
+        let etiq;
+        let etiq2;
+        let etiq3;
+        if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
+            table.bandera = 1;
+            etiq = table.getEtiqueta();
+            etiq2 = table.getEtiqueta();
+            c3d += this.operadorIzq.get3D(table, tree);
+            c3d += `goto ${etiq};\n`;
+            c3d += `    goto ${etiq2};\n`;
+            c3d += `    ${etiq}:\n`;
+            temp = table.getTemporal();
+            table.AgregarTemporal(temp);
+            etiq = table.getEtiqueta();
+            c3d += `    ${temp} = 1;\n`;
+            c3d += `    goto ${etiq};\n`;
+            c3d += `    ${etiq2}:\n`;
+            c3d += `    ${temp} = 0;\n`;
+            c3d += `    ${etiq}:\n`;
+            etiq = table.getEtiqueta();
+            etiq2 = table.getEtiqueta();
+            c3d += this.operadorDer.get3D(table, tree);
+            c3d += `goto ${etiq};\n`;
+            c3d += `    goto ${etiq2};\n`;
+            c3d += `    ${etiq}:\n`;
+            temp2 = table.getTemporal();
+            table.AgregarTemporal(temp2);
+            etiq = table.getEtiqueta();
+            c3d += `    ${temp2} = 1;\n`;
+            c3d += `    goto ${etiq};\n`;
+            c3d += `    ${etiq2}:\n`;
+            c3d += `    ${temp2} = 0;\n`;
+            c3d += `    ${etiq}:\n`;
+            c3d += `    if(${temp} ${op} ${temp2}) goto ${table.getTrue()};\n`;
+            c3d += `    goto ${table.getFalse()};\n`;
+        }
+        else if (this.operadorIzq instanceof Relacional) {
+        }
+        else if (this.operadorDer instanceof Relacional) {
+        }
+        else {
+            izq = this.operadorIzq.get3D(table, tree);
+            der = this.operadorDer.get3D(table, tree);
+            if (table.bandera == 0) {
+                c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;
+                c3d += `    goto ${table.getFalse()};\n`;
+            }
+            else {
+                c3d += `    if(${izq} ${op} ${der}) `;
+            }
+        }
+        return c3d;
+    }
 }
 exports.Relacional = Relacional;
 
@@ -3120,7 +3211,7 @@ class Vector extends Nodo_1.Nodo {
         this.pos = this.posicion.execute(table, tree);
         if (this.posicion.tipo.tipo == tipo_1.tipos.ENTERO) {
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {
-                const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
+                const error = new Excepcion_1.Excepcion('Semantico', `efe en vector La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
                 return error;
             }
             else {
@@ -3130,7 +3221,7 @@ class Vector extends Nodo_1.Nodo {
                     return this.valor;
                 }
                 catch (err) {
-                    const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
+                    const error = new Excepcion_1.Excepcion('Semantico', ` efe vector 2La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
                     return error;
                 }
             }
@@ -4942,7 +5033,7 @@ class AsignacionVector extends Nodo_1.Nodo {
         this.pos = this.posicion.execute(table, tree);
         if (this.posicion.tipo.tipo == tipo_1.tipos.ENTERO) {
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {
-                const error = new Excepcion_1.Excepcion('Semantico', `La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
+                const error = new Excepcion_1.Excepcion('Semantico', `efe arriba   La Posicion especificada no es valida para el vector {${this.id}}`, this.line, this.column);
                 tree.excepciones.push(error);
                 tree.consola.push(error.toString());
                 return error;
@@ -4957,15 +5048,37 @@ class AsignacionVector extends Nodo_1.Nodo {
                         return null;
                     }
                     else {
-                        const error = new Excepcion_1.Excepcion('Semantico', `la posicion del vector no puede reasignarse debido a que son de diferentes tipos`, this.line, this.column);
+                        const error = new Excepcion_1.Excepcion('Semantico', `efeeee la posicion del vector no puede reasignarse debido a que son de diferentes tipos`, this.line, this.column);
                         tree.excepciones.push(error);
                         tree.consola.push(error.toString());
                         return error;
                     }
                 }
                 else {
+                    let Alv = new Array();
+                    /**
+                     * let dec = struct_padre.valor[index];
+                       let exp = this.expresion.listaParams[index];
+                       let nuevoArray2 = new Array<Nodo>();
+                       for(let i = 0; i < exp.valor.length; i++){
+                           nuevoArray2.push(Object.assign(Object.create(exp.valor[i]), exp.valor[i]));
+                       }
+
+                       let prim = Object.assign(Object.create(exp), exp);
+                       prim.valor = nuevoArray2;
+                       let new_dec = new DeclaracionArray(dec.tipo, dec.id, null, dec.line, dec.column);
+                       new_dec.listaValores = prim
+                       nuevoArray.push(new_dec);
+                     *
+                     *
+                    */
                     arreglo[this.pos] = this.valor;
-                    variable.valor.valor = arreglo;
+                    for (let index = 0; index < arreglo.length; index++) {
+                        Alv.push(Object.assign(Object.create(arreglo[index]), arreglo[index]));
+                    }
+                    console.log(Alv);
+                    variable.valor.valor = Alv;
+                    console.log("--------------------------------");
                     return null;
                 }
             }
@@ -5851,12 +5964,70 @@ class LlamadaMetodo extends Nodo_1.Nodo {
         var parametros = simboloMetodo.valor[0];
         for (let i = 0; i < parametros.length; i++) {
             if (parametros[i] instanceof DeclaracionArray_1.DeclaracionArray) {
+                /**
+                 *
+                 *
+                 * let dec = struct_padre.valor[index];
+                             let exp = this.expresion.listaParams[index];
+                             let nuevoArray2 = new Array<Nodo>();
+                             for(let i = 0; i < exp.valor.length; i++){
+                                 nuevoArray2.push(Object.assign(Object.create(exp.valor[i]), exp.valor[i]));
+                             }
+     
+                             let prim = Object.assign(Object.create(exp), exp);
+                             prim.valor = nuevoArray2;
+                             let new_dec = new DeclaracionArray(dec.tipo, dec.id, null, dec.line, dec.column);
+                             new_dec.listaValores = prim
+                             nuevoArray.push(new_dec);
+                         }
+                 *
+                 */
                 var para;
                 var crear;
                 para = parametros[i];
+                let Alv = new Array();
                 crear = para;
-                crear.listaValores = this.listaParams[i].valor;
-                console.log(crear.listaValores);
+                for (let index = 0; index < this.listaParams.length; index++) {
+                    Alv.push(Object.assign(Object.create(this.listaParams[index]), this.listaParams[index]));
+                }
+                //es que cuando vos cambias  ponete xd 
+                /**
+                 *
+                 * void efe(){
+         int i=0;
+         int j=1;
+         int [] array = [10,20,30,40,50,60];
+        array[j]=array[5];
+        array[i]=array[j];
+        print(array);
+    }
+     efe();
+     esa entrada si jala ponete asigancion vector n
+                 *
+                 *
+                 * void swap(int i, int j, int [] array) {
+       array[j] = 10;
+        array[i] = array[j];
+        
+         
+    
+          
+      
+    }
+       int [] array=[1,2,3,4,5,6];
+    
+    int efe=0;
+    swap(efe,efe+1,array);
+    
+     println(array);
+     pero aca no xd
+    
+                 *
+                 *
+                 *
+                 *
+                */
+                crear.listaValores = Alv;
                 crear.execute(newtable, tree);
             }
             else {
@@ -6126,6 +6297,7 @@ class Print extends Nodo_1.Nodo {
             table.setTrue(table.etiqueta);
             Etiq = table.getEtiqueta();
             table.setFalse(table.etiqueta);
+            codigo += this.expresion[0].get3D(table, tree);
             codigo += `    ${table.getTrue()}:\n`;
             codigo += `    printf("%c", (char)116);\n`;
             codigo += `    printf("%c", (char)114);\n`;
@@ -6842,6 +7014,7 @@ class Table {
         this.ambito = false; // false = global, true = local
         this.listaReturn = [];
         this.sizeActual = [];
+        this.bandera = 0;
     }
     setVariable(simbol) {
         let ambito;

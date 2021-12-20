@@ -6,6 +6,7 @@ export class Table{
 
     temporal: number;
     etiqueta: number;
+    bandera: number;
     trueL: number;
     falseL: number;
     heap: number;
@@ -27,6 +28,7 @@ export class Table{
         this.ambito = false; // false = global, true = local
         this.listaReturn = [];
         this.sizeActual = [];
+        this.bandera = 0;
     }
 
     setVariable(simbol: Simbolo){

@@ -41,14 +41,18 @@ export class Vector extends Nodo {
         }
 
         this.pos = this.posicion.execute(table, tree);
+       
+      
         if (this.posicion.tipo.tipo == tipos.ENTERO) {
             
             if ((this.pos >= arreglo.length) || (this.pos < 0)) {
                 const error = new Excepcion('Semantico',
-                    `La Posicion especificada no es valida para el vector {${this.id}}`,
+                    `efe en vector La Posicion especificada no es valida para el vector {${this.id}}`,
                     this.line, this.column);
                 return error;
             } else {
+
+               
                 try {
                     this.bandera1 = true;
                     this.valor = arreglo[this.pos].execute(table, tree);
@@ -60,7 +64,7 @@ export class Vector extends Nodo {
 
                 } catch (err) {
                     const error = new Excepcion('Semantico',
-                        `La Posicion especificada no es valida para el vector {${this.id}}`,
+                        ` efe vector 2La Posicion especificada no es valida para el vector {${this.id}}`,
                         this.line, this.column);
                     return error;
                 }
