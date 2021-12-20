@@ -58,6 +58,18 @@ class Table {
     getEtiquetaActual() {
         return "L" + this.etiqueta;
     }
+    setTrue(etiqueta) {
+        this.trueL = etiqueta;
+    }
+    getTrue() {
+        return "L" + this.trueL;
+    }
+    setFalse(etiqueta) {
+        this.falseL = etiqueta;
+    }
+    getFalse() {
+        return "L" + this.falseL;
+    }
     AgregarTemporal(temp) {
         this.tempStorage.push(temp);
     }

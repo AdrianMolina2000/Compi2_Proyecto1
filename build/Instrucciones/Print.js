@@ -108,6 +108,27 @@ class Print extends Nodo_1.Nodo {
             codigo += `    ${temporal} = stack[(int)P];\n`;
             codigo += `    printf("%c", (char)10);\n\n`;
         }
+        else if (this.tipo.tipo == 5) {
+            let Etiq = table.getEtiqueta();
+            table.setTrue(table.etiqueta);
+            Etiq = table.getEtiqueta();
+            table.setFalse(table.etiqueta);
+            codigo += `    ${table.getTrue()}:\n`;
+            codigo += `    printf("%c", (char)116);\n`;
+            codigo += `    printf("%c", (char)114);\n`;
+            codigo += `    printf("%c", (char)117);\n`;
+            codigo += `    printf("%c", (char)101);\n`;
+            Etiq = table.getEtiqueta();
+            codigo += `    goto ${table.getEtiquetaActual()};\n`;
+            codigo += `    ${table.getFalse()}:\n`;
+            codigo += `    printf("%c", (char)102);\n`;
+            codigo += `    printf("%c", (char)97);\n`;
+            codigo += `    printf("%c", (char)108);\n`;
+            codigo += `    printf("%c", (char)115);\n`;
+            codigo += `    printf("%c", (char)101);\n`;
+            codigo += `    ${table.getEtiquetaActual()}:\n`;
+            codigo += `    printf("%c", (char)10);\n`;
+        }
         return codigo;
     }
 }

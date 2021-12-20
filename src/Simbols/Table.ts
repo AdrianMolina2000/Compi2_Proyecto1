@@ -3,8 +3,11 @@ import {Simbolo} from "./Simbolo";
 export class Table{
     Anterior: Table;
     Variables: Map<String, Simbolo>;
+
     temporal: number;
     etiqueta: number;
+    trueL: number;
+    falseL: number;
     heap: number;
     stack: number;
     tempStorage: Array<String>;
@@ -15,6 +18,7 @@ export class Table{
     constructor(Anterior: Table){
         this.Anterior = Anterior;
         this.Variables = new Map<String, Simbolo>();
+
         this.temporal = 0;
         this.etiqueta = 0;
         this.heap = 0;
@@ -76,9 +80,25 @@ export class Table{
     getEtiqueta(): String {
         return "L" + ++this.etiqueta;
     }
-
+    
     getEtiquetaActual(): String {
         return "L" + this.etiqueta;
+    }
+    
+    setTrue(etiqueta: number){
+        this.trueL = etiqueta;
+    }
+
+    getTrue(){
+        return "L"+this.trueL;
+    }
+    
+    setFalse(etiqueta: number){
+        this.falseL = etiqueta;
+    }
+    
+    getFalse(){
+        return "L"+this.falseL;
     }
 
     AgregarTemporal(temp: String){
