@@ -103,7 +103,7 @@ export class Relacional extends Nodo {
                 // tree.consola.push(error.toString());
                 return error;
             }
-        }else if (this.operador === '<=') {
+        } else if (this.operador === '<=') {
             if (this.operadorIzq.tipo.tipo === tipos.ENTERO) {
                 if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                     return resultadoIzq <= resultadoDer;
@@ -247,7 +247,7 @@ export class Relacional extends Nodo {
                     // tree.consola.push(error.toString());
                     return error;
                 }
-            }else {
+            } else {
                 const error = new Excepcion('Semantico',
                     `El operador relacional MAYOR QUE se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                     this.line, this.column);
@@ -399,7 +399,7 @@ export class Relacional extends Nodo {
                     // tree.consola.push(error.toString());
                     return error;
                 }
-            }else {
+            } else {
                 const error = new Excepcion('Semantico',
                     `El operador relacional DIFERENTE DE se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                     this.line, this.column);
@@ -494,7 +494,7 @@ export class Relacional extends Nodo {
     }
 
     getNodo() {
-        var nodo:NodoAST  = new NodoAST("RELACIONAL");
+        var nodo: NodoAST = new NodoAST("RELACIONAL");
         nodo.agregarHijo(this.operadorIzq.getNodo());
         nodo.agregarHijo(this.operador + "");
         nodo.agregarHijo(this.operadorDer.getNodo());
@@ -509,29 +509,38 @@ export class Relacional extends Nodo {
         let temp;
         let temp2;
         let temp3;
-
+//manoo momento latm se fue la luz jajaja 
         let etiq;
         let etiq2;
         let etiq3;
 
+        console.log("OP DER");
+        console.log(this.operadorDer);
+        console.log("OP DER");
+        console.log("OP IZQ");//vos xd
+        console.log(this.operadorIzq);
+        console.log("OP IZQ");
+
+
         if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
+
             table.bandera = 1;
             etiq = table.getEtiqueta();
             etiq2 = table.getEtiqueta();
-            
+
             c3d += this.operadorIzq.get3D(table, tree);
             c3d += `goto ${etiq};\n`;
             c3d += `    goto ${etiq2};\n`;
             c3d += `    ${etiq}:\n`;
-            
+
             temp = table.getTemporal();
             table.AgregarTemporal(temp);
             etiq = table.getEtiqueta();
-            
+
             c3d += `    ${temp} = 1;\n`;
             c3d += `    goto ${etiq};\n`;
             c3d += `    ${etiq2}:\n`;
-            
+
             c3d += `    ${temp} = 0;\n`;
             c3d += `    ${etiq}:\n`;
 
@@ -542,18 +551,18 @@ export class Relacional extends Nodo {
             c3d += `goto ${etiq};\n`;
             c3d += `    goto ${etiq2};\n`;
             c3d += `    ${etiq}:\n`;
-            
+
             temp2 = table.getTemporal();
             table.AgregarTemporal(temp2);
             etiq = table.getEtiqueta();
-            
+
             c3d += `    ${temp2} = 1;\n`;
             c3d += `    goto ${etiq};\n`;
             c3d += `    ${etiq2}:\n`;
-            
+
             c3d += `    ${temp2} = 0;\n`;
             c3d += `    ${etiq}:\n`;
-            
+
             c3d += `    if(${temp} ${op} ${temp2}) goto ${table.getTrue()};\n`;
             c3d += `    goto ${table.getFalse()};\n`;
 
@@ -566,7 +575,7 @@ export class Relacional extends Nodo {
             if (table.bandera == 0) {
                 c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;
                 c3d += `    goto ${table.getFalse()};\n`;
-            }else{
+            } else {
                 c3d += `    if(${izq} ${op} ${der}) `;
             }
         }

@@ -528,9 +528,16 @@ class Relacional extends Nodo_1.Nodo {
         let temp;
         let temp2;
         let temp3;
+        //manoo momento latm se fue la luz jajaja 
         let etiq;
         let etiq2;
         let etiq3;
+        console.log("OP DER");
+        console.log(this.operadorDer);
+        console.log("OP DER");
+        console.log("OP IZQ"); //vos xd
+        console.log(this.operadorIzq);
+        console.log("OP IZQ");
         if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
             table.bandera = 1;
             etiq = table.getEtiqueta();

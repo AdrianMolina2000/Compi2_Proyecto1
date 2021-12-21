@@ -5,6 +5,10 @@ const ReporteGramatica_1 = require("../Simbols/ReporteGramatica");
 const Grafica_1 = require("./Grafica");
 const NodoAST_1 = require("../Abstract/NodoAST");
 const Error_1 = require("../Simbols/Error");
+const DeclaracionMetodo_1 = require("../Instrucciones/DeclaracionMetodo");
+const Declaracion_1 = require("../Instrucciones/Declaracion");
+const DeclaracionArray_1 = require("../Instrucciones/DeclaracionArray");
+const Main_1 = require("../Instrucciones/Main");
 const parser = require('../Gramatica/grammar.js');
 let simbolos = "";
 let graficas = "";
@@ -153,17 +157,52 @@ global.Enviar = function entrada() {
     const tabla = new Table_1.Table(null);
     tree.instrucciones.map((m) => {
         try {
-            const res = m.execute(tabla, tree);
+            if (m instanceof DeclaracionMetodo_1.DeclaracionMetodo) {
+                m.execute(tabla, tree);
+            }
         }
         catch (error) {
             console.log(error);
         }
         // console.log(tree.consola);
-        var texto = "";
-        for (const key in tree.consola) {
-            texto += tree.consola[key];
+    });
+    tree.instrucciones.map((m) => {
+        try {
+            if (m instanceof DeclaracionArray_1.DeclaracionArray) {
+                m.execute(tabla, tree);
+            }
         }
-        editor2.setValue(texto);
+        catch (error) {
+            console.log(error);
+        }
+        // console.log(tree.consola);
+    });
+    tree.instrucciones.map((m) => {
+        try {
+            if (m instanceof Declaracion_1.Declaracion) {
+                m.execute(tabla, tree);
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        // console.log(tree.consola);
+    });
+    tree.instrucciones.map((m) => {
+        try {
+            if (m instanceof Main_1.Main) {
+                const res = m.execute(tabla, tree);
+            }
+            //  console.log(tree);
+            var texto = "";
+            for (const key in tree.consola) {
+                texto += tree.consola[key];
+            }
+            editor2.setValue(texto);
+        }
+        catch (error) {
+            console.log(error);
+        }
     });
     /**
     *

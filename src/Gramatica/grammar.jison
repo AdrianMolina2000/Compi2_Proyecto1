@@ -41,6 +41,7 @@
     const {While} = require('../Instrucciones/While'); 
     const {DoWhile} = require('../Instrucciones/DoWhile');
     const {Declaracion, defal} = require('../Instrucciones/Declaracion');
+    const {Main} = require('../Instrucciones/Main');
     const {DeclaracionArray} = require('../Instrucciones/DeclaracionArray');
     const {Asignacion_Struct} = require('../Instrucciones/Asignacion_Struct');
     const {AsignacionVector} = require('../Instrucciones/AsignacionVector');
@@ -227,6 +228,9 @@ INSTRUCCION
     
     
     }
+
+
+    |   TIPO  'main'  '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}'  {$$ = new Main($1 , $7, @1.first_line, @1.first_column);}
     |DECLARACION ';'                                                            {$$ = $1;
     
          new ReporteGramatica("INSTRUCCION ->  DECLARACION ", " INSTRUCCION.val=DECLARACION.val"      );
@@ -1336,31 +1340,7 @@ OPCION_PTO2:
      new ReporteGramatica("OPCION_PTO->  identifier [EXPRESION]"
     ,"OPCION_PTO.val=identifier.lexval+EXPRESION.val");
     }
-/*
 
- OPCION_PTO
-  :'.' 'identifier'                 { $$ =$2;
-    new ReporteGramatica("OPCION_PTO-> . identifier"
-    ,"OPCION_PTO.val=identifier.lexval");
-  
-  
-  }
-  |'identifier'                     {$$ =$1;
-  
-   new ReporteGramatica("OPCION_PTO->  identifier"
-    ,"OPCION_PTO.val=identifier.lexval");
-  
-  }
-  |'identifier' '[' EXPRESION']'    {$$ =$1;
-  
-  
-     new ReporteGramatica("OPCION_PTO->  identifier [EXPRESION]"
-    ,"OPCION_PTO.val=identifier.lexval+EXPRESION.val");
-  
-  }
-
-
-*/
   
   
   

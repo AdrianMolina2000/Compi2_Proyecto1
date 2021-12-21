@@ -9,6 +9,7 @@ const Continue_1 = require("../Expresiones/Continue");
 const Break_1 = require("../Expresiones/Break");
 const Retorno_1 = require("./Retorno");
 const DeclaracionArray_1 = require("./DeclaracionArray");
+//*
 class LlamadaMetodo extends Nodo_1.Nodo {
     constructor(id, listaParams, line, column) {
         super(null, line, column);
@@ -37,24 +38,6 @@ class LlamadaMetodo extends Nodo_1.Nodo {
         var parametros = simboloMetodo.valor[0];
         for (let i = 0; i < parametros.length; i++) {
             if (parametros[i] instanceof DeclaracionArray_1.DeclaracionArray) {
-                /**
-                 *
-                 *
-                 * let dec = struct_padre.valor[index];
-                             let exp = this.expresion.listaParams[index];
-                             let nuevoArray2 = new Array<Nodo>();
-                             for(let i = 0; i < exp.valor.length; i++){
-                                 nuevoArray2.push(Object.assign(Object.create(exp.valor[i]), exp.valor[i]));
-                             }
-     
-                             let prim = Object.assign(Object.create(exp), exp);
-                             prim.valor = nuevoArray2;
-                             let new_dec = new DeclaracionArray(dec.tipo, dec.id, null, dec.line, dec.column);
-                             new_dec.listaValores = prim
-                             nuevoArray.push(new_dec);
-                         }
-                 *
-                 */
                 var para;
                 var crear;
                 para = parametros[i];
@@ -63,43 +46,6 @@ class LlamadaMetodo extends Nodo_1.Nodo {
                 for (let index = 0; index < this.listaParams.length; index++) {
                     Alv.push(Object.assign(Object.create(this.listaParams[index]), this.listaParams[index]));
                 }
-                //es que cuando vos cambias  ponete xd 
-                /**
-                 *
-                 * void efe(){
-         int i=0;
-         int j=1;
-         int [] array = [10,20,30,40,50,60];
-        array[j]=array[5];
-        array[i]=array[j];
-        print(array);
-    }
-     efe();
-     esa entrada si jala ponete asigancion vector n
-                 *
-                 *
-                 * void swap(int i, int j, int [] array) {
-       array[j] = 10;
-        array[i] = array[j];
-        
-         
-    
-          
-      
-    }
-       int [] array=[1,2,3,4,5,6];
-    
-    int efe=0;
-    swap(efe,efe+1,array);
-    
-     println(array);
-     pero aca no xd
-    
-                 *
-                 *
-                 *
-                 *
-                */
                 crear.listaValores = Alv;
                 crear.execute(newtable, tree);
             }

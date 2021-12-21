@@ -6,6 +6,11 @@ import { Nodo } from '../Abstract/Nodo';
 import { NodoAST } from '../Abstract/NodoAST';
 import { Excepcion } from '../other/Excepcion';
 import { Error } from '../Simbols/Error';
+import { DeclaracionMetodo } from '../Instrucciones/DeclaracionMetodo';
+import { Declaracion } from '../Instrucciones/Declaracion';
+import { DeclaracionArray } from '../Instrucciones/DeclaracionArray';
+import { Tree } from '../Simbols/Tree';
+import { Main } from '../Instrucciones/Main';
 const parser = require('../Gramatica/grammar.js');
 let simbolos = "";
 let graficas = "";
@@ -251,23 +256,83 @@ global.Enviar = function entrada() {
 
     const tree = parser.parse(entrada);
 
-
-
-
     const tabla = new Table(null);
+
+
 
     tree.instrucciones.map((m: any) => {
         try {
-            const res = m.execute(tabla, tree);
+
+             if(m instanceof DeclaracionMetodo ){
+
+                 m.execute(tabla,tree)
+             }
+
+            
         } catch (error) {
             console.log(error)
         }
         // console.log(tree.consola);
-        var texto = "";
-        for (const key in tree.consola) {
-            texto += tree.consola[key];
+       
+    });
+
+   
+    tree.instrucciones.map((m: any) => {
+        try {
+
+             if(m instanceof DeclaracionArray){
+
+                  m.execute(tabla,tree)
+             }
+
+            
+        } catch (error) {
+            console.log(error)
         }
-        editor2.setValue(texto);
+        // console.log(tree.consola);
+       
+    });
+
+    tree.instrucciones.map((m: any) => {
+        try {
+
+             if(m instanceof Declaracion){
+
+                  m.execute(tabla,tree)
+             }
+
+            
+        } catch (error) {
+            console.log(error)
+        }
+        // console.log(tree.consola);
+       
+    });
+
+
+    tree.instrucciones.map((m: any) => {
+       
+       
+       
+       
+        try {
+
+           
+            if(m instanceof Main){
+                const res = m.execute(tabla, tree);
+
+            }
+            
+          //  console.log(tree);
+            var texto = "";
+            for (const key in tree.consola) {
+                texto += tree.consola[key];
+            }
+            editor2.setValue(texto);
+        } catch (error) {
+            console.log(error)
+        }
+       
     });
 
     /**
