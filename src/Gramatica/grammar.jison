@@ -1243,6 +1243,12 @@ EXPRESION
         
         
         }
+         |'['  ']'                                {$$ = new Primitivo(new Tipo(tipos.ARREGLO), [], @1.first_line, @1.first_column);
+         new ReporteGramatica("EXPRESION->   [LISTA_EXPRESION]  "
+                  ,"EXPRESION.val= new  Primitivo( LISTA_EXPRESION.val ) ")
+        
+        
+        }
         |'identifier' '[' EXPRESION ']'                         {$$ = new Vector($1, $3, @1.first_line, @1.first_column);
         
            new ReporteGramatica("EXPRESION-> identifier  [EXPRESION]  "
