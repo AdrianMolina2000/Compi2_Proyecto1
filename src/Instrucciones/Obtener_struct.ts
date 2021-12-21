@@ -11,6 +11,8 @@ import { If } from "./If";
 
 function alv(padre: Simbolo, id: String, lista_ids: Array<String>, tree: Tree, table: Table): any {
 
+    console.log("aqui perro")
+  console.log(padre)
     for (let index = 0; index < padre.valor.length; index++) {
         if (padre.valor[index].id[0] == id) {
             if (padre.valor[index].tipo.tipo == 11) {
@@ -63,6 +65,7 @@ export class Obtener_struct extends Nodo {
 
         let struct_var: Simbolo
         struct_var = table.getVariable(this.id)
+        
 
         for (let x = 0; x < struct_var.valor.length; x++) {
             struct_var.valor[x].execute(struct_var.ambito, tree);

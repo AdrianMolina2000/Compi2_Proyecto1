@@ -22,7 +22,9 @@ function alv(padre, id, lista_ids, valor, tree, table) {
                 }
             }
             else {
-                padre.valor[index].valor = valor.execute(table, tree);
+                console.log("suuuuuuuuu*********---------------------******************");
+                let res;
+                padre.valor[index].valor = valor;
                 break;
             }
         }
@@ -42,10 +44,9 @@ class Asignacion_Struct extends Nodo_1.Nodo {
         }
         let struct;
         struct = table.getVariable(this.id);
-        console.log(struct);
-        if (id_struct.tipo2.tipo == tipo_1.tipos.STRUCTS) {
+        if (struct.tipo2.tipo == tipo_1.tipos.STRUCTS) {
             //id.id,id,id
-            alv(id_struct, this.posicion[0], this.posicion, this.valor, tree, id_struct.ambito);
+            alv(struct, this.posicion[0], this.posicion, this.valor, tree, struct.ambito);
         }
         else {
             const error = new Excepcion_1.Excepcion('Semantico', `no se puede  modificar el valor del struct debido a que este id no es un struct \n`, this.line, this.column);

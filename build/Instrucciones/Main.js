@@ -13,7 +13,6 @@ class Main extends Nodo_1.Nodo {
     execute(table, tree) {
         //com oasi ?
         // var nombre = this.id + "$";
-        console.log("aqui");
         var result = this.instrucciones;
         if (result) {
             for (let i = 0; i < result.length; i++) {
@@ -36,7 +35,10 @@ class Main extends Nodo_1.Nodo {
         nodo.agregarHijo("{");
         var nodo3 = new NodoAST_1.NodoAST("INSTRUCCIONES");
         for (let i = 0; i < this.instrucciones.length; i++) {
-            nodo3.agregarHijo(this.instrucciones[i].getNodo());
+            console.log(this.instrucciones[i]);
+            if (this.instrucciones[i].getNodo() != null) {
+                nodo3.agregarHijo(this.instrucciones[i].getNodo());
+            }
         }
         nodo.agregarHijo(nodo3);
         nodo.agregarHijo("}");

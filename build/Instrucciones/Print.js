@@ -29,6 +29,19 @@ function imprimir(lista, table, tree) {
     salida = salida.substring(0, salida.length - 2) + "], ";
     return salida;
 }
+function imprimir2(lista, table, tree) {
+    var salida = "[";
+    for (let key in lista.valor) {
+        if (lista.valor[key].valor.valor == null) {
+            salida += lista.valor[key].valor + ",";
+        }
+        else {
+            salida += lista.valor[key].valor.valor + ",";
+        }
+    }
+    salida = salida.substring(0, salida.length - 2) + "], ";
+    return salida;
+}
 class Print extends Nodo_1.Nodo {
     constructor(expresion, line, column, tipo_print) {
         super(null, line, column);
@@ -43,6 +56,10 @@ class Print extends Nodo_1.Nodo {
             var valor = this.expresion[key].execute(table, tree);
             if (this.expresion[key].tipo.tipo == 6) {
                 let texto = imprimir(this.expresion[key], table, tree);
+                tree.consola.push(texto.substring(0, texto.length - 2) + " ");
+            }
+            else if (this.expresion[key].tipo.tipo == 11) {
+                let texto = imprimir2(this.expresion[key], table, tree);
                 tree.consola.push(texto.substring(0, texto.length - 2) + " ");
             }
             else {

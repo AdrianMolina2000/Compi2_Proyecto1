@@ -32,11 +32,11 @@ export class DeclaracionVarStruct extends Nodo {
 
         let new_struct: Simbolo;
         let struct_padre: Simbolo;
-
+        console.log(this.nombre_struct)
 
         struct_padre = table.getVariable(this.nombre_struct);
         let nuevoArray = new Array<Nodo>();
-
+      
         if (this.expresion != null) {
             if (struct_padre.valor.length == this.expresion.listaParams.length) {
                 for (let index = 0; index < struct_padre.valor.length; index++) {

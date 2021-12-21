@@ -30,7 +30,7 @@
     const {Nativas_Diferentes} = require('../Expresiones/Nativas_Diferentes');
     const {Ternario} = require('../Expresiones/Ternario');
     //Instrucciones+
-
+    const {Grafica} = require('../Instrucciones/Grafica');
     const {Print} = require('../Instrucciones/Print');
     const {If} = require('../Instrucciones/If');
     const {If_unico} = require('../Instrucciones/If_unico');
@@ -162,6 +162,7 @@ caracter (\'[^☼]\')
 "pop"                 return 'pop'
 "push"                return 'push'
 "log10"                return 'log10'
+"graficar_ts"          return 'graficar_ts'
 
 [0-9]+("."[0-9]+)?\b  return 'numero';
 
@@ -251,6 +252,7 @@ INSTRUCCION
 
 
     |PRINT ';'
+    | STRUCT ';'
 
     | error {console.log("Error Sintactico "  + yytext
                            + " linea: " + this._$.first_line
@@ -260,6 +262,7 @@ INSTRUCCION
                            
             
                            }
+
 ;
 
 Verificar_params
@@ -350,8 +353,12 @@ llamar
     }
     |'identifier' '(' ')'                       {$$ = new LlamadaMetodo($1, [], @1.first_line, @1.first_column);
       new ReporteGramatica("llamar ->  indetifier (parametros_llamada) ", " llamar.val=new LlmadaMetodo(identifier.lexval,parametros_llamada.val)  "  );
+
+
     
     }
+
+    |'graficar_ts' '(' ')'{$$ = new Grafica( @1.first_line, @1.first_column); }
 ;
 
 parametros_llamada

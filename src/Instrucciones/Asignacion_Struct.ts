@@ -5,6 +5,7 @@ import { Excepcion } from "../other/Excepcion";
 import { Simbolo } from "../Simbols/Simbolo";
 import { Tipo, tipos } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
+import { Primitivo } from "../Expresiones/Primitivo";
 
 //
 function alv(padre: Simbolo, id: String, lista_ids: Array<String>, valor: Nodo, tree: Tree, table: Table): any {
@@ -26,7 +27,20 @@ function alv(padre: Simbolo, id: String, lista_ids: Array<String>, valor: Nodo, 
 
                 }
             } else {
-                padre.valor[index].valor = valor.execute(table, tree)
+                console.log("suuuuuuuuu*********---------------------******************")
+
+           
+                let res: Simbolo
+                
+              
+              
+                
+                
+
+                 
+                padre.valor[index].valor= valor
+
+                
                 break;
             }
         }
@@ -41,6 +55,8 @@ export class Asignacion_Struct extends Nodo {
     posicion: Array<String>;
     valor: Nodo;
     pos: any;
+
+
 
     constructor(id: String, posicion: Array<String>, valor: Nodo, line: Number, column: Number) {
         super(null, line, column);
@@ -61,13 +77,13 @@ export class Asignacion_Struct extends Nodo {
         let struct: Simbolo
         struct = table.getVariable(this.id)
 
-        console.log(struct);
+        
 
-        if (id_struct.tipo2.tipo == tipos.STRUCTS) {
+        if (struct.tipo2.tipo == tipos.STRUCTS) {
 
 
             //id.id,id,id
-            alv(id_struct, this.posicion[0], this.posicion, this.valor, tree, id_struct.ambito);
+            alv(struct, this.posicion[0], this.posicion, this.valor, tree, struct.ambito);
 
         } else {
             const error = new Excepcion('Semantico',

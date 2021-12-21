@@ -31,6 +31,26 @@ function imprimir(lista: Nodo, table: Table, tree: Tree) {
     return salida
 }
 
+function imprimir2(lista: Nodo, table: Table, tree: Tree) {
+
+    
+    var salida = "[";
+    for (let key in lista.valor) {
+        if(lista.valor[key].valor.valor==null){
+
+            salida+=lista.valor[key].valor+","
+        }else{
+            salida+=lista.valor[key].valor.valor+","
+
+        }
+        
+       
+    }
+    salida = salida.substring(0, salida.length - 2) + "], ";
+    return salida
+}
+
+
 export class Print extends Nodo {
     expresion: Array<Nodo>;
     tipo_print: Number;
@@ -51,7 +71,19 @@ export class Print extends Nodo {
             if (this.expresion[key].tipo.tipo == 6) {
                 let texto = imprimir(this.expresion[key], table, tree);
                 tree.consola.push(texto.substring(0, texto.length - 2) + " ");
-            } else {
+            } 
+            
+            else if(this.expresion[key].tipo.tipo==11){
+
+                
+                let texto = imprimir2(this.expresion[key], table, tree);
+     
+             
+                tree.consola.push(texto.substring(0, texto.length - 2) + " ");
+
+
+            }
+            else {
                 if (valor.tipo) {
                     if (valor.tipo.tipo == 6) {
                         let texto = imprimir(valor, table, tree)

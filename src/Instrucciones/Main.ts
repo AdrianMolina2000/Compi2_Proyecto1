@@ -25,7 +25,7 @@ export class Main extends Nodo {
 
         // var nombre = this.id + "$";
 
-        console.log("aqui")
+       
 
         var result: Array<Nodo> = this.instrucciones;
 
@@ -66,7 +66,11 @@ export class Main extends Nodo {
 
         var nodo3: NodoAST = new NodoAST("INSTRUCCIONES");
         for (let i = 0; i < this.instrucciones.length; i++) {
+
+            console.log(this.instrucciones[i])
+            if(this.instrucciones[i].getNodo()!= null){
             nodo3.agregarHijo(this.instrucciones[i].getNodo());
+        }
         }
         nodo.agregarHijo(nodo3);
         nodo.agregarHijo("}");

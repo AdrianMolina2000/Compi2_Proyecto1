@@ -102,10 +102,23 @@ export class Asignacion extends Nodo {
     }
 
     getNodo() {
+
+
+        console.log(this.valor)
         var nodo: NodoAST = new NodoAST("ASIGNACION");
         nodo.agregarHijo(this.id);
+
         nodo.agregarHijo("=");
-        nodo.agregarHijo(this.valor.getNodo());
+        if(this.valor==null){
+
+            
+            nodo.agregarHijo("nulo")
+            return nodo;
+        }
+        else{
+            nodo.agregarHijo(this.valor.getNodo());
+            
+        }
         return nodo;
     }
 }

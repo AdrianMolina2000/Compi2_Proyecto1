@@ -5,6 +5,8 @@ const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 function alv(padre, id, lista_ids, tree, table) {
+    console.log("aqui perro");
+    console.log(padre);
     for (let index = 0; index < padre.valor.length; index++) {
         if (padre.valor[index].id[0] == id) {
             if (padre.valor[index].tipo.tipo == 11) {

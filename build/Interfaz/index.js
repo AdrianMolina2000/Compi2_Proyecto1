@@ -9,6 +9,8 @@ const DeclaracionMetodo_1 = require("../Instrucciones/DeclaracionMetodo");
 const Declaracion_1 = require("../Instrucciones/Declaracion");
 const DeclaracionArray_1 = require("../Instrucciones/DeclaracionArray");
 const Main_1 = require("../Instrucciones/Main");
+const Struct_1 = require("../Instrucciones/Struct");
+const Grafica_2 = require("../Instrucciones/Grafica");
 const parser = require('../Gramatica/grammar.js');
 let simbolos = "";
 let graficas = "";
@@ -38,6 +40,18 @@ global.grafo = function grafo() {
 global.reporte = function reporte() {
     document.getElementById("gramatical").innerHTML = simbolos;
 };
+function generar(archivo) {
+    const link = document.createElement("a");
+    link.style.display = "none";
+    link.href = URL.createObjectURL(archivo);
+    link.download = archivo.name;
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+        URL.revokeObjectURL(link.href);
+        archivo.parentNode.removeChild(link);
+    }, 0);
+}
 global.efe = function efe() {
     document.getElementById("gramatical").innerHTML = err;
 };
@@ -105,6 +119,46 @@ function graph_Simbols(tabla) {
         simbolos += "</tr>";
     }
     simbolos += "</table>";
+    //  let archivo =new File([simbolos],"TablaSimbolos.html");
+    //generar(archivo) ;
+}
+function graph_Simbols2(tabla) {
+    simbolos = "";
+    simbolos += `  <h1 style="color: blue;">Tabla de SIMBOLOS</h1>   
+    
+    <table style=" color: blue;float=right;"    \">
+    <thead>
+      <tr>
+      <th>#</th>
+       
+          <th>ID</th>
+          <th>Tipo</th>
+          <th>tipo</th>
+          <th>linea</th>
+          <th>columna</th> 
+          <th>Valor</th> 
+          
+          
+      </tr>
+    </thead>
+    
+    
+    `;
+    for (let index = 0; index < tabla.length; index++) {
+        var alv = tabla[index];
+        simbolos += "<tr>";
+        simbolos += `   <th><strong>   ${index} </strong></th>`;
+        simbolos += `   <th><strong>   ${alv.id} </strong></th>`;
+        simbolos += `   <th><strong>   ${alv.tipo} </strong></th>  `;
+        simbolos += `   <th><strong>   ${alv.tipo2} </strong></th>  `;
+        simbolos += `   <th><strong>   ${alv.line} </strong></th>  `;
+        simbolos += `   <th><strong>   ${alv.column} </strong></th>  `;
+        simbolos += `   <th><strong>   ${alv.valor} </strong></th>  `;
+        simbolos += "</tr>";
+    }
+    simbolos += "</table>";
+    let archivo = new File([simbolos], "TablaSimbolos.html");
+    generar(archivo);
 }
 function graph_err(tabla) {
     err = "";
@@ -190,8 +244,34 @@ global.Enviar = function entrada() {
     });
     tree.instrucciones.map((m) => {
         try {
+            if (m instanceof Struct_1.Struct) {
+                m.execute(tabla, tree);
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        // console.log(tree.consola);
+    });
+    tree.instrucciones.map((m) => {
+        try {
+            if (m instanceof Grafica_2.Grafica) {
+                console.log("suuuuu");
+                graph_Simbols2(tree.Variables);
+            }
+            //  console.log(tree);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+    tree.instrucciones.map((m) => {
+        try {
             if (m instanceof Main_1.Main) {
                 const res = m.execute(tabla, tree);
+            }
+            else if (m instanceof Grafica_2.Grafica) {
+                graph_Simbols2(tree.Variables);
             }
             //  console.log(tree);
             var texto = "";

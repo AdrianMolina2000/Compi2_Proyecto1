@@ -19,6 +19,7 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
         this.newTable = new Table_1.Table(table);
         let new_struct;
         let struct_padre;
+        console.log(this.nombre_struct);
         struct_padre = table.getVariable(this.nombre_struct);
         let nuevoArray = new Array();
         if (this.expresion != null) {
