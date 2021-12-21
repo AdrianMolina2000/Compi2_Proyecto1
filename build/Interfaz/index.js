@@ -20,7 +20,7 @@ var editor = CodeMirror.fromTextArea(document.getElementById('editor1'), {
     smartIndent: true,
     indentUnit: 4,
 });
-editor.setSize(500, 400);
+editor.setSize(500, 500);
 editor.save();
 var editor2 = CodeMirror.fromTextArea(document.getElementById('editor2'), {
     mode: "javascript",
@@ -29,7 +29,7 @@ var editor2 = CodeMirror.fromTextArea(document.getElementById('editor2'), {
     smartIndent: true,
     indentUnit: 4,
 });
-editor2.setSize(500, 400);
+editor2.setSize(500, 500);
 editor2.save();
 global.grafo = function grafo() {
     let prueba = "digraph G { a->b; }";
@@ -286,4 +286,5 @@ void print() {
     C3D += C3D2;
     C3D += `\nreturn;\n}`;
     editor2.setValue(C3D);
+    //console.log("12"=="12");
 };

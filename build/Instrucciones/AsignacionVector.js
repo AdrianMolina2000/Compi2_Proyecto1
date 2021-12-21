@@ -57,9 +57,7 @@ class AsignacionVector extends Nodo_1.Nodo {
                         Alv.push(Object.assign(Object.create(prim[index]), prim[index]));
                     }
                     let new_dec = new DeclaracionArray_1.DeclaracionArray(variable.tipo, this.id, Alv, this.line, this.column);
-                    console.log(new_dec.listaValores);
                     variable.valor.valor = new_dec.listaValores;
-                    console.log("--------------------------------");
                     return null;
                 }
             }

@@ -5,7 +5,8 @@ import { Excepcion } from "../other/Excepcion";
 import { Simbolo } from "../Simbols/Simbolo";
 import { Tipo, tipos } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
-
+import { DeclaracionArray } from "./DeclaracionArray";
+import { Primitivo } from "../Expresiones/Primitivo";
 
 export class AddLista extends Nodo {
     id: String;
@@ -34,36 +35,35 @@ export class AddLista extends Nodo {
             tree.consola.push(error.toString());
             return error;
         }
-        var arreglo: Array<Nodo> = <Array<Nodo>>variable.valor.valor;
 
-        if (variable.tipo.tipo != this.expresion.tipo.tipo) {
-            if ((variable.tipo.tipo == tipos.DECIMAL) && (this.expresion.tipo.tipo == tipos.ENTERO)) {
-                this.expresion.tipo.tipo = tipos.DECIMAL;
-                arreglo.push(this.expresion);
-                variable.valor = arreglo;
+        if (variable.tipo2.tipo == tipos.ARREGLO) {
+            if (variable.tipo.tipo != this.expresion.tipo.tipo) {
+                if ((variable.tipo.tipo == tipos.DECIMAL) && (this.expresion.tipo.tipo == tipos.ENTERO)) {
+                    this.expresion.tipo.tipo = tipos.DECIMAL;
+                        variable.valor.valor.push(new Primitivo(this.expresion.tipo,result, this.line, this.column));
+                    return null;
+                } else {
+                    const error = new Excepcion('Semantico',
+                        `No se puede ingresar un valor de diferente tipo al de la lista {${this.id}}`,
+                        this.line, this.column);
+                    tree.excepciones.push(error);
+                    tree.consola.push(error.toString());
+                    return error;
+                }
+            }else{
+                variable.valor.valor.push(new Primitivo(this.expresion.tipo,result, this.line, this.column));
                 return null;
-            } else {
-                const error = new Excepcion('Semantico',
-                    `No se puede ingresar un valor de diferente tipo al de la lista {${this.id}}`,
-                    this.line, this.column);
-                tree.excepciones.push(error);
-                tree.consola.push(error.toString());
-                return error;
             }
+
         } else {
-            if (variable.tipo2.tipo == tipos.ARREGLO) {
-                arreglo.push(this.expresion);
-                // variable.valor = arreglo;
-                return null;
-            } else {
-                const error = new Excepcion('Semantico',
-                    `No se puede agregar un valor a {${this.id}}`,
-                    this.line, this.column);
-                tree.excepciones.push(error);
-                tree.consola.push(error.toString());
-                return error;
-            }
+            const error = new Excepcion('Semantico',
+                `No se puede agregar un valor a {${this.id}}`,
+                this.line, this.column);
+            tree.excepciones.push(error);
+            tree.consola.push(error.toString());
+            return error;
         }
+
     }
 
     getNodo() {

@@ -528,7 +528,6 @@ class Relacional extends Nodo_1.Nodo {
         let temp;
         let temp2;
         let temp3;
-        //manoo momento latm se fue la luz jajaja 
         let etiq;
         let etiq2;
         let etiq3;

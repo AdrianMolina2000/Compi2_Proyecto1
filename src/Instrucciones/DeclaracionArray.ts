@@ -49,7 +49,7 @@ export class DeclaracionArray extends Nodo {
     execute(table: Table, tree: Tree) {
         if ((this.listaValores != null)) {
             
-            //Declaracion Tipo 2
+            //Declaracion Tipo 2  =[  ]
 
             if (revisar(this.tipo, this.listaValores, table, tree)) {
                 let simbolo: Simbolo;

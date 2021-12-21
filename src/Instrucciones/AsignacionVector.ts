@@ -88,9 +88,8 @@ export class AsignacionVector extends Nodo {
                    
                    
 
-                    console.log(new_dec.listaValores)
                     variable.valor.valor = new_dec.listaValores
-                    console.log("--------------------------------")
+               
                     
                     return null;
                 }

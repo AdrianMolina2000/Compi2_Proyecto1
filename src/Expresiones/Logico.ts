@@ -4,6 +4,7 @@ import { Tree } from "../Simbols/Tree";
 import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
+import { Relacional } from "./Relacional";
 
 export class Logico extends Nodo {
     operadorIzq: Nodo;
@@ -16,7 +17,7 @@ export class Logico extends Nodo {
         this.operadorDer = operadorDer;
         this.operador = operador;
     }
- 
+
     execute(table: Table, tree: Tree) {
         if (this.operadorIzq !== null) {
             const resultadoIzq = this.operadorIzq.execute(table, tree);
@@ -86,16 +87,16 @@ export class Logico extends Nodo {
     }
 
     getNodo() {
-        var nodo: NodoAST  = new NodoAST("LOGICO");
-        if(this.operadorIzq != null){
+        var nodo: NodoAST = new NodoAST("LOGICO");
+        if (this.operadorIzq != null) {
             nodo.agregarHijo(this.operadorIzq.getNodo());
             nodo.agregarHijo(this.operador + "");
             nodo.agregarHijo(this.operadorDer.getNodo());
-            
-        }else{
+
+        } else {
             nodo.agregarHijo(this.operador + "");
             nodo.agregarHijo(this.operadorDer.getNodo());
-        } 
+        }
         return nodo;
     }
 
@@ -112,20 +113,33 @@ export class Logico extends Nodo {
         let etiq2;
         let etiq3;
 
+        table.bandera = 1;
+
         if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
-            
+            izq = this.operadorIzq.get3D(table, tree);
+            der = this.operadorDer.get3D(table, tree);
+            etiq = table.getEtiqueta();
+            if (op == "||") {
+                c3d += izq;
+                c3d += `goto ${table.getTrue()};\n`;
+                c3d += `    goto ${etiq};\n`;
+                c3d += `    ${etiq}:\n`;
+                c3d += der;
+                c3d += `goto ${table.getTrue()};\n`;
+                c3d += `    goto ${table.getFalse()};\n`;
+            } else if (op == "&&") {
+                c3d += izq;
+                c3d += `goto ${etiq};\n`;
+                c3d += `    goto ${table.getFalse()};\n`;
+                c3d += `    ${etiq}:\n`;
+                c3d += der;
+                c3d += `goto ${table.getTrue()};\n`;
+                c3d += `    goto ${table.getFalse()};\n`;
+            }
+
         } else if (this.operadorIzq instanceof Relacional) {
         } else if (this.operadorDer instanceof Relacional) {
         } else {
-            izq = this.operadorIzq.get3D(table, tree);
-            der = this.operadorDer.get3D(table, tree);
-
-            if (table.bandera == 0) {
-                c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;
-                c3d += `    goto ${table.getFalse()};\n`;
-            }else{
-                c3d += `    if(${izq} ${op} ${der}) `;
-            }
         }
 
         return c3d;

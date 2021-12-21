@@ -45,7 +45,7 @@ class DeclaracionArray extends Nodo_1.Nodo {
     //int[] a = [1];
     execute(table, tree) {
         if ((this.listaValores != null)) {
-            //Declaracion Tipo 2
+            //Declaracion Tipo 2  =[  ]
             if (revisar(this.tipo, this.listaValores, table, tree)) {
                 let simbolo;
                 simbolo = new Simbolo_1.Simbolo(this.tipo, this.id, this.listaValores, new tipo_1.Tipo(tipo_1.tipos.ARREGLO), this.line, this.column);

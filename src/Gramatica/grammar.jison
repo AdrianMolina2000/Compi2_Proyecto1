@@ -456,13 +456,13 @@ ListaIns
     
     
     }  
-    |'identifier' '.' 'pop' '(' ')'             {$$ = new Pop($1, @1.first_line, @1.first_column);
+    |'identifier' '.' 'pop' '(' ')'     ';'        {$$ = new Pop($1, @1.first_line, @1.first_column);
     
     new ReporteGramatica("Lista_Ins->identifier .pop   "
     ,"Lista_Ins.val= new Pop(identifier.lexval )");
     
     } 
-    |'identifier' '.' 'push' '(' EXPRESION ')'  {$$ = new AddLista($1, $5, @1.first_line, @1.first_column);
+    |'identifier' '.' 'push' '(' EXPRESION ')' ';' {$$ = new AddLista($1, $5, @1.first_line, @1.first_column);
     
     new ReporteGramatica("Lista_Ins->identifier .push   "
     ,"Lista_Ins.val= new Push(identifier.lexval )");
@@ -574,13 +574,13 @@ ListaIns2
     
     
     }  
-    |'identifier' '.' 'pop' '(' ')'             {$$ = new Pop($1, @1.first_line, @1.first_column);
+    |'identifier' '.' 'pop' '(' ')'       ';'      {$$ = new Pop($1, @1.first_line, @1.first_column);
     
     new ReporteGramatica("Lista_Ins->identifier .pop   "
     ,"Lista_Ins.val= new Pop(identifier.lexval )");
     
     } 
-    |'identifier' '.' 'push' '(' EXPRESION ')'  {$$ = new AddLista($1, $5, @1.first_line, @1.first_column);
+    |'identifier' '.' 'push' '(' EXPRESION ')' ';'  {$$ = new AddLista($1, $5, @1.first_line, @1.first_column);
     
     new ReporteGramatica("Lista_Ins->identifier .push   "
     ,"Lista_Ins.val= new Push(identifier.lexval )");
