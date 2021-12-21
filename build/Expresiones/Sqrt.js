@@ -6,7 +6,7 @@ const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 class Sqrt extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
-        super(new tipo_1.Tipo(tipo_1.tipos.STRING), line, column);
+        super(new tipo_1.Tipo(tipo_1.tipos.ENTERO), line, column);
         this.expresion = expresion;
     }
     execute(table, tree) {

@@ -8,7 +8,7 @@ import { NodoAST } from "../Abstract/NodoAST";
 export class Sqrt extends Nodo {
     expresion: Nodo;
     constructor(expresion: Nodo, line: Number, column: Number) {
-        super(new Tipo(tipos.STRING), line, column);
+        super(new Tipo(tipos.ENTERO), line, column);
         this.expresion = expresion;
     }
 

@@ -4,6 +4,7 @@ import { Tree } from "../Simbols/Tree";
 import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
+import { Primitivo } from "./Primitivo";
 
 export class Length extends Nodo {
     expresion: Nodo;
@@ -14,23 +15,28 @@ export class Length extends Nodo {
     }
 
     execute(table: Table, tree: Tree) {
+        const resultado = this.expresion.execute(table, tree);
         try {
-            const resultado = this.expresion.execute(table, tree);
             if (resultado instanceof Excepcion) {
                 return resultado;
             } 
 
+            if(resultado instanceof Primitivo){
+                if(resultado.tipo.tipo == 6){
+                    return resultado.valor.length;
+                }
+            }
+
             if(this.expresion.tipo.tipo == 6){
                 return this.expresion.valor.length
-            }else if(resultado.tipo.tipo == 6){
-                return resultado.valor.length;
             }else{
                 return resultado.length;
             }
             
         } catch (err) {
+            
             const error = new Excepcion('Semantico',
-                `Ha ocurrido un error con la longitud buscada`,
+                `Ha ocurrido un error con la longitud buscada`,//
                 this.line, this.column);
                 tree.excepciones.push(error)
                 tree.consola.push(error.toString());
