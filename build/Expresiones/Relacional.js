@@ -344,7 +344,7 @@ class Relacional extends Nodo_1.Nodo {
                 return error;
             }
         }
-        else if (this.operador === '!=') {
+        else if (this.operador === '!=') { //Maaaaaaano. esa mierda no jala asi que se quede
             if (this.operadorIzq.tipo.tipo === tipo_1.tipos.ENTERO) {
                 if (this.operadorDer.tipo.tipo === tipo_1.tipos.ENTERO) {
                     return resultadoIzq != resultadoDer;
@@ -490,6 +490,17 @@ class Relacional extends Nodo_1.Nodo {
             }
             else if (this.operadorIzq.tipo.tipo === tipo_1.tipos.STRING) {
                 if (this.operadorDer.tipo.tipo === tipo_1.tipos.STRING) {
+                    return resultadoIzq == resultadoDer;
+                }
+                else {
+                    const error = new Excepcion_1.Excepcion('Semantico', `El operador relacional IGUAL A se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`, this.line, this.column);
+                    tree.excepciones.push(error);
+                    // tree.consola.push(error.toString());
+                    return error;
+                }
+            }
+            else if (this.operadorIzq.tipo.tipo === tipo_1.tipos.STRUCTS) {
+                if (this.operadorDer.tipo.tipo === tipo_1.tipos.NULO) {
                     return resultadoIzq == resultadoDer;
                 }
                 else {

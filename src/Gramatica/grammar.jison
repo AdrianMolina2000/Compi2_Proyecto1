@@ -141,6 +141,7 @@ caracter (\'[^☼]\')
 "new"                 return 'new'
 "void"                return 'void'
 "main"                return 'main'
+"Main"                return 'Main'
 "false"               return 'false'
 "print"               return 'print'
 "println"             return 'println'
@@ -238,6 +239,7 @@ INSTRUCCION
  
     
     }
+    | TIPO  'Main'  '(' Verificar_params ')' '{' LISTA_INSTRUCCIONES '}'  {$$ = new Main($1 , $7, @1.first_line, @1.first_column);}  
     |llamada  {
        $$ = $1;
        new ReporteGramatica("INSTRUCCION ->  llamada ", " INSTRUCCION.val=llamada.val"      );
@@ -312,12 +314,14 @@ PARAMETROS
 */
 OPCION_PARAMETROS:
  TIPO 'identifier'   {$$ = new Declaracion($1, [$2], defal($1), @1.first_line, @1.first_column);}
-|TIPO  '[' ']' 'identifier'   { $$ = new DeclaracionArray($1, $4, new Primitivo(new Tipo(tipos.ARREGLO), [], @1.first_line, @1.first_column), @1.first_line, @1.first_column);
-
-
-
-
-}
+|TIPO  '[' ']' 'identifier'   { $$ = new DeclaracionArray($1, $4, new Primitivo(new Tipo(tipos.ARREGLO), [], @1.first_line, @1.first_column), @1.first_line, @1.first_column);}
+| 'identifier'  'identifier' {   $$ = new DeclaracionVarStruct(new Tipo(tipos.STRUCTS),$1, [$2], $4, @1.first_line, @1.first_column);
+    
+    
+    new ReporteGramatica("DECLARACION-> identifier  identifier = llamar"
+   ,"DECLARACION=new DeclaracionVarStruct(TIPO.val,identifier.lexval,identifier.lexval)");
+    
+    }
 
 
 ;
@@ -1185,12 +1189,18 @@ EXPRESION
 
 
         //Primitivos
-        |'null'    
+       
         |'numero'                                               {$$ = new Primitivo(new Tipo(esEntero(Number($1))), Number($1), @1.first_line, @1.first_column);
           new ReporteGramatica("EXPRESION->   numero  "
                   ,"EXPRESION.val= new  Primitivo( numero.lexval ) ")
         
         } 
+         |'null'                                                 {$$ = new Primitivo(new Tipo(tipos.NULO), null, @1.first_line, @1.first_column);
+        
+           new ReporteGramatica("EXPRESION->   null  "
+                  ,"EXPRESION.val= new  Primitivo( null.lexval ) ")
+        
+        }
         |'true'                                                 {$$ = new Primitivo(new Tipo(tipos.BOOLEANO), true, @1.first_line, @1.first_column);
         
            new ReporteGramatica("EXPRESION->   true  "
@@ -1212,7 +1222,7 @@ EXPRESION
            new ReporteGramatica("EXPRESION->   cadena  "
                   ,"EXPRESION.val= new  Primitivo( cadena.lexval ) ")
         
-        
+        //<:::::::3
         }
         |EXPRESION '.' 'toLowercase' '(' ')'                    {$$ = new ToLower($1, @1.first_line, @1.first_column);
            new ReporteGramatica("EXPRESION->   EXPRESION . toLowecase()  "

@@ -9,6 +9,8 @@ const Continue_1 = require("../Expresiones/Continue");
 const Break_1 = require("../Expresiones/Break");
 const Retorno_1 = require("./Retorno");
 const DeclaracionArray_1 = require("./DeclaracionArray");
+const Grafica_1 = require("./Grafica");
+const DeclaracionVarStruct_1 = require("./DeclaracionVarStruct");
 //*
 class LlamadaMetodo extends Nodo_1.Nodo {
     constructor(id, listaParams, line, column) {
@@ -35,9 +37,22 @@ class LlamadaMetodo extends Nodo_1.Nodo {
             tree.consola.push(error.toString());
             return error;
         }
+        this.tipo = simboloMetodo.tipo;
         var parametros = simboloMetodo.valor[0];
         for (let i = 0; i < parametros.length; i++) {
             if (parametros[i] instanceof DeclaracionArray_1.DeclaracionArray) {
+                var para;
+                var crear;
+                para = parametros[i];
+                let Alv = new Array();
+                crear = para;
+                for (let index = 0; index < this.listaParams.length; index++) {
+                    Alv.push(Object.assign(Object.create(this.listaParams[index]), this.listaParams[index]));
+                }
+                crear.listaValores = Alv;
+                crear.execute(newtable, tree);
+            }
+            else if (parametros[i] instanceof DeclaracionVarStruct_1.DeclaracionVarStruct) {
                 var para;
                 var crear;
                 para = parametros[i];
@@ -65,6 +80,8 @@ class LlamadaMetodo extends Nodo_1.Nodo {
                 if (res instanceof Continue_1.Continue || res instanceof Break_1.Break) {
                     return res;
                 }
+                if (res instanceof Grafica_1.Grafica) {
+                }
                 if (simboloMetodo.tipo.tipo == tipo_1.tipos.VOID) {
                     if (res instanceof Retorno_1.Retorno) {
                         const error = new Excepcion_1.Excepcion('Semantico', `No se esperaba un retorno en este metodo`, res.line, res.column);
@@ -80,10 +97,12 @@ class LlamadaMetodo extends Nodo_1.Nodo {
                             res.execute(newtable, tree);
                             var retorno = res.exp;
                             if (simboloMetodo.tipo.tipo == res.expresion.tipo.tipo) {
+                                this.tipo = res.expresion.tipo;
                                 return retorno;
                             }
                             else {
                                 if (simboloMetodo.tipo.tipo == tipo_1.tipos.DECIMAL && (res.expresion.tipo.tipo == tipo_1.tipos.ENTERO)) {
+                                    this.tipo = res.expresion.tipo;
                                     return retorno;
                                 }
                                 const error = new Excepcion_1.Excepcion('Semantico', `No se puede retornar debido a que es de un tipo diferente al declarado`, res.line, res.column);

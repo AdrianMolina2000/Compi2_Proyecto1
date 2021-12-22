@@ -27,9 +27,7 @@ function alv(padre: Simbolo, id: String, lista_ids: Array<String>, valor: Nodo, 
 
                 }
             } else {
-                console.log("suuuuuuuuu*********---------------------******************")
-
-           
+            
                 let res: Simbolo
                 
               

@@ -171,7 +171,10 @@ export class Relacional extends Nodo {
                     // tree.consola.push(error.toString());
                     return error;
                 }
-            } else {
+            }
+          
+            
+            else {
                 const error = new Excepcion('Semantico',
                     `El operador relacional MENOR IGUAL QUE se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                     this.line, this.column);
@@ -331,7 +334,7 @@ export class Relacional extends Nodo {
                 // tree.consola.push(error.toString());
                 return error;
             }
-        } else if (this.operador === '!=') {
+        } else if (this.operador === '!=') { //Maaaaaaano. esa mierda no jala asi que se quede
             if (this.operadorIzq.tipo.tipo === tipos.ENTERO) {
                 if (this.operadorDer.tipo.tipo === tipos.ENTERO) {
                     return resultadoIzq != resultadoDer;
@@ -415,7 +418,10 @@ export class Relacional extends Nodo {
                     return resultadoIzq == resultadoDer;
                 } else if (this.operadorDer.tipo.tipo === tipos.CARACTER) {
                     return resultadoIzq == resultadoDer.charCodeAt(0);
-                } else {
+                } 
+                
+                
+                else {
                     const error = new Excepcion('Semantico',
                         `El operador relacional IGUAL A se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                         this.line, this.column);
@@ -475,7 +481,22 @@ export class Relacional extends Nodo {
                     // tree.consola.push(error.toString());
                     return error;
                 }
-            } else {
+            } 
+            
+            else if (this.operadorIzq.tipo.tipo === tipos.STRUCTS) {
+                if (this.operadorDer.tipo.tipo === tipos.NULO) {
+                    return resultadoIzq == resultadoDer;
+                } else {
+                    const error = new Excepcion('Semantico',
+                        `El operador relacional IGUAL A se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
+                        this.line, this.column);
+                    tree.excepciones.push(error);
+                    // tree.consola.push(error.toString());
+                    return error;
+                }
+            } 
+            
+            else {
                 const error = new Excepcion('Semantico',
                     `El operador relacional IGUAL A se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                     this.line, this.column);

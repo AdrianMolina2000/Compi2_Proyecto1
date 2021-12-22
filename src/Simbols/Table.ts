@@ -37,11 +37,13 @@ export class Table{
             for(let key of Array.from(ambito.Variables.keys())) {
                 if(key.toLowerCase() === simbol.id.toLowerCase()){
                     // return `La variable ${key} ya ha sido declarada.`;
+                    simbol.stack = this.getStack();
                     return this.Variables.set(simbol.id.toLowerCase(), simbol);
                 }
             }
         }
-
+        
+        simbol.stack = this.getStack();
         this.Variables.set(simbol.id.toLowerCase(), simbol);
         return null;
     }

@@ -14,6 +14,7 @@ var tipos;
     tipos[tipos["FUNCION"] = 9] = "FUNCION";
     tipos[tipos["VARIABLE"] = 10] = "VARIABLE";
     tipos[tipos["STRUCTS"] = 11] = "STRUCTS";
+    tipos[tipos["NULO"] = 12] = "NULO";
 })(tipos = exports.tipos || (exports.tipos = {}));
 function esEntero(numero) {
     if (numero % 1 == 0) {
@@ -60,6 +61,9 @@ class Tipo {
             return 'Arreglo';
         }
         else if (this.tipo === tipos.STRUCTS) {
+            return 'Lista';
+        }
+        else if (this.tipo === tipos.NULO) {
             return 'Lista';
         }
     }

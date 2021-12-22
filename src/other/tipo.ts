@@ -10,7 +10,8 @@ export enum tipos {
     METODO,
     FUNCION,
     VARIABLE,
-    STRUCTS
+    STRUCTS,
+    NULO
 }
 
 export function esEntero(numero: number) {
@@ -52,6 +53,9 @@ export class Tipo {
             return 'Arreglo';
         }
         else if (this.tipo === tipos.STRUCTS) {
+            return 'Lista';
+        }
+        else if (this.tipo === tipos.NULO) {
             return 'Lista';
         }
     }

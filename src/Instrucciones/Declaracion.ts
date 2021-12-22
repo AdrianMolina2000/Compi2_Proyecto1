@@ -6,6 +6,7 @@ import { Tipo, tipos } from "../other/tipo";
 import { Simbolo } from "../Simbols/Simbolo";
 import { Primitivo } from "../Expresiones/Primitivo";
 import { NodoAST } from "../Abstract/NodoAST";
+import {Var} from "../Simbols/Var"
 
 export function defal(tipo: Tipo, line: Number, column: Number) {
     if (tipo.tipo == tipos.ENTERO) {
@@ -66,6 +67,7 @@ export class Declaracion extends Nodo {
             simbolo = new Simbolo(this.tipo, this.id[key], result, new Tipo(tipos.VARIABLE), this.line, this.column);
             const res = table.setVariable(simbolo);
             tree.Variables.push(simbolo)
+            Var.Lista.push(simbolo)
 
         }
 
@@ -90,5 +92,13 @@ export class Declaracion extends Nodo {
         }
 
         return nodo;
+    }
+
+    get3D(table: Table, tree: Tree): String {
+        let c3d = '';
+        let variable = table.getVariable(this.id[0])
+        c3d += `    stack[(int)${variable.stack}] = ${variable.valor};\n`;
+        
+        return c3d;
     }
 }

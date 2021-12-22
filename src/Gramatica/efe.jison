@@ -1,3 +1,31 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@Juandi22001 
+harias25
+/
+olc2-diciembre-2021
+Public
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+olc2-diciembre-2021/Proyecto 1/Archivos Entrada/graficar_ts.java /
+@harias25
+harias25 carga archivos finales
+Latest commit 089b79d 2 days ago
+ History
+ 1 contributor
+70 lines (50 sloc)  1.06 KB
+  
  /***************** GRAFICAR TS*******************/
     int x = 10;
     String y = "Hola compi2";
@@ -5,12 +33,12 @@
     int[] arreglo = [1,2,3,4,5];
     boolean[] arreglo2 = [true, false];
 
-struct t  {
+struct t = {
     String nombre,
     int edad
 };
 
-struct x  {
+struct x2 = {
     String personaje,
     boolean booleano
 };
@@ -65,3 +93,34 @@ void funcion3(){
     "Calificacion", 25
     "Cambio", 40
     null
+*/
+© 
+
+
+/*
+
+===================================================== 
+===========FUNCIONES RECURSIVAS====================== 
+===================================================== 
+ 
+==============FACTORIAL============================== 
+1307674368000 
+===============ACKERMAN============================== 
+9 
+===============HANOI================================= 
+Mover de  1  a  3 
+Mover de  1 a  3 
+Mover de  3  a  3 
+Mover de  1 a  3 
+Mover de  3  a  3 
+Mover de  3 a  3 
+Mover de  3  a  3 
+Mover de  1 a  3 
+Mover de  2  a  3 
+Mover de  2 a  3 
+Mover de  3  a  3 
+Mover de  2 a  3 
+Mover de  2  a  3 
+Mover de  2 a  3 
+Mover de  2  a  3
+*/

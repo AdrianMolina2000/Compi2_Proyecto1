@@ -53,6 +53,7 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
             }
         }
         else {
+            console.log(struct_padre);
             for (let index = 0; index < struct_padre.valor.length; index++) {
                 if (struct_padre.valor[index] instanceof Declaracion_1.Declaracion) {
                     let dec = struct_padre.valor[index];

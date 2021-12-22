@@ -9,7 +9,12 @@ import { Declaracion } from "./Declaracion";
 import { Continue } from "../Expresiones/Continue";
 import { Break } from "../Expresiones/Break";
 import { Retorno } from "./Retorno";
-import {DeclaracionArray} from './DeclaracionArray'
+import { DeclaracionArray } from './DeclaracionArray'
+import { Grafica } from "./Grafica";
+import { Var } from "../Simbols/Var";
+import { Primitivo } from "../Expresiones/Primitivo";
+import { DeclaracionVarStruct } from "./DeclaracionVarStruct";
+
 //*
 export class LlamadaMetodo extends Nodo {
     id: String;
@@ -46,38 +51,63 @@ export class LlamadaMetodo extends Nodo {
             return error;
         }
 
+        this.tipo = simboloMetodo.tipo
+   
         var parametros: Array<Nodo> = (<any>simboloMetodo).valor[0];
         for (let i = 0; i < parametros.length; i++) {
+            if (parametros[i] instanceof DeclaracionArray) {
+                var para: DeclaracionArray;
+                var crear: DeclaracionArray;
+                para = <DeclaracionArray>parametros[i];
+                let Alv = new Array<Nodo>();
 
-            
-           if(parametros[i] instanceof DeclaracionArray){
-           
-            var para: DeclaracionArray;
-            var crear: DeclaracionArray;
-            para = <DeclaracionArray>parametros[i];
-            let Alv = new Array<Nodo>();
-           
-            crear = para;
+                crear = para;
 
-            for (let index = 0; index < this.listaParams.length; index++) {
-             Alv.push(Object.assign(Object.create(this.listaParams[index]), this.listaParams[index]))
-                
+                for (let index = 0; index < this.listaParams.length; index++) {
+                    Alv.push(Object.assign(Object.create(this.listaParams[index]), this.listaParams[index]))
+
+                }
+
+
+                crear.listaValores = Alv;
+
+                crear.execute(newtable, tree);
+
             }
-          
-     
-            crear.listaValores=Alv;
-            
-            crear.execute(newtable, tree);
-           
-           } else {
+            else if(parametros[i] instanceof DeclaracionVarStruct ){
                
-            var para: Declaracion;
-            var crear: Declaracion;
-            para = <Declaracion>parametros[i];
-            crear = para;
-            crear.valor = this.listaParams[i];
-            crear.execute(newtable, tree);
-        }}
+                    var para: DeclaracionVarStruct;
+                    var crear: DeclaracionVarStruct;
+                    para = <DeclaracionArray>parametros[i];
+                    let Alv = new Array<Nodo>();
+    
+                    crear = para;
+    
+                    for (let index = 0; index < this.listaParams.length; index++) {
+                        Alv.push(Object.assign(Object.create(this.listaParams[index]), this.listaParams[index]))
+    
+                    }
+    
+    
+                    crear.listaValores = Alv;
+    
+                    crear.execute(newtable, tree);
+                
+
+            }
+            
+            else {
+
+                var para: Declaracion;
+                var crear: Declaracion;
+                para=<Declaracion>parametros[i];
+                crear=para;
+                crear.valor = this.listaParams[i];
+                crear.execute(newtable, tree);
+
+
+            }
+        }
 
         var result: Array<Nodo> = (<any>simboloMetodo).valor[1];
 
@@ -86,6 +116,11 @@ export class LlamadaMetodo extends Nodo {
                 const res = result[i].execute(newtable, tree);
                 if (res instanceof Continue || res instanceof Break) {
                     return res;
+                }
+
+                if (res instanceof Grafica) {
+
+
                 }
 
                 if (simboloMetodo.tipo.tipo == tipos.VOID) {
@@ -106,9 +141,11 @@ export class LlamadaMetodo extends Nodo {
                             var retorno = res.exp;
 
                             if (simboloMetodo.tipo.tipo == res.expresion.tipo.tipo) {
+                                this.tipo = res.expresion.tipo;
                                 return retorno;
                             } else {
                                 if (simboloMetodo.tipo.tipo == tipos.DECIMAL && (res.expresion.tipo.tipo == tipos.ENTERO)) {
+                                    this.tipo = res.expresion.tipo;
                                     return retorno;
                                 }
                                 const error = new Excepcion('Semantico',

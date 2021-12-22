@@ -22,7 +22,6 @@ function alv(padre, id, lista_ids, valor, tree, table) {
                 }
             }
             else {
-                console.log("suuuuuuuuu*********---------------------******************");
                 let res;
                 padre.valor[index].valor = valor;
                 break;

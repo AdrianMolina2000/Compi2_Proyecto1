@@ -1,3 +1,4 @@
+import internal from "stream";
 import {Tipo, tipos} from "../other/tipo";
 import {Table} from "./Table";
 
@@ -9,6 +10,7 @@ export class Simbolo {
     column : Number;
     tipo2 : Tipo;
     ambito:Table;
+    stack: number;
 
 
     constructor(tipo: Tipo, id: String, valor: Object, tipo2: Tipo, line:Number, column:Number) {

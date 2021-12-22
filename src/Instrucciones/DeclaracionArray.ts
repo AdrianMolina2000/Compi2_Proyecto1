@@ -6,7 +6,7 @@ import { Tipo, tipos } from "../other/tipo";
 import { Simbolo } from "../Simbols/Simbolo";
 import { Primitivo } from "../Expresiones/Primitivo";
 import { NodoAST } from "../Abstract/NodoAST";
-
+import {Var} from "../Simbols/Var"
 export function defal(tipo: Tipo, line: Number, column: Number) {
     if (tipo.tipo == tipos.ENTERO) {
         return new Primitivo(tipo, 0, line, column);

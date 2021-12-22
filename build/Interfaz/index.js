@@ -256,7 +256,6 @@ global.Enviar = function entrada() {
     tree.instrucciones.map((m) => {
         try {
             if (m instanceof Grafica_2.Grafica) {
-                console.log("suuuuu");
                 graph_Simbols2(tree.Variables);
             }
             //  console.log(tree);
@@ -269,9 +268,6 @@ global.Enviar = function entrada() {
         try {
             if (m instanceof Main_1.Main) {
                 const res = m.execute(tabla, tree);
-            }
-            else if (m instanceof Grafica_2.Grafica) {
-                graph_Simbols2(tree.Variables);
             }
             //  console.log(tree);
             var texto = "";

@@ -6,6 +6,7 @@ const tipo_1 = require("../other/tipo");
 const Simbolo_1 = require("../Simbols/Simbolo");
 const Primitivo_1 = require("../Expresiones/Primitivo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Var_1 = require("../Simbols/Var");
 function defal(tipo, line, column) {
     if (tipo.tipo == tipo_1.tipos.ENTERO) {
         return new Primitivo_1.Primitivo(tipo, 0, line, column);
@@ -54,6 +55,7 @@ class Declaracion extends Nodo_1.Nodo {
             simbolo = new Simbolo_1.Simbolo(this.tipo, this.id[key], result, new tipo_1.Tipo(tipo_1.tipos.VARIABLE), this.line, this.column);
             const res = table.setVariable(simbolo);
             tree.Variables.push(simbolo);
+            Var_1.Var.Lista.push(simbolo);
         }
         // if (res != null) {
         // const error = new Excepcion('Semantico',
@@ -73,6 +75,12 @@ class Declaracion extends Nodo_1.Nodo {
             nodo.agregarHijo(this.valor.getNodo());
         }
         return nodo;
+    }
+    get3D(table, tree) {
+        let c3d = '';
+        let variable = table.getVariable(this.id[0]);
+        c3d += `    stack[(int)${variable.stack}] = ${variable.valor};\n`;
+        return c3d;
     }
 }
 exports.Declaracion = Declaracion;

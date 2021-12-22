@@ -35,7 +35,18 @@ function imprimir2(lista: Nodo, table: Table, tree: Tree) {
 
     
     var salida = "[";
+  
+
+    if(lista.valor==null){
+
+        salida="null"
+
+        console.log(salida+"------")
+        return salida
+    }
     for (let key in lista.valor) {
+
+      
         if(lista.valor[key].valor.valor==null){
 
             salida+=lista.valor[key].valor+","
@@ -78,15 +89,23 @@ export class Print extends Nodo {
                 
                 let texto = imprimir2(this.expresion[key], table, tree);
      
-             
-                tree.consola.push(texto.substring(0, texto.length - 2) + " ");
+                if(texto=="null"){
 
+                    tree.consola.push("null")
+                }else{
+
+                    tree.consola.push(texto.substring(0, texto.length - 2) + " ");
+
+
+                }
 
             }
             else {
                 if (valor.tipo) {
                     if (valor.tipo.tipo == 6) {
                         let texto = imprimir(valor, table, tree)
+
+
                         tree.consola.push(texto.substring(0, texto.length - 2) + " ");
                     }
                 } else {
@@ -104,9 +123,6 @@ export class Print extends Nodo {
         else if (this.tipo_print == 2) {
             tree.consola.push("\n");
         }
-        console.log("TIPO");
-        console.log(this.tipo);
-        console.log("TIPO");
         return null;
     }
 

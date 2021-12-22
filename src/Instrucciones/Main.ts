@@ -8,6 +8,7 @@ import { NodoAST } from "../Abstract/NodoAST";
 import { Declaracion } from "./Declaracion";
 import { Continue } from "../Expresiones/Continue";
 import { Break } from "../Expresiones/Break";
+import { Grafica } from "./Grafica";
 
 export class Main extends Nodo {
     id: String;
@@ -35,6 +36,11 @@ export class Main extends Nodo {
                 const res = result[i].execute(table, tree);
                 if (res instanceof Continue || res instanceof Break) {
                     return res;
+                }
+                if(res instanceof Grafica ){
+
+
+                    res.execute(table,tree);
                 }
                 
 
@@ -67,7 +73,6 @@ export class Main extends Nodo {
         var nodo3: NodoAST = new NodoAST("INSTRUCCIONES");
         for (let i = 0; i < this.instrucciones.length; i++) {
 
-            console.log(this.instrucciones[i])
             if(this.instrucciones[i].getNodo()!= null){
             nodo3.agregarHijo(this.instrucciones[i].getNodo());
         }

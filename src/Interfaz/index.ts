@@ -417,7 +417,6 @@ global.Enviar = function entrada() {
             
              if(m instanceof Grafica){
  
-                 console.log("suuuuu")
                         graph_Simbols2(tree.Variables)
  
               }
@@ -437,20 +436,9 @@ global.Enviar = function entrada() {
        
         try {
 
-           
             if(m instanceof Main){
                 const res = m.execute(tabla, tree);
-
-           
-           
-           
             }
-            else if(m instanceof Grafica){
-
-                
-                       graph_Simbols2(tree.Variables)
-
-             }
             
           //  console.log(tree);
             var texto = "";
