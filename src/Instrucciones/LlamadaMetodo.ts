@@ -119,7 +119,7 @@ export class LlamadaMetodo extends Nodo {
                 }
 
                 if (res instanceof Grafica) {
-
+                    res.execute(table,tree);
 
                 }
 

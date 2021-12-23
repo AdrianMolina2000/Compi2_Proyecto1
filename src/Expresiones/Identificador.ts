@@ -4,6 +4,7 @@ import { Tree } from "../Simbols/Tree";
 import { Simbolo } from "../Simbols/Simbolo";
 import { Excepcion } from "../other/Excepcion";
 import { NodoAST } from "../Abstract/NodoAST";
+import { tipos } from "../other/tipo";
 
 export class Identificador extends Nodo {
     id: String;
@@ -40,5 +41,33 @@ export class Identificador extends Nodo {
         nodo2.agregarHijo(this.valor + "");
         nodo.agregarHijo(nodo2);
         return nodo;
+    }
+
+    get3D(table: Table, tree: Tree): String {
+        let c3d = '';
+        let variable = table.getVariable(this.id)
+        
+        let temporal = table.getTemporal();
+        table.AgregarTemporal(temporal);
+        c3d += `    ${temporal} = stack[(int)${variable.stack}];\n`;
+        
+        if(variable.tipo.tipo == tipos.STRING){
+            let temporal2 = table.getTemporal();
+            table.AgregarTemporal(temporal2);
+            c3d += `    ${temporal2} = P + ${table.variablesNum};\n`;
+            c3d += `    ${temporal2} = ${temporal2} + 1;\n`;
+            c3d += `    stack[(int)${temporal2}] = ${temporal};\n`;
+            c3d += `    P = P + ${table.variablesNum};\n`;
+            c3d += `    print();\n`;
+            
+            temporal2 = table.getTemporal();
+            table.AgregarTemporal(temporal2);
+            
+            c3d += `    ${temporal2} = stack[(int)P];\n`;
+            c3d += `    P = P - ${table.variablesNum};\n`;
+            c3d += `    printf("%c", (char)10);\n`;
+        }
+
+        return c3d;
     }
 }

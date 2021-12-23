@@ -4,6 +4,7 @@ class Table {
     constructor(Anterior) {
         this.Anterior = Anterior;
         this.Variables = new Map();
+        this.variablesNum = 0;
         this.temporal = 0;
         this.etiqueta = 0;
         this.heap = 0;
@@ -13,6 +14,8 @@ class Table {
         this.listaReturn = [];
         this.sizeActual = [];
         this.bandera = 0;
+        this.banderastr = 0;
+        this.banderapow = 0;
     }
     setVariable(simbol) {
         let ambito;
@@ -21,11 +24,13 @@ class Table {
                 if (key.toLowerCase() === simbol.id.toLowerCase()) {
                     // return `La variable ${key} ya ha sido declarada.`;
                     simbol.stack = this.getStack();
+                    this.variablesNum++;
                     return this.Variables.set(simbol.id.toLowerCase(), simbol);
                 }
             }
         }
         simbol.stack = this.getStack();
+        this.variablesNum++;
         this.Variables.set(simbol.id.toLowerCase(), simbol);
         return null;
     }

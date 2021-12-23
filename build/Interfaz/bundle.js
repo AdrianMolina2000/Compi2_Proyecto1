@@ -784,6 +784,12 @@ const Nodo_1 = require("../Abstract/Nodo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
+const Identificador_1 = require("./Identificador");
+const Pow_1 = require("./Pow");
+const Sqrt_1 = require("./Sqrt");
+const Seno_1 = require("./Seno");
+const Tan_1 = require("./Tan");
+const Cos_1 = require("./Cos");
 function esEntero(numero) {
     if (numero % 1 == 0) {
         return true;
@@ -1402,7 +1408,19 @@ class Aritmetica extends Nodo_1.Nodo {
             }
         }
         else if (this.operadorIzq instanceof Aritmetica) {
-            der = this.operadorDer.get3D(table, tree);
+            if (this.operadorDer instanceof Identificador_1.Identificador
+                || this.operadorDer instanceof Pow_1.Pow
+                || this.operadorDer instanceof Sqrt_1.Sqrt
+                || this.operadorDer instanceof Seno_1.Seno
+                || this.operadorDer instanceof Tan_1.Tan
+                || this.operadorDer instanceof Cos_1.Cos) {
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual();
+            }
+            else {
+                der = this.operadorDer.get3D(table, tree);
+            }
             c3d += this.operadorIzq.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
@@ -1415,7 +1433,19 @@ class Aritmetica extends Nodo_1.Nodo {
             }
         }
         else if (this.operadorDer instanceof Aritmetica) {
-            izq = this.operadorIzq.get3D(table, tree);
+            if (this.operadorIzq instanceof Identificador_1.Identificador
+                || this.operadorIzq instanceof Pow_1.Pow
+                || this.operadorIzq instanceof Sqrt_1.Sqrt
+                || this.operadorIzq instanceof Tan_1.Tan
+                || this.operadorIzq instanceof Seno_1.Seno
+                || this.operadorIzq instanceof Cos_1.Cos) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual();
+            }
+            else {
+                izq = this.operadorIzq.get3D(table, tree);
+            }
             c3d += this.operadorDer.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
@@ -1428,8 +1458,45 @@ class Aritmetica extends Nodo_1.Nodo {
             }
         }
         else {
-            izq = this.operadorIzq.get3D(table, tree);
-            der = this.operadorDer.get3D(table, tree);
+            if (this.operadorIzq instanceof Identificador_1.Identificador && this.operadorDer instanceof Identificador_1.Identificador ||
+                this.operadorIzq instanceof Pow_1.Pow && this.operadorDer instanceof Pow_1.Pow ||
+                this.operadorIzq instanceof Sqrt_1.Sqrt && this.operadorDer instanceof Sqrt_1.Sqrt ||
+                this.operadorIzq instanceof Tan_1.Tan && this.operadorDer instanceof Tan_1.Tan ||
+                this.operadorIzq instanceof Cos_1.Cos && this.operadorDer instanceof Cos_1.Cos ||
+                this.operadorIzq instanceof Seno_1.Seno && this.operadorDer instanceof Seno_1.Seno) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual();
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual();
+            }
+            else if (this.operadorIzq instanceof Identificador_1.Identificador
+                || this.operadorIzq instanceof Pow_1.Pow
+                || this.operadorIzq instanceof Sqrt_1.Sqrt
+                || this.operadorIzq instanceof Cos_1.Cos
+                || this.operadorIzq instanceof Seno_1.Seno
+                || this.operadorIzq instanceof Tan_1.Tan) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual();
+                der = this.operadorDer.get3D(table, tree);
+            }
+            else if (this.operadorDer instanceof Identificador_1.Identificador
+                || this.operadorDer instanceof Pow_1.Pow
+                || this.operadorDer instanceof Sqrt_1.Sqrt
+                || this.operadorDer instanceof Seno_1.Seno
+                || this.operadorDer instanceof Cos_1.Cos
+                || this.operadorDer instanceof Tan_1.Tan) {
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual();
+                izq = this.operadorIzq.get3D(table, tree);
+            }
+            else {
+                izq = this.operadorIzq.get3D(table, tree);
+                der = this.operadorDer.get3D(table, tree);
+            }
             temp = table.getTemporal();
             table.AgregarTemporal(temp);
             if (op == "%") {
@@ -1444,7 +1511,7 @@ class Aritmetica extends Nodo_1.Nodo {
 }
 exports.Aritmetica = Aritmetica;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68}],7:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68,"./Cos":11,"./Identificador":12,"./Pow":18,"./Seno":21,"./Sqrt":22,"./Tan":24}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -1585,6 +1652,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Primitivo_1 = require("./Primitivo");
 class Cos extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.DECIMAL), line, column);
@@ -1621,15 +1689,32 @@ class Cos extends Nodo_1.Nodo {
             return nodo;
         }
     }
+    get3D(table, tree) {
+        let c3d = "";
+        let temporal1;
+        let temporal2;
+        if (this.expresion instanceof Primitivo_1.Primitivo) {
+            temporal1 = this.expresion.get3D(table, tree);
+        }
+        else {
+            c3d += this.expresion.get3D(table, tree);
+            temporal1 = table.getTemporalActual();
+        }
+        temporal2 = table.getTemporal();
+        table.AgregarTemporal(temporal2);
+        c3d += `    ${temporal2} = cos(${temporal1});\n`;
+        return c3d;
+    }
 }
 exports.Cos = Cos;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68}],12:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68,"./Primitivo":19}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const tipo_1 = require("../other/tipo");
 class Identificador extends Nodo_1.Nodo {
     constructor(id, line, column) {
         super(null, line, column);
@@ -1657,10 +1742,32 @@ class Identificador extends Nodo_1.Nodo {
         nodo.agregarHijo(nodo2);
         return nodo;
     }
+    get3D(table, tree) {
+        let c3d = '';
+        let variable = table.getVariable(this.id);
+        let temporal = table.getTemporal();
+        table.AgregarTemporal(temporal);
+        c3d += `    ${temporal} = stack[(int)${variable.stack}];\n`;
+        if (variable.tipo.tipo == tipo_1.tipos.STRING) {
+            let temporal2 = table.getTemporal();
+            table.AgregarTemporal(temporal2);
+            c3d += `    ${temporal2} = P + ${table.variablesNum};\n`;
+            c3d += `    ${temporal2} = ${temporal2} + 1;\n`;
+            c3d += `    stack[(int)${temporal2}] = ${temporal};\n`;
+            c3d += `    P = P + ${table.variablesNum};\n`;
+            c3d += `    print();\n`;
+            temporal2 = table.getTemporal();
+            table.AgregarTemporal(temporal2);
+            c3d += `    ${temporal2} = stack[(int)P];\n`;
+            c3d += `    P = P - ${table.variablesNum};\n`;
+            c3d += `    printf("%c", (char)10);\n`;
+        }
+        return c3d;
+    }
 }
 exports.Identificador = Identificador;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67}],13:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -2059,7 +2166,9 @@ class Pow extends Nodo_1.Nodo {
     execute(table, tree) {
         try {
             const resultado = this.base.execute(table, tree);
+            this.bas = resultado;
             const resultado2 = this.exponente.execute(table, tree);
+            this.exp = resultado2;
             if (resultado instanceof Excepcion_1.Excepcion) {
                 return resultado;
             }
@@ -2089,6 +2198,24 @@ class Pow extends Nodo_1.Nodo {
             var nodo = new NodoAST_1.NodoAST("ToLower");
             return nodo;
         }
+    }
+    get3D(table, tree) {
+        let c3d = "";
+        table.banderapow = 1;
+        let temporal = table.getTemporal();
+        table.AgregarTemporal(temporal);
+        c3d += `    ${temporal} = P + ${table.variablesNum};\n`;
+        c3d += `    ${temporal} = ${temporal} + 1;\n`;
+        c3d += `    stack[(int)${temporal}] = ${this.bas};\n`;
+        c3d += `    ${temporal} = ${temporal} + 1;\n`;
+        c3d += `    stack[(int)${temporal}] = ${this.exp};\n`;
+        c3d += `    P = P + ${table.variablesNum};\n`;
+        c3d += `    power();\n`;
+        temporal = table.getTemporal();
+        table.AgregarTemporal(temporal);
+        c3d += `    ${temporal} = stack[(int)P];\n`;
+        c3d += `    P = P - ${table.variablesNum};\n`;
+        return c3d;
     }
 }
 exports.Pow = Pow;
@@ -2741,6 +2868,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Primitivo_1 = require("./Primitivo");
 class Seno extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.DECIMAL), line, column);
@@ -2777,16 +2905,33 @@ class Seno extends Nodo_1.Nodo {
             return nodo;
         }
     }
+    get3D(table, tree) {
+        let c3d = "";
+        let temporal1;
+        let temporal2;
+        if (this.expresion instanceof Primitivo_1.Primitivo) {
+            temporal1 = this.expresion.get3D(table, tree);
+        }
+        else {
+            c3d += this.expresion.get3D(table, tree);
+            temporal1 = table.getTemporalActual();
+        }
+        temporal2 = table.getTemporal();
+        table.AgregarTemporal(temporal2);
+        c3d += `    ${temporal2} = sin(${temporal1});\n`;
+        return c3d;
+    }
 }
 exports.Seno = Seno;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68}],22:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68,"./Primitivo":19}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Primitivo_1 = require("./Primitivo");
 class Sqrt extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.ENTERO), line, column);
@@ -2823,10 +2968,26 @@ class Sqrt extends Nodo_1.Nodo {
             return nodo;
         }
     }
+    get3D(table, tree) {
+        let c3d = "";
+        let temporal1;
+        let temporal2;
+        if (this.expresion instanceof Primitivo_1.Primitivo) {
+            temporal1 = this.expresion.get3D(table, tree);
+        }
+        else {
+            c3d += this.expresion.get3D(table, tree);
+            temporal1 = table.getTemporalActual();
+        }
+        temporal2 = table.getTemporal();
+        table.AgregarTemporal(temporal2);
+        c3d += `    ${temporal2} = sqrt(${temporal1});\n`;
+        return c3d;
+    }
 }
 exports.Sqrt = Sqrt;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68}],23:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68,"./Primitivo":19}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -2887,6 +3048,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Primitivo_1 = require("./Primitivo");
 class Tan extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.DECIMAL), line, column);
@@ -2923,10 +3085,26 @@ class Tan extends Nodo_1.Nodo {
             return nodo;
         }
     }
+    get3D(table, tree) {
+        let c3d = "";
+        let temporal1;
+        let temporal2;
+        if (this.expresion instanceof Primitivo_1.Primitivo) {
+            temporal1 = this.expresion.get3D(table, tree);
+        }
+        else {
+            c3d += this.expresion.get3D(table, tree);
+            temporal1 = table.getTemporalActual();
+        }
+        temporal2 = table.getTemporal();
+        table.AgregarTemporal(temporal2);
+        c3d += `    ${temporal2} = tan(${temporal1});\n`;
+        return c3d;
+    }
 }
 exports.Tan = Tan;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68}],25:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68,"./Primitivo":19}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -4978,6 +5156,12 @@ const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 const Primitivo_1 = require("../Expresiones/Primitivo");
+const Aritmetica_1 = require("../Expresiones/Aritmetica");
+const Pow_1 = require("../Expresiones/Pow");
+const Sqrt_1 = require("../Expresiones/Sqrt");
+const Seno_1 = require("../Expresiones/Seno");
+const Cos_1 = require("../Expresiones/Cos");
+const Tan_1 = require("../Expresiones/Tan");
 function revisar(tipo1, lista) {
     for (let key in lista.valor) {
         if (lista.valor[key].tipo.tipo == 6) {
@@ -5005,7 +5189,6 @@ class Asignacion extends Nodo_1.Nodo {
             let variable;
             variable = table.getVariable(this.id);
             variable.valor = result;
-            //
         }
         else {
             let variable;
@@ -5059,6 +5242,7 @@ class Asignacion extends Nodo_1.Nodo {
                     }
                 }
             }
+            this.resultado = val;
             variable.valor = val;
             return null;
         }
@@ -5077,10 +5261,41 @@ class Asignacion extends Nodo_1.Nodo {
         }
         return nodo;
     }
+    get3D(table, tree) {
+        let c3d = '';
+        let variable = table.getVariable(this.id);
+        c3d += `    /*----------Asigno Variable ${variable.id}----------*/\n`;
+        if (variable.tipo.tipo == tipo_1.tipos.ENTERO || variable.tipo.tipo == tipo_1.tipos.DECIMAL) {
+            let resul = this.resultado;
+            if (this.valor instanceof Aritmetica_1.Aritmetica
+                || this.valor instanceof Pow_1.Pow
+                || this.valor instanceof Sqrt_1.Sqrt
+                || this.valor instanceof Tan_1.Tan
+                || this.valor instanceof Cos_1.Cos
+                || this.valor instanceof Seno_1.Seno) {
+                c3d += this.valor.get3D(table, tree);
+                resul = table.getTemporalActual();
+            }
+            c3d += `    stack[(int)${variable.stack}] = ${resul};\n`;
+        }
+        else if (variable.tipo.tipo == tipo_1.tipos.STRING) {
+            let temporal = table.getTemporal();
+            table.AgregarTemporal(temporal);
+            c3d += `    ${temporal} = H;\n`;
+            for (let i in variable.valor) {
+                c3d += `    heap[(int)H] = ${variable.valor[i].charCodeAt(0)};\n`;
+                c3d += `    H = H + 1;\n`;
+            }
+            c3d += `    heap[(int)H] = -1;\n`;
+            c3d += `    H = H + 1;\n`;
+            c3d += `    stack[(int)${variable.stack}] = ${temporal};\n`;
+        }
+        return c3d;
+    }
 }
 exports.Asignacion = Asignacion;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Primitivo":19,"../other/Excepcion":67,"../other/tipo":68}],35:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Aritmetica":6,"../Expresiones/Cos":11,"../Expresiones/Pow":18,"../Expresiones/Primitivo":19,"../Expresiones/Seno":21,"../Expresiones/Sqrt":22,"../Expresiones/Tan":24,"../other/Excepcion":67,"../other/tipo":68}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -5266,6 +5481,12 @@ const Simbolo_1 = require("../Simbols/Simbolo");
 const Primitivo_1 = require("../Expresiones/Primitivo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 const Var_1 = require("../Simbols/Var");
+const Aritmetica_1 = require("../Expresiones/Aritmetica");
+const Pow_1 = require("../Expresiones/Pow");
+const Sqrt_1 = require("../Expresiones/Sqrt");
+const Seno_1 = require("../Expresiones/Seno");
+const Cos_1 = require("../Expresiones/Cos");
+const Tan_1 = require("../Expresiones/Tan");
 function defal(tipo, line, column) {
     if (tipo.tipo == tipo_1.tipos.ENTERO) {
         return new Primitivo_1.Primitivo(tipo, 0, line, column);
@@ -5316,13 +5537,7 @@ class Declaracion extends Nodo_1.Nodo {
             tree.Variables.push(simbolo);
             Var_1.Var.Lista.push(simbolo);
         }
-        // if (res != null) {
-        // const error = new Excepcion('Semantico',
-        // res,
-        // this.line, this.column);
-        // tree.excepciones.push(error);
-        // tree.consola.push(error.toString());
-        // }
+        this.resultado = result;
         return null;
     }
     getNodo() {
@@ -5337,14 +5552,42 @@ class Declaracion extends Nodo_1.Nodo {
     }
     get3D(table, tree) {
         let c3d = '';
-        let variable = table.getVariable(this.id[0]);
-        c3d += `    stack[(int)${variable.stack}] = ${variable.valor};\n`;
+        let variable;
+        for (let i = 0; i < this.id.length; i++) {
+            variable = table.getVariable(this.id[i]);
+            c3d += `    /*----------Declaro Variable ${variable.id}----------*/\n`;
+            if (variable.tipo.tipo == tipo_1.tipos.ENTERO || variable.tipo.tipo == tipo_1.tipos.DECIMAL) {
+                let resul = this.resultado;
+                if (this.valor instanceof Aritmetica_1.Aritmetica
+                    || this.valor instanceof Pow_1.Pow
+                    || this.valor instanceof Sqrt_1.Sqrt
+                    || this.valor instanceof Seno_1.Seno
+                    || this.valor instanceof Cos_1.Cos
+                    || this.valor instanceof Tan_1.Tan) {
+                    c3d += this.valor.get3D(table, tree);
+                    resul = table.getTemporalActual();
+                }
+                c3d += `    stack[(int)${variable.stack}] = ${resul};\n`;
+            }
+            else if (variable.tipo.tipo == tipo_1.tipos.STRING) {
+                let temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                c3d += `    ${temporal} = H;\n`;
+                for (let j in variable.valor) {
+                    c3d += `    heap[(int)H] = ${variable.valor[j].charCodeAt(0)};\n`;
+                    c3d += `    H = H + 1;\n`;
+                }
+                c3d += `    heap[(int)H] = -1;\n`;
+                c3d += `    H = H + 1;\n`;
+                c3d += `    stack[(int)${variable.stack}] = ${temporal};\n`;
+            }
+        }
         return c3d;
     }
 }
 exports.Declaracion = Declaracion;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Primitivo":19,"../Simbols/Simbolo":63,"../Simbols/Var":66,"../other/Excepcion":67,"../other/tipo":68}],40:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../Expresiones/Aritmetica":6,"../Expresiones/Cos":11,"../Expresiones/Pow":18,"../Expresiones/Primitivo":19,"../Expresiones/Seno":21,"../Expresiones/Sqrt":22,"../Expresiones/Tan":24,"../Simbols/Simbolo":63,"../Simbols/Var":66,"../other/Excepcion":67,"../other/tipo":68}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -5574,7 +5817,6 @@ class DeclaracionVarStruct extends Nodo_1.Nodo {
             }
         }
         else {
-            console.log("efe?????????");
             console.log(struct_padre);
             for (let index = 0; index < struct_padre.valor.length; index++) {
                 if (struct_padre.valor[index] instanceof Declaracion_1.Declaracion) {
@@ -6153,6 +6395,7 @@ class LlamadaMetodo extends Nodo_1.Nodo {
                     return res;
                 }
                 if (res instanceof Grafica_1.Grafica) {
+                    res.execute(table, tree);
                 }
                 if (simboloMetodo.tipo.tipo == tipo_1.tipos.VOID) {
                     if (res instanceof Retorno_1.Retorno) {
@@ -6275,6 +6518,13 @@ class Main extends Nodo_1.Nodo {
         nodo.agregarHijo(nodo3);
         nodo.agregarHijo("}");
         return nodo;
+    }
+    get3D(table, tree) {
+        let c3d = "";
+        for (let i = 0; i < this.instrucciones.length; i++) {
+            c3d += this.instrucciones[i].get3D(table, tree);
+        }
+        return c3d;
     }
 }
 exports.Main = Main;
@@ -6453,33 +6703,42 @@ class Print extends Nodo_1.Nodo {
         let temporal;
         let codigo = '';
         if (this.tipo.tipo == 0 || this.tipo.tipo == 1) {
+            codigo += `    /*----------Imprimo Numeros----------*/\n`;
             codigo += this.expresion[0].get3D(table, tree);
             codigo += `    printf("%f", (double)${table.getTemporalActual()});\n`;
             codigo += `    printf("%c", (char)10);\n`;
         }
         else if (this.tipo.tipo == 4) {
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = H;\n`;
-            for (let i in this.valor2) {
-                codigo += `    heap[(int)H] = ${this.valor2[i].charCodeAt(0)};\n`;
-                codigo += `    H = H + 1;\n`;
+            codigo += `    /*----------Imprimo Strings----------*/\n`;
+            table.banderastr = 1;
+            if (this.expresion instanceof Identificador_1.Identificador) {
+                codigo += this.expresion.get3D(table, tree);
             }
-            codigo += `    heap[(int)H] = -1;\n`;
-            codigo += `    H = H + 1;\n`;
-            let tempActual1 = table.getTemporalActual();
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = P + 1;\n`;
-            let tempActual2 = table.getTemporalActual();
-            codigo += `    stack[(int)${tempActual2}] = ${tempActual1};\n`;
-            codigo += `    print();\n`;
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = stack[(int)P];\n`;
-            codigo += `    printf("%c", (char)10);\n\n`;
+            else {
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = H;\n`;
+                for (let i in this.valor2) {
+                    codigo += `    heap[(int)H] = ${this.valor2[i].charCodeAt(0)};\n`;
+                    codigo += `    H = H + 1;\n`;
+                }
+                codigo += `    heap[(int)H] = -1;\n`;
+                codigo += `    H = H + 1;\n`;
+                let tempActual1 = table.getTemporalActual();
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = P + 1;\n`;
+                let tempActual2 = table.getTemporalActual();
+                codigo += `    stack[(int)${tempActual2}] = ${tempActual1};\n`;
+                codigo += `    print();\n`;
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = stack[(int)P];\n`;
+                codigo += `    printf("%c", (char)10);\n\n`;
+            }
         }
         else if (this.tipo.tipo == 5) {
+            codigo += `    /*----------Imprimo Booleans----------*/\n`;
             let Etiq = table.getEtiqueta();
             table.setTrue(table.etiqueta);
             Etiq = table.getEtiqueta();
@@ -7212,9 +7471,13 @@ float stack[16394];
 float P;
 float H;\n`;
     var C3D2 = ``;
-    tabla.tempStorage.push(tabla.getTemporal());
-    tabla.tempStorage.push(tabla.getTemporal());
-    tabla.tempStorage.push(tabla.getTemporal());
+    let temp1;
+    let temp2;
+    let temp3;
+    let tepow1;
+    let tepow2;
+    let tepow3;
+    let tepow4;
     tree.instrucciones.map((m) => {
         try {
             C3D2 += m.get3D(tabla, tree);
@@ -7224,24 +7487,68 @@ float H;\n`;
         }
     });
     C3D += `float `;
+    if (tabla.banderastr) {
+        temp1 = tabla.getTemporal();
+        tabla.AgregarTemporal(temp1);
+        temp2 = tabla.getTemporal();
+        tabla.AgregarTemporal(temp2);
+        temp3 = tabla.getTemporal();
+        tabla.AgregarTemporal(temp3);
+    }
+    if (tabla.banderapow) {
+        tepow1 = tabla.getTemporal();
+        tabla.AgregarTemporal(tepow1);
+        tepow2 = tabla.getTemporal();
+        tabla.AgregarTemporal(tepow2);
+        tepow3 = tabla.getTemporal();
+        tabla.AgregarTemporal(tepow3);
+        tepow4 = tabla.getTemporal();
+        tabla.AgregarTemporal(tepow4);
+    }
     for (let i = 0; i < tabla.tempStorage.length; i++) {
         C3D += `${tabla.tempStorage[i]}, `;
     }
     C3D = C3D.substring(0, C3D.length - 2);
     C3D += `;\n\n`;
-    C3D += `/*------Funcion Imprimir------*/
+    if (tabla.banderastr) {
+        C3D += `/*------Funcion Imprimir------*/
 void print() {
-    t1 = P+1;
-    t2 = stack[(int)t1];
+    ${temp1} = P+1;
+    ${temp2} = stack[(int)${temp1}];
     L1:
-        t3 = heap[(int)t2];
-        if(t3 == -1) goto L0;
-        printf("%c", (char)t3);
-        t2 = t2+1;
+        ${temp3} = heap[(int)${temp2}];
+        if(${temp3} == -1) goto L0;
+        printf("%c", (char)${temp3});
+        ${temp2} = ${temp2}+1;
         goto L1;
     L0:
         return;
 }\n\n`;
+    }
+    if (tabla.banderapow) {
+        C3D += `/*------Funcion Pow------*/
+void power() {
+    ${tepow1} = P+1;
+    ${tepow2} = stack[(int)${tepow1}];
+    ${tepow3} = ${tepow2};
+    ${tepow4} = ${tepow2};
+    ${tepow1} = P+2;
+    ${tepow2} = stack[(int)${tepow1}];
+    if(${tepow2} == 0) goto L1;
+    L2:
+    if(${tepow2} <= 1) goto L0;
+    ${tepow3} = ${tepow3}*${tepow4};
+    ${tepow2} = ${tepow2}-1;
+    goto L2;
+    L0:
+    stack[(int)P] = ${tepow3};
+    goto L3;
+    L1:
+    stack[(int)P] = 1;
+    L3:
+    return;
+}\n\n`;
+    }
     C3D += `/*------Funcion Main------*/
  void main() {
     P = 0; H = 0;\n\n`;
@@ -7309,6 +7616,7 @@ class Table {
     constructor(Anterior) {
         this.Anterior = Anterior;
         this.Variables = new Map();
+        this.variablesNum = 0;
         this.temporal = 0;
         this.etiqueta = 0;
         this.heap = 0;
@@ -7318,6 +7626,8 @@ class Table {
         this.listaReturn = [];
         this.sizeActual = [];
         this.bandera = 0;
+        this.banderastr = 0;
+        this.banderapow = 0;
     }
     setVariable(simbol) {
         let ambito;
@@ -7326,11 +7636,13 @@ class Table {
                 if (key.toLowerCase() === simbol.id.toLowerCase()) {
                     // return `La variable ${key} ya ha sido declarada.`;
                     simbol.stack = this.getStack();
+                    this.variablesNum++;
                     return this.Variables.set(simbol.id.toLowerCase(), simbol);
                 }
             }
         }
         simbol.stack = this.getStack();
+        this.variablesNum++;
         this.Variables.set(simbol.id.toLowerCase(), simbol);
         return null;
     }

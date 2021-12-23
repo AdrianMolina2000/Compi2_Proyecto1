@@ -1,126 +1,56 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@Juandi22001 
-harias25
-/
-olc2-diciembre-2021
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-olc2-diciembre-2021/Proyecto 1/Archivos Entrada/graficar_ts.java /
-@harias25
-harias25 carga archivos finales
-Latest commit 089b79d 2 days ago
- History
- 1 contributor
-70 lines (50 sloc)  1.06 KB
-  
- /***************** GRAFICAR TS*******************/
-    int x = 10;
-    String y = "Hola compi2";
-    boolean z = true;
-    int[] arreglo = [1,2,3,4,5];
-    boolean[] arreglo2 = [true, false];
+/*
 
-struct t = {
-    String nombre,
-    int edad
-};
+int var1 = 10;
+int var2 = 20;
+double punteoBasicas = 0.0;
+double declaracion, asignacion, aritmeticas, relacionales, logicas;
 
-struct x2 = {
-    String personaje,
-    boolean booleano
-};
+int dimension = 3;
 
 void main(){
-   graficar_ts(); //Grafica sin hola
+    double val1 = 0.0;
+    double val2 = 0.0;
+    double val3 = 0.0;
+    double a = 0.0;
+    double b = 0;
 
-    int hola = 20;
-    graficar_ts(); //Grafica con hola
-    funcion1();
-    funcion2(1, "2", true);
-    funcion3();
-    StructBasico();
+    println("El valor defecto de declacion es 0 = " & declaracion);
+    println("El valor defecto de asignacion es 0 =" & asignacion & "y de aritmeticas 0 = " & aritmeticas);
+    print("Probando ");
+    println("Manejo de Entornos");
+
+
+    int var1 = 5*5;
+    println("El valor de var1 es" & var1);  //25
     
-}
+    var2 = 40;
 
+    println("Declaraciones = "&declaracion);
+    println("Asignaciones = "&asignacion);
 
-void StructBasico(){
-    t persona = persona("Calificacion",25);
-    println(persona);
+    val1 = 7 - (5 + 10 * (20 / 5 - 2 + 4 * (5 + 2 * 3)) - 8 * 3 % 2) + 50 * (6 * 2); //142.0
+    val2 = pow(2,4) - 9 * (8 - 6 * (pow(3,2) - 6 * 5 - 7 * (9 + pow(7,3)) + 10) - 5 ) + 8 * (36 / 6 - 5 * ( 2 * 3)); //-133853.0
+    val3 = (pow(8,3) * pow(8,2) - sqrt(4) + tan(12) + sin(60) + 2) / 3; //10922.353109816746
+    double val4 = val1 - val2 + val3; //El resultado es 144917.35310981676
 
-    persona.nombre = "Cambio";
-    persona.edad = 40;
+    print(val1);
+    print(val2);
+    print(val3);
+    print(val4);
 
-    println(persona);
-
-
-    persona = null;
-    println(persona);
-
-}
-
-
-void funcion1() {
-    graficar_ts(); //Grafica global
-}
-
-void funcion2(int param1, String param2, boolean param3) {
-    graficar_ts(); //Grafica global + 3 parametros
-}
-
-void funcion3(){
-    int x = 10;
-    int y = 10;
-    int z = 20;
-    graficar_ts();//Grafica global + 3 variables
-}
-
-
-/*
-    5 tablas de simbolos
-    "Calificacion", 25
-    "Cambio", 40
-    null
-*/
-© 
-
-
-/*
-
-===================================================== 
-===========FUNCIONES RECURSIVAS====================== 
-===================================================== 
+    String String_3;
+    String String_4;
+    int int2_;
  
-==============FACTORIAL============================== 
-1307674368000 
-===============ACKERMAN============================== 
-9 
-===============HANOI================================= 
-Mover de  1  a  3 
-Mover de  1 a  3 
-Mover de  3  a  3 
-Mover de  1 a  3 
-Mover de  3  a  3 
-Mover de  3 a  3 
-Mover de  3  a  3 
-Mover de  1 a  3 
-Mover de  2  a  3 
-Mover de  2 a  3 
-Mover de  3  a  3 
-Mover de  2 a  3 
-Mover de  2  a  3 
-Mover de  2 a  3 
-Mover de  2  a  3
+    int2_ = 45;
+    int2_ = int2_ - 1; 
+    
+
+    String String_5 = "Calificacion "^3; 
+    String pruebasNativas = "ComPiLaDoReS2 TesT";
+
+    println("Cadena 5" & " = " & String_5); //Calificacion Calificacion Calificacion 
+    println(pruebasNativas.subString(0,12).toUppercase()&" "&pruebasNativas.caracterOfPosition(12)&" "&pruebasNativas.subString(14,pruebasNativas.length()).toLowercase());  // COMPILADORES 2 test
+    }
+
 */

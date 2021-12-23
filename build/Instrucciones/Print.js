@@ -106,33 +106,42 @@ class Print extends Nodo_1.Nodo {
         let temporal;
         let codigo = '';
         if (this.tipo.tipo == 0 || this.tipo.tipo == 1) {
+            codigo += `    /*----------Imprimo Numeros----------*/\n`;
             codigo += this.expresion[0].get3D(table, tree);
             codigo += `    printf("%f", (double)${table.getTemporalActual()});\n`;
             codigo += `    printf("%c", (char)10);\n`;
         }
         else if (this.tipo.tipo == 4) {
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = H;\n`;
-            for (let i in this.valor2) {
-                codigo += `    heap[(int)H] = ${this.valor2[i].charCodeAt(0)};\n`;
-                codigo += `    H = H + 1;\n`;
+            codigo += `    /*----------Imprimo Strings----------*/\n`;
+            table.banderastr = 1;
+            if (this.expresion instanceof Identificador_1.Identificador) {
+                codigo += this.expresion.get3D(table, tree);
             }
-            codigo += `    heap[(int)H] = -1;\n`;
-            codigo += `    H = H + 1;\n`;
-            let tempActual1 = table.getTemporalActual();
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = P + 1;\n`;
-            let tempActual2 = table.getTemporalActual();
-            codigo += `    stack[(int)${tempActual2}] = ${tempActual1};\n`;
-            codigo += `    print();\n`;
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = stack[(int)P];\n`;
-            codigo += `    printf("%c", (char)10);\n\n`;
+            else {
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = H;\n`;
+                for (let i in this.valor2) {
+                    codigo += `    heap[(int)H] = ${this.valor2[i].charCodeAt(0)};\n`;
+                    codigo += `    H = H + 1;\n`;
+                }
+                codigo += `    heap[(int)H] = -1;\n`;
+                codigo += `    H = H + 1;\n`;
+                let tempActual1 = table.getTemporalActual();
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = P + 1;\n`;
+                let tempActual2 = table.getTemporalActual();
+                codigo += `    stack[(int)${tempActual2}] = ${tempActual1};\n`;
+                codigo += `    print();\n`;
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = stack[(int)P];\n`;
+                codigo += `    printf("%c", (char)10);\n\n`;
+            }
         }
         else if (this.tipo.tipo == 5) {
+            codigo += `    /*----------Imprimo Booleans----------*/\n`;
             let Etiq = table.getEtiqueta();
             table.setTrue(table.etiqueta);
             Etiq = table.getEtiqueta();

@@ -6,7 +6,13 @@ import { Tipo, tipos } from "../other/tipo";
 import { Simbolo } from "../Simbols/Simbolo";
 import { Primitivo } from "../Expresiones/Primitivo";
 import { NodoAST } from "../Abstract/NodoAST";
-import {Var} from "../Simbols/Var"
+import { Var } from "../Simbols/Var"
+import { Aritmetica } from "../Expresiones/Aritmetica";
+import { Pow } from "../Expresiones/Pow";
+import { Sqrt } from "../Expresiones/Sqrt";
+import { Seno } from "../Expresiones/Seno";
+import { Cos } from "../Expresiones/Cos";
+import { Tan } from "../Expresiones/Tan";
 
 export function defal(tipo: Tipo, line: Number, column: Number) {
     if (tipo.tipo == tipos.ENTERO) {
@@ -31,6 +37,7 @@ export class Declaracion extends Nodo {
     tipo: Tipo;
     id: Array<String>;
     valor: Nodo;
+    resultado: any;
 
     constructor(tipo: Tipo, id: Array<String>, valor: Nodo, line: Number, column: Number) {
         super(tipo, line, column);
@@ -70,14 +77,7 @@ export class Declaracion extends Nodo {
             Var.Lista.push(simbolo)
 
         }
-
-        // if (res != null) {
-        // const error = new Excepcion('Semantico',
-        // res,
-        // this.line, this.column);
-        // tree.excepciones.push(error);
-        // tree.consola.push(error.toString());
-        // }
+        this.resultado = result;
         return null;
     }
 
@@ -96,9 +96,46 @@ export class Declaracion extends Nodo {
 
     get3D(table: Table, tree: Tree): String {
         let c3d = '';
-        let variable = table.getVariable(this.id[0])
-        c3d += `    stack[(int)${variable.stack}] = ${variable.valor};\n`;
-        
+        let variable;
+
+        for (let i = 0; i < this.id.length; i++) {
+            variable = table.getVariable(this.id[i])
+            c3d += `    /*----------Declaro Variable ${variable.id}----------*/\n`;
+            if (variable.tipo.tipo == tipos.ENTERO || variable.tipo.tipo == tipos.DECIMAL) {
+                let resul = this.resultado;
+                if (this.valor instanceof Aritmetica 
+                    || this.valor instanceof Pow
+                    || this.valor instanceof Sqrt
+                    || this.valor instanceof Seno
+                    || this.valor instanceof Cos
+                    || this.valor instanceof Tan
+                    ) {
+                    c3d += this.valor.get3D(table, tree);
+                    resul = table.getTemporalActual();
+
+                }
+
+                c3d += `    stack[(int)${variable.stack}] = ${resul};\n`;
+
+
+
+            } else if (variable.tipo.tipo == tipos.STRING) {
+                let temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+
+                c3d += `    ${temporal} = H;\n`;
+
+                for (let j in variable.valor) {
+                    c3d += `    heap[(int)H] = ${variable.valor[j].charCodeAt(0)};\n`
+                    c3d += `    H = H + 1;\n`
+                }
+                c3d += `    heap[(int)H] = -1;\n`
+                c3d += `    H = H + 1;\n`
+
+                c3d += `    stack[(int)${variable.stack}] = ${temporal};\n`;
+            }
+        }
+
         return c3d;
     }
 }

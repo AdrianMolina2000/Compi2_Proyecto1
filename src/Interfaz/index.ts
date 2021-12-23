@@ -17,7 +17,7 @@ import { Grafica } from '../Instrucciones/Grafica';
 const parser = require('../Gramatica/grammar.js');
 let simbolos = "";
 let graficas = "";
-let err="";
+let err = "";
 var editor = CodeMirror.fromTextArea(document.getElementById('editor1'), {
     mode: "javascript",
     lineNumbers: true,
@@ -194,7 +194,7 @@ function graph_Simbols(tabla: Array<Simbolo>) {
 
     simbolos += "</table>"
 
-  //  let archivo =new File([simbolos],"TablaSimbolos.html");
+    //  let archivo =new File([simbolos],"TablaSimbolos.html");
     //generar(archivo) ;
 
 
@@ -251,8 +251,8 @@ function graph_Simbols2(tabla: Array<Simbolo>) {
 
     simbolos += "</table>"
 
-    let archivo =new File([simbolos],"TablaSimbolos.html");
-    generar(archivo) ;
+    let archivo = new File([simbolos], "TablaSimbolos.html");
+    generar(archivo);
 
 
 
@@ -295,11 +295,11 @@ function graph_err(tabla: Array<Excepcion>) {
 
         err += `   <th><strong>   ${alv.column} </strong></th>  `;
 
-      
+
         err += "</tr>"
 
     }
-    for (let index = 0; index <tabla.length; index++) {
+    for (let index = 0; index < tabla.length; index++) {
         var alv: Excepcion = tabla[index]
         err += "<tr>"
         err += `   <th><strong>   ${index} </strong></th>`;
@@ -309,7 +309,7 @@ function graph_err(tabla: Array<Excepcion>) {
 
         err += `   <th><strong>   ${alv.column} </strong></th>  `;
 
-      
+
         err += "</tr>"
 
     }
@@ -343,104 +343,104 @@ global.Enviar = function entrada() {
     tree.instrucciones.map((m: any) => {
         try {
 
-             if(m instanceof DeclaracionMetodo ){
+            if (m instanceof DeclaracionMetodo) {
 
-                 m.execute(tabla,tree)
-             }
+                m.execute(tabla, tree)
+            }
 
-            
+
         } catch (error) {
             console.log(error)
         }
         // console.log(tree.consola);
-       
-    });
 
-   
-    tree.instrucciones.map((m: any) => {
-        try {
-
-             if(m instanceof DeclaracionArray){
-
-                  m.execute(tabla,tree)
-             }
-
-            
-        } catch (error) {
-            console.log(error)
-        }
-        // console.log(tree.consola);
-       
-    });
-
-    tree.instrucciones.map((m: any) => {
-        try {
-
-             if(m instanceof Declaracion){
-
-                  m.execute(tabla,tree)
-             }
-             
-
-            
-        } catch (error) {
-            console.log(error)
-        }
-        // console.log(tree.consola);
-       
     });
 
 
     tree.instrucciones.map((m: any) => {
         try {
 
-             if(m instanceof Struct){
+            if (m instanceof DeclaracionArray) {
 
-                  m.execute(tabla,tree)
-             }
-             
+                m.execute(tabla, tree)
+            }
 
-            
+
         } catch (error) {
             console.log(error)
         }
         // console.log(tree.consola);
-       
+
     });
-    tree.instrucciones.map((m: any) => {
-       
-       
-   
-        
-         try {
- 
-            
-             if(m instanceof Grafica){
- 
-                        graph_Simbols2(tree.Variables)
- 
-              }
-             
-           //  console.log(tree);
-             } catch (error) {
-             console.log(error)
-         }
-        
-     });
- 
 
     tree.instrucciones.map((m: any) => {
-       
-       
-       
-       
         try {
 
-            if(m instanceof Main){
+            if (m instanceof Declaracion) {
+
+                m.execute(tabla, tree)
+            }
+
+
+
+        } catch (error) {
+            console.log(error)
+        }
+        // console.log(tree.consola);
+
+    });
+
+
+    tree.instrucciones.map((m: any) => {
+        try {
+
+            if (m instanceof Struct) {
+
+                m.execute(tabla, tree)
+            }
+
+
+
+        } catch (error) {
+            console.log(error)
+        }
+        // console.log(tree.consola);
+
+    });
+    tree.instrucciones.map((m: any) => {
+
+
+
+
+        try {
+
+
+            if (m instanceof Grafica) {
+
+                graph_Simbols2(tree.Variables)
+
+            }
+
+            //  console.log(tree);
+        } catch (error) {
+            console.log(error)
+        }
+
+    });
+
+
+    tree.instrucciones.map((m: any) => {
+
+
+
+
+        try {
+
+            if (m instanceof Main) {
                 const res = m.execute(tabla, tree);
             }
-            
-          //  console.log(tree);
+
+            //  console.log(tree);
             var texto = "";
             for (const key in tree.consola) {
                 texto += tree.consola[key];
@@ -449,7 +449,7 @@ global.Enviar = function entrada() {
         } catch (error) {
             console.log(error)
         }
-       
+
     });
 
     /**
@@ -464,8 +464,8 @@ global.Enviar = function entrada() {
      * 
      * 
     */
-   
-    
+
+
 
     graph_Simbols(tree.Variables)
     graph_err(tree.excepciones)
@@ -512,9 +512,14 @@ float H;\n`;
 
     var C3D2 = ``;
 
-    tabla.tempStorage.push(tabla.getTemporal());
-    tabla.tempStorage.push(tabla.getTemporal());
-    tabla.tempStorage.push(tabla.getTemporal());
+    let temp1;
+    let temp2;
+    let temp3;
+
+    let tepow1;
+    let tepow2;
+    let tepow3;
+    let tepow4;
 
     tree.instrucciones.map((m: any) => {
         try {
@@ -527,6 +532,26 @@ float H;\n`;
 
     C3D += `float `
 
+    if(tabla.banderastr){
+        temp1 = tabla.getTemporal()
+        tabla.AgregarTemporal(temp1);
+        temp2 = tabla.getTemporal()
+        tabla.AgregarTemporal(temp2);
+        temp3 = tabla.getTemporal()
+        tabla.AgregarTemporal(temp3);
+    }
+
+    if(tabla.banderapow){
+        tepow1 = tabla.getTemporal()
+        tabla.AgregarTemporal(tepow1);
+        tepow2 = tabla.getTemporal()
+        tabla.AgregarTemporal(tepow2);
+        tepow3 = tabla.getTemporal()
+        tabla.AgregarTemporal(tepow3);
+        tepow4 = tabla.getTemporal()
+        tabla.AgregarTemporal(tepow4);
+    }
+
     for (let i = 0; i < tabla.tempStorage.length; i++) {
         C3D += `${tabla.tempStorage[i]}, `;
     }
@@ -534,19 +559,46 @@ float H;\n`;
 
     C3D += `;\n\n`
 
-    C3D += `/*------Funcion Imprimir------*/
+    if (tabla.banderastr) {
+        C3D += `/*------Funcion Imprimir------*/
 void print() {
-    t1 = P+1;
-    t2 = stack[(int)t1];
+    ${temp1} = P+1;
+    ${temp2} = stack[(int)${temp1}];
     L1:
-        t3 = heap[(int)t2];
-        if(t3 == -1) goto L0;
-        printf("%c", (char)t3);
-        t2 = t2+1;
+        ${temp3} = heap[(int)${temp2}];
+        if(${temp3} == -1) goto L0;
+        printf("%c", (char)${temp3});
+        ${temp2} = ${temp2}+1;
         goto L1;
     L0:
         return;
 }\n\n`;
+    }
+
+    if (tabla.banderapow) {
+        C3D += `/*------Funcion Pow------*/
+void power() {
+    ${tepow1} = P+1;
+    ${tepow2} = stack[(int)${tepow1}];
+    ${tepow3} = ${tepow2};
+    ${tepow4} = ${tepow2};
+    ${tepow1} = P+2;
+    ${tepow2} = stack[(int)${tepow1}];
+    if(${tepow2} == 0) goto L1;
+    L2:
+    if(${tepow2} <= 1) goto L0;
+    ${tepow3} = ${tepow3}*${tepow4};
+    ${tepow2} = ${tepow2}-1;
+    goto L2;
+    L0:
+    stack[(int)P] = ${tepow3};
+    goto L3;
+    L1:
+    stack[(int)P] = 1;
+    L3:
+    return;
+}\n\n`;
+    }
 
     C3D += `/*------Funcion Main------*/
  void main() {
@@ -558,5 +610,5 @@ void print() {
 
     editor2.setValue(C3D);
 
-//console.log("12"=="12");
+    //console.log("12"=="12");
 }

@@ -5,6 +5,12 @@ const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
 const Primitivo_1 = require("../Expresiones/Primitivo");
+const Aritmetica_1 = require("../Expresiones/Aritmetica");
+const Pow_1 = require("../Expresiones/Pow");
+const Sqrt_1 = require("../Expresiones/Sqrt");
+const Seno_1 = require("../Expresiones/Seno");
+const Cos_1 = require("../Expresiones/Cos");
+const Tan_1 = require("../Expresiones/Tan");
 function revisar(tipo1, lista) {
     for (let key in lista.valor) {
         if (lista.valor[key].tipo.tipo == 6) {
@@ -32,7 +38,6 @@ class Asignacion extends Nodo_1.Nodo {
             let variable;
             variable = table.getVariable(this.id);
             variable.valor = result;
-            //
         }
         else {
             let variable;
@@ -86,6 +91,7 @@ class Asignacion extends Nodo_1.Nodo {
                     }
                 }
             }
+            this.resultado = val;
             variable.valor = val;
             return null;
         }
@@ -103,6 +109,37 @@ class Asignacion extends Nodo_1.Nodo {
             nodo.agregarHijo(this.valor.getNodo());
         }
         return nodo;
+    }
+    get3D(table, tree) {
+        let c3d = '';
+        let variable = table.getVariable(this.id);
+        c3d += `    /*----------Asigno Variable ${variable.id}----------*/\n`;
+        if (variable.tipo.tipo == tipo_1.tipos.ENTERO || variable.tipo.tipo == tipo_1.tipos.DECIMAL) {
+            let resul = this.resultado;
+            if (this.valor instanceof Aritmetica_1.Aritmetica
+                || this.valor instanceof Pow_1.Pow
+                || this.valor instanceof Sqrt_1.Sqrt
+                || this.valor instanceof Tan_1.Tan
+                || this.valor instanceof Cos_1.Cos
+                || this.valor instanceof Seno_1.Seno) {
+                c3d += this.valor.get3D(table, tree);
+                resul = table.getTemporalActual();
+            }
+            c3d += `    stack[(int)${variable.stack}] = ${resul};\n`;
+        }
+        else if (variable.tipo.tipo == tipo_1.tipos.STRING) {
+            let temporal = table.getTemporal();
+            table.AgregarTemporal(temporal);
+            c3d += `    ${temporal} = H;\n`;
+            for (let i in variable.valor) {
+                c3d += `    heap[(int)H] = ${variable.valor[i].charCodeAt(0)};\n`;
+                c3d += `    H = H + 1;\n`;
+            }
+            c3d += `    heap[(int)H] = -1;\n`;
+            c3d += `    H = H + 1;\n`;
+            c3d += `    stack[(int)${variable.stack}] = ${temporal};\n`;
+        }
+        return c3d;
     }
 }
 exports.Asignacion = Asignacion;

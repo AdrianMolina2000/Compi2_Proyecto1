@@ -4,6 +4,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Primitivo_1 = require("./Primitivo");
 class Tan extends Nodo_1.Nodo {
     constructor(expresion, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.DECIMAL), line, column);
@@ -39,6 +40,22 @@ class Tan extends Nodo_1.Nodo {
             var nodo = new NodoAST_1.NodoAST("Tan");
             return nodo;
         }
+    }
+    get3D(table, tree) {
+        let c3d = "";
+        let temporal1;
+        let temporal2;
+        if (this.expresion instanceof Primitivo_1.Primitivo) {
+            temporal1 = this.expresion.get3D(table, tree);
+        }
+        else {
+            c3d += this.expresion.get3D(table, tree);
+            temporal1 = table.getTemporalActual();
+        }
+        temporal2 = table.getTemporal();
+        table.AgregarTemporal(temporal2);
+        c3d += `    ${temporal2} = tan(${temporal1});\n`;
+        return c3d;
     }
 }
 exports.Tan = Tan;

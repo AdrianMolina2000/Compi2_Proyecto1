@@ -47,5 +47,12 @@ class Main extends Nodo_1.Nodo {
         nodo.agregarHijo("}");
         return nodo;
     }
+    get3D(table, tree) {
+        let c3d = "";
+        for (let i = 0; i < this.instrucciones.length; i++) {
+            c3d += this.instrucciones[i].get3D(table, tree);
+        }
+        return c3d;
+    }
 }
 exports.Main = Main;

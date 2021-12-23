@@ -81,4 +81,13 @@ export class Main extends Nodo {
         nodo.agregarHijo("}");
         return nodo;
     }
+
+    get3D(table: Table, tree: Tree): String {
+        let c3d = "";
+        for (let i = 0; i < this.instrucciones.length; i++) {
+
+            c3d += this.instrucciones[i].get3D(table, tree);
+        }
+        return c3d;
+    }
 }

@@ -5,6 +5,12 @@ import { Tree } from "../Simbols/Tree";
 import { Error } from "../Simbols/Error";
 import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
+import { Identificador } from "./Identificador";
+import { Pow } from "./Pow";
+import { Sqrt } from "./Sqrt";
+import { Seno } from "./Seno";
+import { Tan } from "./Tan";
+import { Cos } from "./Cos";
 
 
 function esEntero(numero: number) {
@@ -619,7 +625,19 @@ export class Aritmetica extends Nodo {
                 c3d += `    ${temp3} = ${temp} ${op} ${temp2};\n`;
             }
         } else if (this.operadorIzq instanceof Aritmetica) {
-            der = this.operadorDer.get3D(table, tree);
+            if (this.operadorDer instanceof Identificador
+                || this.operadorDer instanceof Pow
+                || this.operadorDer instanceof Sqrt
+                || this.operadorDer instanceof Seno
+                || this.operadorDer instanceof Tan
+                || this.operadorDer instanceof Cos
+            ) {
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual()
+            } else {
+                der = this.operadorDer.get3D(table, tree);
+            }
             c3d += this.operadorIzq.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
@@ -631,7 +649,20 @@ export class Aritmetica extends Nodo {
             }
 
         } else if (this.operadorDer instanceof Aritmetica) {
-            izq = this.operadorIzq.get3D(table, tree);
+            if (this.operadorIzq instanceof Identificador
+                || this.operadorIzq instanceof Pow
+                || this.operadorIzq instanceof Sqrt
+                || this.operadorIzq instanceof Tan
+                || this.operadorIzq instanceof Seno
+                || this.operadorIzq instanceof Cos
+
+            ) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual()
+            } else {
+                izq = this.operadorIzq.get3D(table, tree);
+            }
             c3d += this.operadorDer.get3D(table, tree);
             temp = table.getTemporalActual();
             temp2 = table.getTemporal();
@@ -642,13 +673,53 @@ export class Aritmetica extends Nodo {
                 c3d += `    ${temp2} = ${izq} ${op} ${temp};\n`;
             }
         } else {
-            izq = this.operadorIzq.get3D(table, tree);
-            der = this.operadorDer.get3D(table, tree);
+            if (this.operadorIzq instanceof Identificador && this.operadorDer instanceof Identificador ||
+                this.operadorIzq instanceof Pow && this.operadorDer instanceof Pow ||
+                this.operadorIzq instanceof Sqrt && this.operadorDer instanceof Sqrt ||
+                this.operadorIzq instanceof Tan && this.operadorDer instanceof Tan ||
+                this.operadorIzq instanceof Cos && this.operadorDer instanceof Cos ||
+                this.operadorIzq instanceof Seno && this.operadorDer instanceof Seno
+            ) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual()
+
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual()
+            } else if (this.operadorIzq instanceof Identificador
+                || this.operadorIzq instanceof Pow
+                || this.operadorIzq instanceof Sqrt
+                || this.operadorIzq instanceof Cos
+                || this.operadorIzq instanceof Seno
+                || this.operadorIzq instanceof Tan
+                
+                ) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual()
+                der = this.operadorDer.get3D(table, tree);
+            } else if (this.operadorDer instanceof Identificador
+                || this.operadorDer instanceof Pow
+                || this.operadorDer instanceof Sqrt
+                || this.operadorDer instanceof Seno
+                || this.operadorDer instanceof Cos
+                || this.operadorDer instanceof Tan
+                ) {
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual()
+                izq = this.operadorIzq.get3D(table, tree);
+            } else {
+                izq = this.operadorIzq.get3D(table, tree);
+                der = this.operadorDer.get3D(table, tree);
+            }
+
             temp = table.getTemporal();
             table.AgregarTemporal(temp);
             if (op == "%") {
                 c3d += `    ${temp} = fmod(${izq}, ${der});\n`;
-            }else{
+            } else {
                 c3d += `    ${temp} = ${izq} ${op} ${der};\n`;
             }
         }

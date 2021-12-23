@@ -33,29 +33,29 @@ function imprimir(lista: Nodo, table: Table, tree: Tree) {
 
 function imprimir2(lista: Nodo, table: Table, tree: Tree) {
 
-    
+
     var salida = "[";
-  
 
-    if(lista.valor==null){
 
-        salida="null"
+    if (lista.valor == null) {
 
-        console.log(salida+"------")
+        salida = "null"
+
+        console.log(salida + "------")
         return salida
     }
     for (let key in lista.valor) {
 
-      
-        if(lista.valor[key].valor.valor==null){
 
-            salida+=lista.valor[key].valor+","
-        }else{
-            salida+=lista.valor[key].valor.valor+","
+        if (lista.valor[key].valor.valor == null) {
+
+            salida += lista.valor[key].valor + ","
+        } else {
+            salida += lista.valor[key].valor.valor + ","
 
         }
-        
-       
+
+
     }
     salida = salida.substring(0, salida.length - 2) + "], ";
     return salida
@@ -82,17 +82,17 @@ export class Print extends Nodo {
             if (this.expresion[key].tipo.tipo == 6) {
                 let texto = imprimir(this.expresion[key], table, tree);
                 tree.consola.push(texto.substring(0, texto.length - 2) + " ");
-            } 
-            
-            else if(this.expresion[key].tipo.tipo==11){
+            }
 
-                
+            else if (this.expresion[key].tipo.tipo == 11) {
+
+
                 let texto = imprimir2(this.expresion[key], table, tree);
-     
-                if(texto=="null"){
+
+                if (texto == "null") {
 
                     tree.consola.push("null")
-                }else{
+                } else {
 
                     tree.consola.push(texto.substring(0, texto.length - 2) + " ");
 
@@ -140,39 +140,49 @@ export class Print extends Nodo {
         let codigo = '';
 
         if (this.tipo.tipo == 0 || this.tipo.tipo == 1) {
+            codigo += `    /*----------Imprimo Numeros----------*/\n`;
             codigo += this.expresion[0].get3D(table, tree);
 
             codigo += `    printf("%f", (double)${table.getTemporalActual()});\n`;
             codigo += `    printf("%c", (char)10);\n`;
         } else if (this.tipo.tipo == 4) {
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = H;\n`
+            codigo += `    /*----------Imprimo Strings----------*/\n`;
+            table.banderastr = 1;
 
-            for (let i in this.valor2) {
-                codigo += `    heap[(int)H] = ${this.valor2[i].charCodeAt(0)};\n`
+            if (this.expresion instanceof Identificador) {
+                codigo += this.expresion.get3D(table, tree)
+            } else {
+
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = H;\n`
+
+                for (let i in this.valor2) {
+                    codigo += `    heap[(int)H] = ${this.valor2[i].charCodeAt(0)};\n`
+                    codigo += `    H = H + 1;\n`
+                }
+                codigo += `    heap[(int)H] = -1;\n`
                 codigo += `    H = H + 1;\n`
+
+                let tempActual1 = table.getTemporalActual();
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = P + 1;\n`
+
+                let tempActual2 = table.getTemporalActual();
+
+                codigo += `    stack[(int)${tempActual2}] = ${tempActual1};\n`
+                codigo += `    print();\n`
+                temporal = table.getTemporal();
+                table.AgregarTemporal(temporal);
+                codigo += `    ${temporal} = stack[(int)P];\n`
+                codigo += `    printf("%c", (char)10);\n\n`
             }
-            codigo += `    heap[(int)H] = -1;\n`
-            codigo += `    H = H + 1;\n`
-
-            let tempActual1 = table.getTemporalActual();
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = P + 1;\n`
-
-            let tempActual2 = table.getTemporalActual();
-
-            codigo += `    stack[(int)${tempActual2}] = ${tempActual1};\n`
-            codigo += `    print();\n`
-            temporal = table.getTemporal();
-            table.AgregarTemporal(temporal);
-            codigo += `    ${temporal} = stack[(int)P];\n`
-            codigo += `    printf("%c", (char)10);\n\n`
         } else if (this.tipo.tipo == 5) {
-            let Etiq =  table.getEtiqueta();
+            codigo += `    /*----------Imprimo Booleans----------*/\n`;
+            let Etiq = table.getEtiqueta();
             table.setTrue(table.etiqueta);
-            Etiq =  table.getEtiqueta();
+            Etiq = table.getEtiqueta();
             table.setFalse(table.etiqueta);
             codigo += this.expresion[0].get3D(table, tree);
             codigo += `    ${table.getTrue()}:\n`
@@ -190,7 +200,7 @@ export class Print extends Nodo {
             codigo += `    printf("%c", (char)101);\n`
             codigo += `    ${table.getEtiquetaActual()}:\n`
             codigo += `    printf("%c", (char)10);\n`
-            
+
         }
         return codigo;
     }

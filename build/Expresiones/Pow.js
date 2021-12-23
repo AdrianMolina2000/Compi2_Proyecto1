@@ -13,7 +13,9 @@ class Pow extends Nodo_1.Nodo {
     execute(table, tree) {
         try {
             const resultado = this.base.execute(table, tree);
+            this.bas = resultado;
             const resultado2 = this.exponente.execute(table, tree);
+            this.exp = resultado2;
             if (resultado instanceof Excepcion_1.Excepcion) {
                 return resultado;
             }
@@ -43,6 +45,24 @@ class Pow extends Nodo_1.Nodo {
             var nodo = new NodoAST_1.NodoAST("ToLower");
             return nodo;
         }
+    }
+    get3D(table, tree) {
+        let c3d = "";
+        table.banderapow = 1;
+        let temporal = table.getTemporal();
+        table.AgregarTemporal(temporal);
+        c3d += `    ${temporal} = P + ${table.variablesNum};\n`;
+        c3d += `    ${temporal} = ${temporal} + 1;\n`;
+        c3d += `    stack[(int)${temporal}] = ${this.bas};\n`;
+        c3d += `    ${temporal} = ${temporal} + 1;\n`;
+        c3d += `    stack[(int)${temporal}] = ${this.exp};\n`;
+        c3d += `    P = P + ${table.variablesNum};\n`;
+        c3d += `    power();\n`;
+        temporal = table.getTemporal();
+        table.AgregarTemporal(temporal);
+        c3d += `    ${temporal} = stack[(int)P];\n`;
+        c3d += `    P = P - ${table.variablesNum};\n`;
+        return c3d;
     }
 }
 exports.Pow = Pow;

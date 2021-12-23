@@ -81,6 +81,7 @@ class LlamadaMetodo extends Nodo_1.Nodo {
                     return res;
                 }
                 if (res instanceof Grafica_1.Grafica) {
+                    res.execute(table, tree);
                 }
                 if (simboloMetodo.tipo.tipo == tipo_1.tipos.VOID) {
                     if (res instanceof Retorno_1.Retorno) {

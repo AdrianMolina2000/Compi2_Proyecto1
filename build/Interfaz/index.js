@@ -326,9 +326,13 @@ float stack[16394];
 float P;
 float H;\n`;
     var C3D2 = ``;
-    tabla.tempStorage.push(tabla.getTemporal());
-    tabla.tempStorage.push(tabla.getTemporal());
-    tabla.tempStorage.push(tabla.getTemporal());
+    let temp1;
+    let temp2;
+    let temp3;
+    let tepow1;
+    let tepow2;
+    let tepow3;
+    let tepow4;
     tree.instrucciones.map((m) => {
         try {
             C3D2 += m.get3D(tabla, tree);
@@ -338,24 +342,68 @@ float H;\n`;
         }
     });
     C3D += `float `;
+    if (tabla.banderastr) {
+        temp1 = tabla.getTemporal();
+        tabla.AgregarTemporal(temp1);
+        temp2 = tabla.getTemporal();
+        tabla.AgregarTemporal(temp2);
+        temp3 = tabla.getTemporal();
+        tabla.AgregarTemporal(temp3);
+    }
+    if (tabla.banderapow) {
+        tepow1 = tabla.getTemporal();
+        tabla.AgregarTemporal(tepow1);
+        tepow2 = tabla.getTemporal();
+        tabla.AgregarTemporal(tepow2);
+        tepow3 = tabla.getTemporal();
+        tabla.AgregarTemporal(tepow3);
+        tepow4 = tabla.getTemporal();
+        tabla.AgregarTemporal(tepow4);
+    }
     for (let i = 0; i < tabla.tempStorage.length; i++) {
         C3D += `${tabla.tempStorage[i]}, `;
     }
     C3D = C3D.substring(0, C3D.length - 2);
     C3D += `;\n\n`;
-    C3D += `/*------Funcion Imprimir------*/
+    if (tabla.banderastr) {
+        C3D += `/*------Funcion Imprimir------*/
 void print() {
-    t1 = P+1;
-    t2 = stack[(int)t1];
+    ${temp1} = P+1;
+    ${temp2} = stack[(int)${temp1}];
     L1:
-        t3 = heap[(int)t2];
-        if(t3 == -1) goto L0;
-        printf("%c", (char)t3);
-        t2 = t2+1;
+        ${temp3} = heap[(int)${temp2}];
+        if(${temp3} == -1) goto L0;
+        printf("%c", (char)${temp3});
+        ${temp2} = ${temp2}+1;
         goto L1;
     L0:
         return;
 }\n\n`;
+    }
+    if (tabla.banderapow) {
+        C3D += `/*------Funcion Pow------*/
+void power() {
+    ${tepow1} = P+1;
+    ${tepow2} = stack[(int)${tepow1}];
+    ${tepow3} = ${tepow2};
+    ${tepow4} = ${tepow2};
+    ${tepow1} = P+2;
+    ${tepow2} = stack[(int)${tepow1}];
+    if(${tepow2} == 0) goto L1;
+    L2:
+    if(${tepow2} <= 1) goto L0;
+    ${tepow3} = ${tepow3}*${tepow4};
+    ${tepow2} = ${tepow2}-1;
+    goto L2;
+    L0:
+    stack[(int)P] = ${tepow3};
+    goto L3;
+    L1:
+    stack[(int)P] = 1;
+    L3:
+    return;
+}\n\n`;
+    }
     C3D += `/*------Funcion Main------*/
  void main() {
     P = 0; H = 0;\n\n`;

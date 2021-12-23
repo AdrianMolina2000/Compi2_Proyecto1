@@ -4,6 +4,7 @@ import { Tree } from "../Simbols/Tree";
 import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
+import { Primitivo } from "./Primitivo";
 
 export class Cos extends Nodo {
     expresion: Nodo;
@@ -45,6 +46,27 @@ export class Cos extends Nodo {
             var nodo: NodoAST = new NodoAST("cos");
             return nodo;
         }
+    }
+
+    get3D(table: Table, tree: Tree): String {
+        let c3d = "";
+        let temporal1;
+        let temporal2;
+
+        if(this.expresion instanceof Primitivo){
+            temporal1 = this.expresion.get3D(table, tree);
+        }else{
+            c3d += this.expresion.get3D(table, tree);
+            temporal1 = table.getTemporalActual()
+        }
+
+        temporal2 = table.getTemporal()
+        table.AgregarTemporal(temporal2);
+
+        c3d += `    ${temporal2} = cos(${temporal1});\n`;
+
+
+        return c3d;
     }
 
 }
