@@ -4,6 +4,7 @@ import { Tree } from "../Simbols/Tree";
 import { Excepcion } from "../other/Excepcion";
 import { tipos, Tipo } from "../other/tipo";
 import { NodoAST } from "../Abstract/NodoAST";
+import { Identificador } from "./Identificador";
 
 export class Relacional extends Nodo {
     operadorIzq: Nodo;
@@ -36,8 +37,6 @@ export class Relacional extends Nodo {
                 } else if (this.operadorDer.tipo.tipo === tipos.CARACTER) {
                     return resultadoIzq < resultadoDer.charCodeAt(0);
                 } else {
-                    console.log(this.operadorIzq)
-                    console.log(this.operadorDer)
                     const error = new Excepcion('Semantico',
                         `El operador relacional MENOR QUE se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`,
                         this.line, this.column);
@@ -534,14 +533,6 @@ export class Relacional extends Nodo {
         let etiq2;
         let etiq3;
 
-        console.log("OP DER");
-        console.log(this.operadorDer);
-        console.log("OP DER");
-        console.log("OP IZQ");//vos xd
-        console.log(this.operadorIzq);
-        console.log("OP IZQ");
-
-
         if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
 
             table.bandera = 1;
@@ -589,8 +580,28 @@ export class Relacional extends Nodo {
         } else if (this.operadorIzq instanceof Relacional) {
         } else if (this.operadorDer instanceof Relacional) {
         } else {
-            izq = this.operadorIzq.get3D(table, tree);
-            der = this.operadorDer.get3D(table, tree);
+            if (this.operadorIzq instanceof Identificador && this.operadorDer instanceof Identificador){
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual()
+
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual()
+            }else if (this.operadorIzq instanceof Identificador) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual()
+                der = this.operadorDer.get3D(table, tree);
+            } else if (this.operadorDer instanceof Identificador) {
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual()
+                izq = this.operadorIzq.get3D(table, tree);
+            } else {
+                izq = this.operadorIzq.get3D(table, tree);
+                der = this.operadorDer.get3D(table, tree);
+            }
 
             if (table.bandera == 0) {
                 c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;

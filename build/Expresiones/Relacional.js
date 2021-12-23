@@ -4,6 +4,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Identificador_1 = require("./Identificador");
 class Relacional extends Nodo_1.Nodo {
     constructor(operadorIzq, operadorDer, operador, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.BOOLEANO), line, column);
@@ -32,8 +33,6 @@ class Relacional extends Nodo_1.Nodo {
                     return resultadoIzq < resultadoDer.charCodeAt(0);
                 }
                 else {
-                    console.log(this.operadorIzq);
-                    console.log(this.operadorDer);
                     const error = new Excepcion_1.Excepcion('Semantico', `El operador relacional MENOR QUE se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`, this.line, this.column);
                     return error;
                 }
@@ -542,12 +541,6 @@ class Relacional extends Nodo_1.Nodo {
         let etiq;
         let etiq2;
         let etiq3;
-        console.log("OP DER");
-        console.log(this.operadorDer);
-        console.log("OP DER");
-        console.log("OP IZQ"); //vos xd
-        console.log(this.operadorIzq);
-        console.log("OP IZQ");
         if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
             table.bandera = 1;
             etiq = table.getEtiqueta();
@@ -586,8 +579,30 @@ class Relacional extends Nodo_1.Nodo {
         else if (this.operadorDer instanceof Relacional) {
         }
         else {
-            izq = this.operadorIzq.get3D(table, tree);
-            der = this.operadorDer.get3D(table, tree);
+            if (this.operadorIzq instanceof Identificador_1.Identificador && this.operadorDer instanceof Identificador_1.Identificador) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual();
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual();
+            }
+            else if (this.operadorIzq instanceof Identificador_1.Identificador) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual();
+                der = this.operadorDer.get3D(table, tree);
+            }
+            else if (this.operadorDer instanceof Identificador_1.Identificador) {
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual();
+                izq = this.operadorIzq.get3D(table, tree);
+            }
+            else {
+                izq = this.operadorIzq.get3D(table, tree);
+                der = this.operadorDer.get3D(table, tree);
+            }
             if (table.bandera == 0) {
                 c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;
                 c3d += `    goto ${table.getFalse()};\n`;

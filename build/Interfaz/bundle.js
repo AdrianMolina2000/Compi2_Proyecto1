@@ -2264,6 +2264,7 @@ const Nodo_1 = require("../Abstract/Nodo");
 const Excepcion_1 = require("../other/Excepcion");
 const tipo_1 = require("../other/tipo");
 const NodoAST_1 = require("../Abstract/NodoAST");
+const Identificador_1 = require("./Identificador");
 class Relacional extends Nodo_1.Nodo {
     constructor(operadorIzq, operadorDer, operador, line, column) {
         super(new tipo_1.Tipo(tipo_1.tipos.BOOLEANO), line, column);
@@ -2292,8 +2293,6 @@ class Relacional extends Nodo_1.Nodo {
                     return resultadoIzq < resultadoDer.charCodeAt(0);
                 }
                 else {
-                    console.log(this.operadorIzq);
-                    console.log(this.operadorDer);
                     const error = new Excepcion_1.Excepcion('Semantico', `El operador relacional MENOR QUE se esta tratando de operar con los tipos ${this.operadorIzq.tipo} y ${this.operadorDer.tipo}`, this.line, this.column);
                     return error;
                 }
@@ -2802,12 +2801,6 @@ class Relacional extends Nodo_1.Nodo {
         let etiq;
         let etiq2;
         let etiq3;
-        console.log("OP DER");
-        console.log(this.operadorDer);
-        console.log("OP DER");
-        console.log("OP IZQ"); //vos xd
-        console.log(this.operadorIzq);
-        console.log("OP IZQ");
         if (this.operadorDer instanceof Relacional && this.operadorIzq instanceof Relacional) {
             table.bandera = 1;
             etiq = table.getEtiqueta();
@@ -2846,8 +2839,30 @@ class Relacional extends Nodo_1.Nodo {
         else if (this.operadorDer instanceof Relacional) {
         }
         else {
-            izq = this.operadorIzq.get3D(table, tree);
-            der = this.operadorDer.get3D(table, tree);
+            if (this.operadorIzq instanceof Identificador_1.Identificador && this.operadorDer instanceof Identificador_1.Identificador) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual();
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual();
+            }
+            else if (this.operadorIzq instanceof Identificador_1.Identificador) {
+                izq = this.operadorIzq.get3D(table, tree);
+                c3d += izq;
+                izq = table.getTemporalActual();
+                der = this.operadorDer.get3D(table, tree);
+            }
+            else if (this.operadorDer instanceof Identificador_1.Identificador) {
+                der = this.operadorDer.get3D(table, tree);
+                c3d += der;
+                der = table.getTemporalActual();
+                izq = this.operadorIzq.get3D(table, tree);
+            }
+            else {
+                izq = this.operadorIzq.get3D(table, tree);
+                der = this.operadorDer.get3D(table, tree);
+            }
             if (table.bandera == 0) {
                 c3d += `    if(${izq} ${op} ${der}) goto ${table.getTrue()};\n`;
                 c3d += `    goto ${table.getFalse()};\n`;
@@ -2861,7 +2876,7 @@ class Relacional extends Nodo_1.Nodo {
 }
 exports.Relacional = Relacional;
 
-},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68}],21:[function(require,module,exports){
+},{"../Abstract/Nodo":4,"../Abstract/NodoAST":5,"../other/Excepcion":67,"../other/tipo":68,"./Identificador":12}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Nodo_1 = require("../Abstract/Nodo");
@@ -5248,7 +5263,6 @@ class Asignacion extends Nodo_1.Nodo {
         }
     }
     getNodo() {
-        console.log(this.valor);
         var nodo = new NodoAST_1.NodoAST("ASIGNACION");
         nodo.agregarHijo(this.id);
         nodo.agregarHijo("=");
@@ -6226,6 +6240,22 @@ class If extends Nodo_1.Nodo {
             nodo.agregarHijo("}");
         }
         return nodo;
+    }
+    get3D(table, tree) {
+        let c3d = "";
+        table.bandera = 1;
+        let etiqueta1 = table.getEtiqueta();
+        let etiqueta2 = table.getEtiqueta();
+        c3d += `    /*----------IF----------*/\n`;
+        c3d += this.condicion.get3D(table, tree);
+        c3d += `goto ${etiqueta1};\n`;
+        c3d += `    goto ${etiqueta2};\n`;
+        c3d += `    ${etiqueta1}:\n`;
+        for (let i = 0; i < this.listaIf.length; i++) {
+            c3d += this.listaIf[i].get3D(table, tree);
+        }
+        c3d += `    ${etiqueta2}:\n`;
+        return c3d;
     }
 }
 exports.If = If;
@@ -7244,6 +7274,7 @@ function graph_Simbols(tabla) {
           <th>linea</th>
           <th>columna</th> 
           <th>Valor</th> 
+          <th>Stack</th> 
           
           
       </tr>
@@ -7261,6 +7292,7 @@ function graph_Simbols(tabla) {
         simbolos += `   <th><strong>   ${alv.line} </strong></th>  `;
         simbolos += `   <th><strong>   ${alv.column} </strong></th>  `;
         simbolos += `   <th><strong>   ${alv.valor} </strong></th>  `;
+        simbolos += `   <th><strong>   ${alv.stack} </strong></th>  `;
         simbolos += "</tr>";
     }
     simbolos += "</table>";

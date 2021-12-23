@@ -111,4 +111,24 @@ export class If extends Nodo {
         }
         return nodo;
     }
+
+    get3D(table: Table, tree: Tree): String {
+        let c3d = "";
+        table.bandera = 1;
+        let etiqueta1 = table.getEtiqueta();
+        let etiqueta2 = table.getEtiqueta();
+
+        c3d += `    /*----------IF----------*/\n`;
+        c3d += this.condicion.get3D(table, tree);
+        c3d += `goto ${etiqueta1};\n`;
+        c3d += `    goto ${etiqueta2};\n`;
+        c3d += `    ${etiqueta1}:\n`;
+        
+        for(let i = 0; i<this.listaIf.length; i++){
+            c3d += this.listaIf[i].get3D(table, tree);
+        }
+
+        c3d += `    ${etiqueta2}:\n`;
+        return c3d;
+    }
 }

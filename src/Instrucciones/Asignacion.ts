@@ -120,9 +120,6 @@ export class Asignacion extends Nodo {
     }
 
     getNodo() {
-
-
-        console.log(this.valor)
         var nodo: NodoAST = new NodoAST("ASIGNACION");
         nodo.agregarHijo(this.id);
 

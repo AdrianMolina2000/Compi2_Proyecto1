@@ -97,7 +97,6 @@ class Asignacion extends Nodo_1.Nodo {
         }
     }
     getNodo() {
-        console.log(this.valor);
         var nodo = new NodoAST_1.NodoAST("ASIGNACION");
         nodo.agregarHijo(this.id);
         nodo.agregarHijo("=");

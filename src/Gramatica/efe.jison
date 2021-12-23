@@ -38,6 +38,12 @@ void main(){
     print(val3);
     print(val4);
 
+    int resultado = toInt(val4);  //144917
+    if(resultado == 144917){
+        println("Aritmeticas 100");
+        aritmeticas = 1;
+    }
+
     String String_3;
     String String_4;
     int int2_;
@@ -45,6 +51,8 @@ void main(){
     int2_ = 45;
     int2_ = int2_ - 1; 
     
+    print(((2>5)<=(22==22))||((12>5)==(20>=19)));
+    print((((200>52)<=(212==32))==((52>54)<=(22==22)))||((12>5)==(20>=19)));
 
     String String_5 = "Calificacion "^3; 
     String pruebasNativas = "ComPiLaDoReS2 TesT";

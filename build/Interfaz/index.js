@@ -99,6 +99,7 @@ function graph_Simbols(tabla) {
           <th>linea</th>
           <th>columna</th> 
           <th>Valor</th> 
+          <th>Stack</th> 
           
           
       </tr>
@@ -116,6 +117,7 @@ function graph_Simbols(tabla) {
         simbolos += `   <th><strong>   ${alv.line} </strong></th>  `;
         simbolos += `   <th><strong>   ${alv.column} </strong></th>  `;
         simbolos += `   <th><strong>   ${alv.valor} </strong></th>  `;
+        simbolos += `   <th><strong>   ${alv.stack} </strong></th>  `;
         simbolos += "</tr>";
     }
     simbolos += "</table>";
